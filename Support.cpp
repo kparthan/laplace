@@ -64,6 +64,22 @@ void Usage (const char *exe, options_description &desc)
 }
 
 /*!
+ *  \brief This module returns the sign of a number.
+ *  \param number a double
+ *  \return the sign
+ */
+int sign(double number)
+{
+  if (fabs(number) <= ZERO) {
+    return 0;
+  } else if (number > 0) {
+    return 1;
+  } else {
+    return -1;
+  }
+}
+
+/*!
  *
  */
 void laplaceFit(struct Parameters &parameters)
