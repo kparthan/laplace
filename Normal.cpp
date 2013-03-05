@@ -1,3 +1,5 @@
+#include "Normal.h"
+
 /*!
  *  \brief This is a constructor module
  *  sets default values of mean as 0 and standard deviation as 1

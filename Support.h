@@ -18,6 +18,7 @@ void laplaceFit(struct Parameters &);
 pair<double,double> extremum(vector<double> &);
 double minimum(vector<double> &);
 double maximum(vector<double> &);
+void printError(const char *);
 
 #endif
 

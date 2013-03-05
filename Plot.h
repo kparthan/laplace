@@ -1,12 +1,12 @@
 #ifndef PLOT_H
 #define PLOT_H
 
-#include "Header.h"
+#include "Support.h"
 
 class Plot
 {
 	private:
-    //! Gnuplot script file
+		//! Gnuplot script file
 		ofstream script;
 
 	public:

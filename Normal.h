@@ -1,5 +1,7 @@
-#ifndef GAUSSIAN_H
-#define GAUSSIAN_H
+#ifndef NORMAL_H
+#define NORMAL_H
+
+#include "Header.h"
 
 class Normal 
 {

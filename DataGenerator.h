@@ -20,22 +20,22 @@ class DataGenerator
 
   public:
     //! Constructor
-    DataGenerator(struct Parameters &);
+    DataGenerator(struct Parameters &, bool);
 
     //! Generate data samples
-    generateData();
+    void generateData();
 
     //! Generate x values
     vector<double> generateRandom();
 
     //! Compute the corresponding function values
-    vector<double> functionValues();
+    vector<double> functionValues(vector<double> &);
 
     //! Add noise to the data
-    vector<double> addNoise();
+    vector<double> addNoise(vector<double> &);
 
     //! Plot the data
-    plotData(); 
+    void plotData(); 
 };
 
 #endif

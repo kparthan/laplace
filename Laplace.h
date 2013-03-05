@@ -1,7 +1,7 @@
 #ifndef LAPLACE_H
 #define LAPLACE_H
 
-#include "Header.h"
+#include "Support.h"
 
 class Laplace
 {

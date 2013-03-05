@@ -39,14 +39,18 @@ vector<double> DataGenerator::generateRandom()
 {
   switch(distribution) {
     case 0: // Normal
+	{
       Normal pdf(mu,sigma);
       x = pdf.generate(samples);
       break;
+	}
 
     case 1: // Laplace
+	{
       Laplace pdf(mu,b);
       x = pdf.generate(samples);
       break;
+	}
 
     default:
       cout << "Distribution not supported ..." << endl;
@@ -110,16 +114,40 @@ vector<double> DataGenerator::addNoise(vector<double> &fx)
  */
 void DataGenerator::plotData()
 {
-  Plot graph;
-  vector<string> labels;
-  labels.push_back("Laplace data plot");
-  labels.push_back("x");
-  labels.push_back("fx");
-  graph.label(labels);
-  pair<double,double> xrange = extremum(x);
-  pair<double,double> fxrange = extremum(fx);
-  graph.setRange(xrange,fxrange);
-  graph.sketch(x,fx);
+  pair<double,double> xrange,yrange;
+
+  Plot graph1;
+  vector<string> labels1(3,"");
+  labels1[0] = "Laplace data plot";
+  labels1[1] = "samples";
+  labels1[2] = "x";
+  graph1.label(labels1);
+  xrange.first = 1;
+  xrange.second = samples;
+  yrange = extremum(x);
+  graph1.setRange(xrange,yrange);
+  graph1.sketch(x);
+
+  Plot graph2;
+  vector<string> labels2(3,"");
+  labels2[0] = "Laplace data plot";
+  labels2[1] = "x";
+  labels2[2] = "f(x)";
+  graph2.label(labels2);
+  xrange = extremum(x);
+  yrange = extremum(fx);
+  graph2.setRange(xrange,yrange);
+  graph2.sketch(x,fx);
+
+  Plot graph3;
+  vector<string> labels3(3,"");
+  labels3[0] = "Laplace data plot";
+  labels3[1] = "x";
+  graph3.label(labels3);
+  xrange = extremum(x);
+  yrange = extremum(y);
+  graph3.setRange(xrange,yrange);
+  graph3.sketch(x,fx,y);
 }
 
 

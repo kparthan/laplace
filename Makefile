@@ -32,5 +32,5 @@ Plot.o: Plot.cpp Plot.h
 	g++ -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f *.o *~ laplace-fit 
+	rm -f *.o *~ laplace-fit temp/*
 

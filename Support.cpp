@@ -90,7 +90,7 @@ void laplaceFit(struct Parameters &parameters)
   cout << "mean: " << parameters.mu << endl;
   cout << "scale: " << parameters.b << endl;
   cout << "noise: " << parameters.noise_sigma << endl;*/
-  DataGenerator laplace(parameters,1);
+  DataGenerator laplace(parameters,0);
   laplace.generateData();
   laplace.plotData();
 }
@@ -144,5 +144,17 @@ pair<double,double> extremum(vector<double> &list)
   ends.first = minimum(list);
   ends.second = maximum(list);
   return ends;
+}
+
+/*!
+ *	\brief This function prints an error message.
+ *	\param errorMessage a pointer to a char
+ */
+void printError(const char* errorMessage)
+{
+	cerr << "Run-time error ..." << endl ;
+	cerr << errorMessage << endl ;
+	cerr << "exiting ..." << endl ;
+	exit(1) ;
 }
 
