@@ -16,6 +16,12 @@ class Laplace
     //! Constructor
     Laplace(double, double);
 
+	//! Return the mean of the distribution
+	const double mean();
+	
+	//! Return the scale parameter of the distribution
+	const double scaleParameter();
+
     //! Overloading = operator
     Laplace operator=(const Laplace &);
 

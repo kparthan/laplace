@@ -51,3 +51,21 @@ vector<double> Laplace::generate(int samples)
   return x;
 }
 
+/*!
+ *  \brief This function returns the mean of the distribution
+ *  \return the mean of the distribution
+ */
+const double Laplace::mean(void)
+{
+	return mu;
+}
+
+/*!
+ *  \brief This function returns the scale parameter of the distribution
+ *  \return the scale parameter of the distribution
+ */
+const double Laplace::scaleParameter(void)
+{
+	return b;
+}
+

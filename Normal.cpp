@@ -44,6 +44,7 @@ double Normal::value(double x)
 vector<double> Normal::generate(int samples)
 {
   vector<double> x(samples,0);
+  //srand(time(NULL));
   srand(1000);
   for (int i=0; i<samples; i=i+2) {
     double u = (double) rand() / RAND_MAX;

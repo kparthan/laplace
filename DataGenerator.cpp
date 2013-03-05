@@ -150,14 +150,3 @@ void DataGenerator::plotData()
   graph3.sketch(x,fx,y);
 }
 
-
-
-
-
-
-
-
-
-
-
-
