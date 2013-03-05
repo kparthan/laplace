@@ -16,9 +16,8 @@ Laplace::Laplace(double mu, double b) : mu(mu), b(b)
 Laplace Laplace::operator=(const Laplace &source)
 {
   if (this != &source) {
-    n = source.n;
-    noise_sigma = source.noise_sigma;
-    pdf = source.pdf;
+    mu = source.mu;
+    b = source.b;
   }
   return *this;
 }
@@ -33,5 +32,22 @@ double Laplace::value(double x)
   double dev = fabs(x - mu);
   double exponent = -dev / (double)b;
   return exp(exponent/(2*b));
+}
+
+/*!
+ *  \brief This function generates samples from a Laplace distribution
+ *  \param samples an integer
+ *  \return the list of samples generated
+ */
+vector<double> Laplace::generate(int samples)
+{
+  vector<double> x(samples,0);
+  srand(1000);
+  for (int i=0; i<samples; i++) {
+    double random = (double)rand() / RAND_MAX;
+    random -= 0.5;
+    x[i] = mu - b * sign(random) * log(1-2*fabs(random));
+  }
+  return x;
 }
 

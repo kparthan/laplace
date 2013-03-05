@@ -21,6 +21,9 @@ class Laplace
 
     //! Value of the mathematical function at a given x
     double value(double);
+
+    //! Generates samples from a Laplace distribution
+    vector<double> generate(int);
 };
 
 #endif

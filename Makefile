@@ -4,7 +4,9 @@ LDFLAGS=$(shell pkg-config --libs liblcb-experimental) -lboost_program_options
 OBJECTS = laplace-fit.o \
   Support.o \
   Laplace.o \
-  LaplaceGenerator.o 
+  Normal.o \
+  DataGenerator.o \
+  Plot.o
 
 all: laplace-fit 
 
@@ -20,7 +22,13 @@ Support.o: Support.cpp Support.h
 Laplace.o: Laplace.cpp Laplace.h 
 	g++ -c $(CFLAGS) $< -o $@
 
-LaplaceGenerator.o: LaplaceGenerator.cpp LaplaceGenerator.h 
+Normal.o: Normal.cpp Normal.h 
+	g++ -c $(CFLAGS) $< -o $@
+
+DataGenerator.o: DataGenerator.cpp DataGenerator.h 
+	g++ -c $(CFLAGS) $< -o $@
+
+Plot.o: Plot.cpp Plot.h 
 	g++ -c $(CFLAGS) $< -o $@
 
 clean:

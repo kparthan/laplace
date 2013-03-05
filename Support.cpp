@@ -1,4 +1,5 @@
 #include "Support.h"
+#include "DataGenerator.h"
 
 /*!
  *  \brief This function checks to see if valid arguments are given to the 
@@ -15,9 +16,9 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   options_description desc("Allowed options");
   desc.add_options()
        ("help","produce help message")
-       ("n",value<int>()->default_value(100),"number of points to be generated")
+       ("samples",value<int>()->default_value(100),"number of points to be generated")
        ("mu",value<double>()->default_value(0),"mean of the distribution")
-       ("b",value<double>()->default_value(2),"scale parameter")
+       ("scale",value<double>()->default_value(2),"scale parameter")
        ("noise",value<double>()->default_value(0.1),"standard deviation of Gaussian noise")
   ;
   variables_map vm;
@@ -28,8 +29,8 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     Usage(argv[0],desc);
   }
   
-  if (vm.count("n")) {
-    parameters.samples= vm["n"].as<int>();
+  if (vm.count("samples")) {
+    parameters.samples= vm["samples"].as<int>();
     cout << "Number of samples to be generated: " << parameters.samples << endl;
   } 
 
@@ -38,9 +39,9 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     cout << "Mean of the distribution: " << parameters.mu << endl;
   } 
 
-  if (vm.count("b")) {
-    parameters.b = vm["b"].as<double>();
-    cout << "Scale parameter: " << parameters.b << endl;
+  if (vm.count("scale")) {
+    parameters.scale = vm["scale"].as<double>();
+    cout << "Scale parameter: " << parameters.scale << endl;
   }
    
   if (vm.count("noise")) {
@@ -89,7 +90,59 @@ void laplaceFit(struct Parameters &parameters)
   cout << "mean: " << parameters.mu << endl;
   cout << "scale: " << parameters.b << endl;
   cout << "noise: " << parameters.noise_sigma << endl;*/
-  LaplaceGenerator laplace(parameters);
-  vector<double> data = laplace.generate();
+  DataGenerator laplace(parameters,1);
+  laplace.generateData();
+  laplace.plotData();
+}
+
+/*!
+ *  \brief This module finds the minimum value in a list
+ *  \param list a reference to a vector<double>
+ *  \return the minimum value in the list
+ */
+double minimum(vector<double> &list)
+{
+  double min;
+  if (list.size() > 0) {
+    min = list[0];
+  }
+  for (int i=1; i<list.size(); i++) {
+    if (list[i] < min) {
+      min = list[i];
+    }
+  }
+  return min;
+}
+
+/*!
+ *  \brief This module finds the maximum value in a list
+ *  \param list a reference to a vector<double>
+ *  \return the maximum value in the list
+ */
+double maximum(vector<double> &list)
+{
+  double max;
+  if (list.size() > 0) {
+    max = list[0];
+  }
+  for (int i=1; i<list.size(); i++) {
+    if (list[i] > max) {
+      max = list[i];
+    }
+  }
+  return max;
+}
+
+/*!
+ *  \brief This function computes the extremum values in a list
+ *  \param list a reference to a vector<double>
+ *  \return the minimum and maximum values in the list
+ */
+pair<double,double> extremum(vector<double> &list)
+{
+  pair<double,double> ends;
+  ends.first = minimum(list);
+  ends.second = maximum(list);
+  return ends;
 }
 
