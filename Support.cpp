@@ -90,9 +90,10 @@ void laplaceFit(struct Parameters &parameters)
   cout << "mean: " << parameters.mu << endl;
   cout << "scale: " << parameters.b << endl;
   cout << "noise: " << parameters.noise_sigma << endl;*/
-  DataGenerator laplace(parameters,0);
+  DataGenerator laplace(parameters,1);
   laplace.generateData();
   laplace.plotData();
+  laplace.mmlEstimate();
 }
 
 /*!
@@ -156,5 +157,34 @@ void printError(const char* errorMessage)
 	cerr << errorMessage << endl ;
 	cerr << "exiting ..." << endl ;
 	exit(1) ;
+}
+
+/*!
+ *  \brief This module computes the mean of a set of samples
+ *  \param list a reference to a vector<double>
+ *  \return the mean value
+ */
+double computeMean(vector<double> &list)
+{
+  double sum = 0;
+  for (int i=0; i<list.size(); i++) {
+    sum += list[i];
+  }
+  return sum / (double)list.size();
+}
+
+/*!
+ *  \brief This module computes the median of a sorted set of samples
+ *  \param list a reference to a vector<double>
+ *  \return the median value
+ */
+double computeMedian(vector<double> &list)
+{
+  int n = list.size();
+  if (n % 2 == 1) {
+    return list[n/2];
+  } else {
+    return (list[n/2-1]+list[n/2])/2;
+  }
 }
 

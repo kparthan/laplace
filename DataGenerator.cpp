@@ -2,6 +2,7 @@
 #include "Normal.h"
 #include "Laplace.h"
 #include "Plot.h"
+#include "Message.h"
 
 /*!
  *  \brief Constructor
@@ -14,11 +15,85 @@ DataGenerator::DataGenerator(struct Parameters &parameters, bool distribution):
                              mu(parameters.mu),
                              noise_sigma(parameters.noise_sigma)
 {
-  if (distribution == 0) {
+  if(distribution == 0) {
     sigma = parameters.scale;
-  } else if (distribution == 1) {
+  } else if(distribution == 1) {
     b = parameters.scale;
   }
+}
+
+/*!
+ *  \brief This function sorts the elements in the list
+ *  \param list a reference to a vector<double>
+ *  \return the sorted list
+ */
+vector<double> DataGenerator::sort(vector<double> &list)
+{
+	vector<double> sortedList(list);
+  vector<int> index(samples,0);
+	for(int i=0; i<samples; i++) {
+			index[i] = i;
+  }
+	quicksort(sortedList,index,0,samples-1);
+  return sortedList;
+}
+
+/*!
+ *  This is an implementation of the classic quicksort() algorithm to sort a
+ *  list of data values. The module uses the overloading operator(<) to 
+ *  compare two Point<T> objects. 
+ *  Pivot is chosen as the right most element in the list(default)
+ *  This function is called recursively.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ */
+void DataGenerator::quicksort(vector<double> &list, vector<int> &index, 
+                              int left, int right)
+{
+	if(left < right)
+	{
+		int pivotNewIndex = partition(list,index,left,right);
+		quicksort(list,index,left,pivotNewIndex-1);
+		quicksort(list,index,pivotNewIndex+1,right);
+	}
+}
+
+/*!
+ *  This function is called from the quicksort() routine to compute the new
+ *  pivot index.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ *  \return the new pivot index
+ */
+int DataGenerator::partition(vector<double> &list, vector<int> &index,
+                             int left, int right)
+{
+	double temp,pivotPoint = list[right];
+	int storeIndex = left,temp_i;
+	for(int i=left; i<right; i++)
+	{
+		if(list[i] < pivotPoint)
+		{
+			temp = list[i];
+			list[i] = list[storeIndex];
+			list[storeIndex] = temp;
+			temp_i = index[i];
+			index[i] = index[storeIndex];
+			index[storeIndex] = temp_i;
+			storeIndex += 1;	
+		}
+	}
+	temp = list[storeIndex];
+	list[storeIndex] = list[right];
+	list[right] = temp;
+	temp_i = index[storeIndex];
+	index[storeIndex] = index[right];
+	index[right] = temp_i;
+	return storeIndex;
 }
 
 /*!
@@ -26,7 +101,8 @@ DataGenerator::DataGenerator(struct Parameters &parameters, bool distribution):
  */
 void DataGenerator::generateData()
 {
-  generateRandom();
+  vector<double> list = generateRandom();
+  x = sort(list);
   functionValues(x);
   addNoise(fx);
 }
@@ -37,26 +113,27 @@ void DataGenerator::generateData()
  */
 vector<double> DataGenerator::generateRandom()
 {
+  vector<double> list;
   switch(distribution) {
     case 0: // Normal
-	{
+	  {
       Normal pdf(mu,sigma);
-      x = pdf.generate(samples);
+      list = pdf.generate(samples);
       break;
-	}
+	  }
 
     case 1: // Laplace
-	{
+	  {
       Laplace pdf(mu,b);
-      x = pdf.generate(samples);
+      list = pdf.generate(samples);
       break;
-	}
+	  }
 
     default:
       cout << "Distribution not supported ..." << endl;
       exit(1);
   }
-  return x;
+  return list;
 }
 
 /*!
@@ -72,7 +149,7 @@ vector<double> DataGenerator::functionValues(vector<double> &x)
     case 0: // Normal
     {
       Normal pdf(mu,sigma);
-      for (int i=0; i<x.size(); i++) {
+      for(int i=0; i<x.size(); i++) {
         fx[i] = pdf.value(x[i]);
       }
       break;
@@ -81,7 +158,7 @@ vector<double> DataGenerator::functionValues(vector<double> &x)
     case 1: // Laplace
     {
       Laplace pdf(mu,b);
-      for (int i=0; i<x.size(); i++) {
+      for(int i=0; i<x.size(); i++) {
         fx[i] = pdf.value(x[i]);
       }
       break;
@@ -103,7 +180,7 @@ vector<double> DataGenerator::addNoise(vector<double> &fx)
   Normal pdf(0,noise_sigma);
   vector<double> noise = pdf.generate(samples);
   y = vector<double>(fx);
-  for (int i=0; i<samples; i++) {
+  for(int i=0; i<samples; i++) {
     y[i] += noise[i];
   }
   return y;
@@ -148,5 +225,29 @@ void DataGenerator::plotData()
   yrange = extremum(y);
   graph3.setRange(xrange,yrange);
   graph3.sketch(x,fx,y);
+}
+
+/*!
+ *  \brief This function computes the MML estimates.
+ */
+void DataGenerator::mmlEstimate()
+{
+  Message message(x);
+  message.estimateParameters();
+
+  // Normal estimates
+  cout << "*** NORMAL ***" << endl;
+  pair<double,double> normalEstimates = message.getNormalEstimates();
+  cout << "\tMean: " << normalEstimates.first << endl;
+  cout << "\tSigma: " << normalEstimates.second << endl;
+  cout << "\tMessage length: " << message.encodeUsingNormalModel() << endl;
+
+  cout << endl;
+  // Laplace estimates
+  cout << "*** LAPLACE ***" << endl;
+  pair<double,double> laplaceEstimates = message.getLaplaceEstimates();
+  cout << "\tMean: " << laplaceEstimates.first << endl;
+  cout << "\tScale: " << laplaceEstimates.second << endl;
+  cout << "\tMessage length: " << message.encodeUsingLaplaceModel() << endl;
 }
 

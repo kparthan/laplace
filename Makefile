@@ -6,7 +6,8 @@ OBJECTS = laplace-fit.o \
   Laplace.o \
   Normal.o \
   DataGenerator.o \
-  Plot.o
+  Plot.o \
+  Message.o
 
 all: laplace-fit 
 
@@ -29,6 +30,9 @@ DataGenerator.o: DataGenerator.cpp DataGenerator.h
 	g++ -c $(CFLAGS) $< -o $@
 
 Plot.o: Plot.cpp Plot.h 
+	g++ -c $(CFLAGS) $< -o $@
+
+Message.o: Message.cpp Message.h 
 	g++ -c $(CFLAGS) $< -o $@
 
 clean:

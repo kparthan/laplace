@@ -18,9 +18,18 @@ class DataGenerator
     //! Random samples generated
     vector<double> x,fx,y;
 
+    //! Quciksort algorithm
+    void quicksort(vector<double> &, vector<int> &, int, int);
+
+    //! Partition function used in quicksort()
+    int partition(vector<double> &, vector<int> &, int, int);
+
   public:
     //! Constructor
     DataGenerator(struct Parameters &, bool);
+
+    //! Sort the elements in the list
+    vector<double> sort(vector<double> &);
 
     //! Generate data samples
     void generateData();
@@ -36,6 +45,9 @@ class DataGenerator
 
     //! Plot the data
     void plotData(); 
+
+    //! MML estimates
+    void mmlEstimate();
 };
 
 #endif
