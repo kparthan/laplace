@@ -7,8 +7,7 @@ int main(int argc, char **argv)
   clock_t c_start = clock();
   auto t_start = high_resolution_clock::now();
 
-  laplaceFit(parameters);
-
+  fitData(parameters);
 
   clock_t c_end = clock();
   auto t_end = high_resolution_clock::now();

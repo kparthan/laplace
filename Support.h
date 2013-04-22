@@ -5,16 +5,18 @@
 
 struct Parameters
 {
-  int samples;
-  double mu;
-  double scale;
-  double noise_sigma;
+  vector<int> samples;
+  double mean;
+  vector<double> scale;
+  vector<double> noise_sigma;
+  string distribution;
+  string estimate;
 };
 
 struct Parameters parseCommandLineInput(int, char **);
 void Usage(const char *, options_description &);
 int sign(double);
-void laplaceFit(struct Parameters &);
+void fitData(struct Parameters &);
 pair<double,double> extremum(vector<double> &);
 double minimum(vector<double> &);
 double maximum(vector<double> &);

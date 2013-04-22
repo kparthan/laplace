@@ -6,27 +6,17 @@
 class DataGenerator
 {
   public:
-    //! Null constructor
-    DataGenerator();
-
     //! Constructor
-    DataGenerator(struct Parameters &);
-
-    //! Types of distributions
-    enum DistributionType {
-      DEFAULT,
-      NORMAL,
-      LAPLACE
-    };
-
-    //! Generate x values
-    virtual vector<double> generateRandom(){}
+    DataGenerator(struct Parameters &, bool);
 
     //! Sort the elements in the list
     vector<double> sort(vector<double> &);
 
     //! Generate data samples
     void generateData();
+
+    //! Generate x values
+    vector<double> generateRandom();
 
     //! Compute the corresponding function values
     vector<double> functionValues(vector<double> &);
@@ -41,11 +31,14 @@ class DataGenerator
     void mmlEstimate();
 
   protected:
-    //! Distribution type
-    DistributionType type;
+    //! Choose Normal/Laplace
+    bool distribution;
 
-    //! Model parameters
-    struct Parameters parameters;
+    //! Number of samples
+    int samples;
+
+    //! Parameters of simulation
+    double mu,b,sigma,noise_sigma;
 
     //! Random samples generated
     vector<double> x,fx,y;

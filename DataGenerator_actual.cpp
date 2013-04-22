@@ -5,18 +5,22 @@
 #include "Message.h"
 
 /*!
- *  \brief This is a null constructor.
- */
-DataGenerator::DataGenerator() : type(DEFAULT)
-{}
-
-/*!
  *  \brief Constructor
  *  \param parameters a reference to a struct Parameters
+ *  \param distribution a boolean
  */
-DataGenerator::DataGenerator(struct Parameters &parameters):
-                             parameters(parameters), type(DEFAULT)
-{}
+DataGenerator::DataGenerator(struct Parameters &parameters, bool distribution):
+                             distribution(distribution),
+                             samples(parameters.samples),
+                             mu(parameters.mu),
+                             noise_sigma(parameters.noise_sigma)
+{
+  if(distribution == 0) {
+    sigma = parameters.scale;
+  } else if(distribution == 1) {
+    b = parameters.scale;
+  }
+}
 
 /*!
  *  \brief This function sorts the elements in the list

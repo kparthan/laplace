@@ -16,10 +16,16 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   options_description desc("Allowed options");
   desc.add_options()
        ("help","produce help message")
-       ("samples",value<int>()->default_value(100),"number of points to be generated")
-       ("mu",value<double>()->default_value(0),"mean of the distribution")
-       ("scale",value<double>()->default_value(2),"scale parameter")
-       ("noise",value<double>()->default_value(0.1),"standard deviation of Gaussian noise")
+       ("samples",value<vector<int>>(&parameters.samples),
+                                    "number of points to be generated")
+       ("mean",value<double>(&parameters.mean),"mean of the distribution")
+       ("scale",value<vector<double>>(&parameters.scale),"the scale values")
+       ("noise",value<vector<double>>(&parameters.noise_sigma),
+                            "values of standard deviation of Gaussian noise")
+       ("generate",value<string>(&parameters.distribution),
+                                    "distribution used to generate the data")
+       ("estimate",value<string>(&parameters.estimate),
+                                    "distribution used to estimate the data")
   ;
   variables_map vm;
   store(parse_command_line(argc,argv,desc),vm);
@@ -30,23 +36,62 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   }
   
   if (vm.count("samples")) {
-    parameters.samples= vm["samples"].as<int>();
-    cout << "Number of samples to be generated: " << parameters.samples << endl;
-  } 
+    cout << "Number of samples to be generated: ";
+    for (int i=0; i<parameters.samples.size(); i++) {
+      cout << parameters.samples[i] << " ";
+    }
+    cout << endl;
+  } else {
+    parameters.samples = vector<int>(1,DEFAULT_SAMPLES);
+    cout << "Generating default number of samples: " << DEFAULT_SAMPLES << endl;
+  }
 
-  if (vm.count("mu")) {
-    parameters.mu = vm["mu"].as<double>();
-    cout << "Mean of the distribution: " << parameters.mu << endl;
-  } 
+  if (vm.count("mean")) {
+    cout << "Mean of the distribution: " << parameters.mean << endl;
+  } else {
+    parameters.mean = DEFAULT_MEAN;
+    cout << "Using default mean: " << DEFAULT_MEAN << endl;
+  }
 
   if (vm.count("scale")) {
-    parameters.scale = vm["scale"].as<double>();
-    cout << "Scale parameter: " << parameters.scale << endl;
+    cout << "Values of the scale parameter: ";
+    for (int i=0; i<parameters.scale.size(); i++) {
+      cout << parameters.scale[i] << " ";
+    }
+    cout << endl;
+  } else {
+    parameters.scale = vector<double>(1,DEFAULT_SCALE);
+    cout << "Using default scale parameter: " << DEFAULT_SCALE << endl;
   }
    
   if (vm.count("noise")) {
-    parameters.noise_sigma = vm["noise"].as<double>();
-    cout << "Standard deviation of Gaussian noise: " << parameters.noise_sigma << endl;
+    cout << "Standard deviation of Gaussian noise: "i;
+    for (int i=0; i<parameters.scale.size(); i++) {
+      cout << parameters.noise_sigma[i] << " ";
+    }
+    cout << endl;
+  } else {
+    parameters.noise_sigma = vector<double>(1,DEFAULT_NOISE_SIGMA);
+    cout << "Using default value of standard deviation of Gaussian noise: "
+         << DEFAULT_NOISE_SIGMA << endl;
+  }
+
+  if (vm.count("generate")) {
+    cout << "Distribution from which data is generated: " 
+         << parameters.distribution << endl;
+  } else {
+    parameters.distribution = DEFAULT_GENERATE_DISTRIBUTION;
+    cout << "Data generated using the default distribution: "
+         << DEFAULT_GENERATE_DISTRIBUTION << endl;
+  }
+
+  if (vm.count("estimate")) {
+    cout << "Distribution which is used to estimate the data: " 
+         << parameters.estimate << endl;
+  } else {
+    parameters.distribution = DEFAULT_ESTIMATE_DISTRIBUTION;
+    cout << "Data estimated using the default distribution: "
+         << DEFAULT_ESTIMATE_DISTRIBUTION << endl;
   }
 
   return parameters;
@@ -81,19 +126,22 @@ int sign(double number)
 }
 
 /*!
- *
+ *  \brief This functions fit the data to a distribution
+ *  \param parameters a reference to a struct Parameters
  */
-void laplaceFit(struct Parameters &parameters)
+void fitData(struct Parameters &parameters)
 {
-  /*cout << "*** Printing parameters ***" << endl;
-  cout << "n: " << parameters.samples << endl;
-  cout << "mean: " << parameters.mu << endl;
-  cout << "scale: " << parameters.b << endl;
-  cout << "noise: " << parameters.noise_sigma << endl;*/
-  DataGenerator laplace(parameters,1);
-  laplace.generateData();
-  laplace.plotData();
-  laplace.mmlEstimate();
+  DataGenerator *data_generator;
+  if (boost::iequals(parameters.distribution,"laplace")) {
+    Laplace laplace(parameters);
+    data_generator = &laplace;
+  } else if (boost::iequals(parameters.distribution,"normal")) {
+    Normal normal(parameters);
+    data_generator = &normal;
+  }
+  data_generator->generateData();
+  data_generator->plotData();
+  data_generator->mmlEstimate();
 }
 
 /*!

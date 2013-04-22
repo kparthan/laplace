@@ -3,14 +3,14 @@
 
 #include "Header.h"
 
-class Normal 
+class Normal : public DataGenerator
 {
   private:
     //! Mean of the distribution
-		double mu ;
+		double mu;
 
     //! Standard deviation of the distribution
-		double sigma ;
+		double sigma;
 
 	public:
 		//! Constructor
