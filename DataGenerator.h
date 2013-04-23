@@ -1,5 +1,5 @@
-#ifndef LAPLACE_GENERATOR_H
-#define LAPLACE_GENERATOR_H
+#ifndef DATA_GENERATOR_H
+#define DATA_GENERATOR_H
 
 #include "Support.h"
 
@@ -19,20 +19,20 @@ class DataGenerator
       LAPLACE
     };
 
+    //! Simulate the experiment
+    virtual void simulate(){}
+
     //! Generate x values
-    virtual vector<double> generateRandom(){}
+    virtual vector<double> generateRandom(int){}
+
+    //! Compute the corresponding function values
+    virtual void computeFunctionValues(){}
+
+    //! Add noise to the data
+    void addNoise(double);
 
     //! Sort the elements in the list
     vector<double> sort(vector<double> &);
-
-    //! Generate data samples
-    void generateData();
-
-    //! Compute the corresponding function values
-    vector<double> functionValues(vector<double> &);
-
-    //! Add noise to the data
-    vector<double> addNoise(vector<double> &);
 
     //! Plot the data
     void plotData(); 
@@ -48,7 +48,7 @@ class DataGenerator
     struct Parameters parameters;
 
     //! Random samples generated
-    vector<double> x,fx,y;
+    vector<double> xvals,fxvals,yvals;
 
     //! Quciksort algorithm
     void quicksort(vector<double> &, vector<int> &, int, int);

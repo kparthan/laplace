@@ -1,6 +1,4 @@
-#include "DataGenerator.h"
-#include "Normal.h"
-#include "Laplace.h"
+#include "NormalDataGenerator.h"
 #include "Plot.h"
 #include "Message.h"
 
@@ -25,12 +23,13 @@ DataGenerator::DataGenerator(struct Parameters &parameters):
  */
 vector<double> DataGenerator::sort(vector<double> &list)
 {
+  int num_samples = list.size();
 	vector<double> sortedList(list);
-  vector<int> index(samples,0);
-	for(int i=0; i<samples; i++) {
+  vector<int> index(num_samples,0);
+	for(int i=0; i<num_samples; i++) {
 			index[i] = i;
   }
-	quicksort(sortedList,index,0,samples-1);
+	quicksort(sortedList,index,0,num_samples-1);
   return sortedList;
 }
 
@@ -70,10 +69,8 @@ int DataGenerator::partition(vector<double> &list, vector<int> &index,
 {
 	double temp,pivotPoint = list[right];
 	int storeIndex = left,temp_i;
-	for(int i=left; i<right; i++)
-	{
-		if(list[i] < pivotPoint)
-		{
+	for(int i=left; i<right; i++) {
+		if(list[i] < pivotPoint) {
 			temp = list[i];
 			list[i] = list[storeIndex];
 			list[storeIndex] = temp;
@@ -93,98 +90,22 @@ int DataGenerator::partition(vector<double> &list, vector<int> &index,
 }
 
 /*!
- *  \brief This module generates data samples from a Data distribution
- */
-void DataGenerator::generateData()
-{
-  vector<double> list = generateRandom();
-  x = sort(list);
-  functionValues(x);
-  addNoise(fx);
-}
-
-/*!
- *  \brief This function generates random data in a range
- *  \return the random samples generated
- */
-vector<double> DataGenerator::generateRandom()
-{
-  vector<double> list;
-  switch(distribution) {
-    case 0: // Normal
-	  {
-      Normal pdf(mu,sigma);
-      list = pdf.generate(samples);
-      break;
-	  }
-
-    case 1: // Laplace
-	  {
-      Laplace pdf(mu,b);
-      list = pdf.generate(samples);
-      break;
-	  }
-
-    default:
-      cout << "Distribution not supported ..." << endl;
-      exit(1);
-  }
-  return list;
-}
-
-/*!
- *  \brief This function computes the function values associated with
- *  the randomly generated data points
- *  \param x a reference to a vector<double>
- *  \return the list of function values
- */
-vector<double> DataGenerator::functionValues(vector<double> &x)
-{
-  fx = vector<double>(samples,0);
-  switch(distribution) {
-    case 0: // Normal
-    {
-      Normal pdf(mu,sigma);
-      for(int i=0; i<x.size(); i++) {
-        fx[i] = pdf.value(x[i]);
-      }
-      break;
-    }
-
-    case 1: // Laplace
-    {
-      Laplace pdf(mu,b);
-      for(int i=0; i<x.size(); i++) {
-        fx[i] = pdf.value(x[i]);
-      }
-      break;
-    }
-
-    default:
-      cout << "Distribution not supported ..." << endl;
-      exit(1);
-  }
-  return fx;
-}
-
-/*!
  *  \brief This function adds noise to the generated fucntion values
- *  \return the noise added values
+ *  \param sigma a double
  */
-vector<double> DataGenerator::addNoise(vector<double> &fx)
+void DataGenerator::addNoise(double sigma)
 {
-  Normal pdf(0,noise_sigma);
-  vector<double> noise = pdf.generate(samples);
-  y = vector<double>(fx);
-  for(int i=0; i<samples; i++) {
-    y[i] += noise[i];
+  yvals = vector<double>(fxvals);
+  NormalDataGenerator noise_generator(0,sigma);
+  vector<double> noise = noise_generator.generateRandom(yvals.size());
+  for(int i=0; i<yvals.size(); i++) {
+    yvals[i] += noise[i];
   }
-  return y;
 }
 
 /*!
  *  \brief This function plots the random generated data
- */
+ *//*
 void DataGenerator::plotData()
 {
   pair<double,double> xrange,yrange;
@@ -221,11 +142,11 @@ void DataGenerator::plotData()
   yrange = extremum(y);
   graph3.setRange(xrange,yrange);
   graph3.sketch(x,fx,y);
-}
+}*/
 
 /*!
  *  \brief This function computes the MML estimates.
- */
+ *//*
 void DataGenerator::mmlEstimate()
 {
   Message message(x);
@@ -246,4 +167,4 @@ void DataGenerator::mmlEstimate()
   cout << "\tScale: " << laplaceEstimates.second << endl;
   cout << "\tMessage length: " << message.encodeUsingLaplaceModel() << endl;
 }
-
+*/

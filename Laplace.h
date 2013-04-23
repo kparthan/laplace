@@ -1,7 +1,7 @@
 #ifndef LAPLACE_H
 #define LAPLACE_H
 
-#include "Support.h"
+#include "Header.h"
 
 class Laplace
 {
@@ -13,23 +13,24 @@ class Laplace
     double b;
 
   public:
+    //! Null constructor
+    Laplace();
+
     //! Constructor
     Laplace(double, double);
-
-	//! Return the mean of the distribution
-	const double mean();
-	
-	//! Return the scale parameter of the distribution
-	const double scaleParameter();
 
     //! Overloading = operator
     Laplace operator=(const Laplace &);
 
+    //! Return the mean of the distribution
+	  const double mean();
+	
+	  //! Return the scale parameter of the distribution
+	  const double scaleParameter();
+
     //! Value of the mathematical function at a given x
     double value(double);
 
-    //! Generates samples from a Laplace distribution
-    vector<double> generate(int);
 };
 
 #endif

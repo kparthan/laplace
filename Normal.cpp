@@ -17,48 +17,16 @@ Normal::Normal(double mu, double sigma) : mu(mu), sigma(sigma)
 {}
 
 /*!
- *  \brief This function computes the value of the distribution at a given x
- *  \param x a double
- *  \return value of the function given x
+ *  \brief This function assigns a source Normal distribution.
+ *  \param source a reference to a Normal
  */
-double Normal::value(double x)
+Normal Normal::operator=(const Normal &source)
 {
-	double expNumerator = (-1) * (x-mu) * (x-mu);
-	double expDenominator = 2 * sigma * sigma;
-	return (exp (expNumerator/expDenominator)) / ((sqrt(2*PI)) * sigma);
-}
-
-/*!
- *  \brief This function generates a data point sampled from this 
- *	Normal distribution. Uses Box-Muller method to draw samples from the 
- *	standard normal distribution i.e., N(0,1)
- *	X = sqrt(-2 ln U) cos(2*pi*V)
- *	Y = sqrt(-2 ln U) sin(2*pi*V), where
- *	U,V are drawn from a uniform distribution in (0,1). The resultant X,Y
- *	will be sampled from a standard normal distribution
- *	To generate from a general N(mu,sigma), use the transformation:
- *	Z = mu + sigma * X, where X~N(0,1)
- *  \param samples an integer
- *	\return a sample drawn from the normal distribution
- */
-vector<double> Normal::generate(int samples)
-{
-  vector<double> x(samples,0);
-  //srand(time(NULL));
-  srand(1000);
-  for (int i=0; i<samples; i=i+2) {
-    double u = (double) rand() / RAND_MAX;
-    double v = (double) rand() / RAND_MAX;
-    double sqroot = sqrt(-2 * log(u));
-    double arg = 2 * PI * v;
-    double r1 = sqroot * cos (arg);
-    double r2 = sqroot * sin (arg);
-	  x[i] = mu + sigma * r1;
-    if (i != samples-1) {
-	    x[i+1] = mu + sigma * r2;
-    }
+  if (this != &source) {
+    mu = source.mu;
+    sigma = source.sigma;
   }
-	return x;
+  return *this;
 }
 
 /*!
@@ -77,5 +45,17 @@ const double Normal::mean(void)
 const double Normal::standardDeviation(void)
 {
 	return sigma;
+}
+
+/*!
+ *  \brief This function computes the value of the distribution at a given x
+ *  \param x a double
+ *  \return value of the function given x
+ */
+double Normal::value(double x)
+{
+	double expNumerator = (-1) * (x-mu) * (x-mu);
+	double expDenominator = 2 * sigma * sigma;
+	return (exp (expNumerator/expDenominator)) / ((sqrt(2*PI)) * sigma);
 }
 

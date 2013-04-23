@@ -1,5 +1,6 @@
 #include "Support.h"
-#include "DataGenerator.h"
+#include "NormalDataGenerator.h"
+#include "LaplaceDataGenerator.h"
 
 /*!
  *  \brief This function checks to see if valid arguments are given to the 
@@ -65,7 +66,7 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   }
    
   if (vm.count("noise")) {
-    cout << "Standard deviation of Gaussian noise: "i;
+    cout << "Standard deviation of Gaussian noise: ";
     for (int i=0; i<parameters.scale.size(); i++) {
       cout << parameters.noise_sigma[i] << " ";
     }
@@ -133,15 +134,13 @@ void fitData(struct Parameters &parameters)
 {
   DataGenerator *data_generator;
   if (boost::iequals(parameters.distribution,"laplace")) {
-    Laplace laplace(parameters);
-    data_generator = &laplace;
+    LaplaceDataGenerator laplace_data_generator(parameters);
+    data_generator = &laplace_data_generator;
   } else if (boost::iequals(parameters.distribution,"normal")) {
-    Normal normal(parameters);
-    data_generator = &normal;
+    NormalDataGenerator normal_data_generator(parameters);
+    data_generator = &normal_data_generator;
   }
-  data_generator->generateData();
-  data_generator->plotData();
-  data_generator->mmlEstimate();
+  data_generator->simulate();
 }
 
 /*!

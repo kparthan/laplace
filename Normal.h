@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class Normal : public DataGenerator
+class Normal
 {
   private:
     //! Mean of the distribution
@@ -12,24 +12,25 @@ class Normal : public DataGenerator
     //! Standard deviation of the distribution
 		double sigma;
 
-	public:
+  public:
 		//! Constructor
 		Normal() ;
 
 		//! Constructor that sets value of parameters
 		Normal(double, double);
 
+    //! Assignment of an existing Normal distribution
+    Normal operator=(const Normal &);
+
+		//! Gets the mean 
+		const double mean();
+
+    //! Gets the standard deviation
+    const double standardDeviation(); 
+
 		//! Function value
 		double value(double);
 
-		//! Generates a sample from the distribution
-		vector<double> generate(int);
-
-		//! Returns the mean 
-		const double mean();
-
-		//! Returns the standard deviation
-		const double standardDeviation() ;
 };
 
 #endif
