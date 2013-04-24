@@ -67,7 +67,7 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
 
 /*!
  *  \brief This function simulates the model to generate data using
-/bin/bash: Generates: command not found
+ *  Normal distribution.
  */
 void NormalDataGenerator::simulate()
 {
@@ -78,11 +78,7 @@ void NormalDataGenerator::simulate()
         double scale = parameters.scale[j];
         normal = Normal(mean,scale);
         vector<double> list = generateRandom(parameters.samples[i]);
-        xvals = sort(list);
-        computeFunctionValues();
-        addNoise(parameters.noise_sigma[k]);
-        //plotData();
-        //mmlEstimate();
+        estimateAndPlotModel("normal",list,j,k);
       }
     }
   }
@@ -91,13 +87,16 @@ void NormalDataGenerator::simulate()
 /*!
  *  This function computes the distribution values for the randomly generated
  *  x values.
+ *  \param x a reference to a vector<double>
+ *  \return the function values
  */
-void NormalDataGenerator::computeFunctionValues()
+vector<double> NormalDataGenerator::computeFunctionValues(vector<double> &x)
 {
-  int num_samples = xvals.size();
-  fxvals = vector<double>(num_samples,0);
+  int num_samples = x.size();
+  fx = vector<double>(num_samples,0);
   for (int i=0; i<num_samples; i++) {
-    fxvals[i] = normal.value(xvals[i]);
+    fx[i] = normal.value(x[i]);
   }
+  return fx;
 }
 

@@ -13,7 +13,6 @@
 #include <ctime>
 #include <thread>
 #include <chrono>
-#include <liblcb/liblcb.h>
 #include <boost/math/constants/constants.hpp>
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
@@ -33,8 +32,6 @@
 
 using namespace std;
 using namespace std::chrono;
-using namespace lcb;
-using namespace lcb::geometry;
 using namespace boost::program_options;
 
 #endif

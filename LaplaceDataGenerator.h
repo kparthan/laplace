@@ -28,7 +28,7 @@ class LaplaceDataGenerator : public DataGenerator
     vector<double> generateRandom(int);
 
     //! Compute the function value for each sample
-    void computeFunctionValues();
+    vector<double> computeFunctionValues(vector<double> &);
 };
 
 #endif

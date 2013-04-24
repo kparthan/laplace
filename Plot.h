@@ -6,8 +6,14 @@
 class Plot
 {
 	private:
+    //! Data file
+    string script_file;
+
 		//! Gnuplot script file
 		ofstream script;
+
+    //! Print default specifications
+    void specifyDefault();
 
 	public:
 		//! Constructor

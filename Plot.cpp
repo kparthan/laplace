@@ -5,9 +5,24 @@
  *  default graph settings.
  */
 Plot::Plot()
+{}
+
+/*!
+ *  \brief This is a constructor function.
+ *  \param file_name a reference to a string
+ */
+Plot::Plot(string &script_file) : script_file(script_file)
 {
-	//	default specifications
-	script.open("temp/plotScript.p");
+  script.open(script_file.c_str());
+  specifyDefault();
+}
+
+/*!
+ *  \brief Default specifications to be printed out to the script file.
+ */
+void Plot::specifyDefault()
+{
+	script.open(script_file.c_str(),ios::app);
 	script << "# Gnuplot script file for plotting data in file \"data\"\n\n";
 	script << "set terminal post eps" << endl;
 	script << "set autoscale\t";
@@ -26,7 +41,7 @@ Plot::Plot()
  */
 void Plot::label(vector<string> &labels)
 {
-	script.open("temp/plotScript.p",ios::app);
+	script.open(script_file.c_str(),ios::app);
 	script << "set title \"" << labels[0] << "\"" << endl;
 	script << "set xlabel \"" << labels[1] << "\"" << endl;
 	script << "set ylabel \"" << labels[2] << "\"" << endl;
@@ -41,7 +56,7 @@ void Plot::label(vector<string> &labels)
  */
 void Plot::label(string s, vector<string> &labels)
 {
-	script.open("temp/plotScript.p",ios::app);
+	script.open(script_file.c_str(),ios::app);
 	script << "set title \"" << labels[0] << "\"" << endl;
   	script << "set label \"" << s << "\" at graph 0.005, graph 0.95 "
   	"font \",10\"" << endl;
@@ -58,15 +73,38 @@ void Plot::label(string s, vector<string> &labels)
  */
 void Plot::setRange(pair<double,double> xrange, pair<double,double> yrange)
 {
-	script.open("temp/plotScript.p",ios::app);
-	script << "set xr [" << xrange.first - GAP << ":" << xrange.second + GAP  << "]"  << endl;
-	script << "set yr [" << yrange.first - GAP/2 << ":" << yrange.second + GAP/2 << "]"  << endl;
+	script.open(script_file.c_str(),ios::app);
+	script << "set xr [" << xrange.first - GAP << ":" << xrange.second + GAP 
+         << "]"  << endl;
+	script << "set yr [" << yrange.first - GAP << ":" << yrange.second + GAP 
+         << "]"  << endl;
 	script.close();
 }
 
 /*!
+ *  \brief This function plots the predictions
+ *  \param data_file a reference to a string
+ *  \param predictions a reference to a vector<vector<double>>
+ */
+void Plot::sketch(string &data_file, vector<vector<double>> &predictions)
+{
+  script.open(script_file.c_str(),ios::app);
+  script << "set output \"predictions/plots/" << data_file << ".eps\"" << endl;
+	script << "set multiplot" << endl;
+  script << "plot \"predictions/data/" << data_file << "\" using 1:2 title "
+         << "'original distribution' with points lc rgb \"red\", \\" << endl;
+  script << "\"predictions/data/" << data_file << "\" using 1:3 title "
+         << "'normal estimate' with points lc rgb \"blue\", \\" << endl;
+  script << "\"predictions/data/" << data_file << "\" using 1:4 title "
+         << "'laplace estimate' with points lc rgb \"green\"" << endl;
+	script.close();
+
+	system("gnuplot -persist predictions/script.p");	
+}
+
+/*!
  *	\brief This function is used to plot the generated X values
- *  	\param randomData a reference to a vector<double>
+ * 	\param randomData a reference to a vector<double>
  */
 void Plot::sketch(vector<double> &randomData)
 {

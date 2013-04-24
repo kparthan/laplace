@@ -1,5 +1,5 @@
-CFLAGS=-std=c++0x -g $(shell pkg-config --cflags liblcb-experimental) 
-LDFLAGS=$(shell pkg-config --libs liblcb-experimental) -lboost_program_options
+CFLAGS=-std=c++0x -g 
+LDFLAGS=-lboost_program_options
 
 OBJECTS = laplace-fit.o \
   Support.o \

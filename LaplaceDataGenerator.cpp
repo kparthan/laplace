@@ -62,11 +62,7 @@ void LaplaceDataGenerator::simulate()
         double scale = parameters.scale[j];
         laplace = Laplace(mean,scale);
         vector<double> list = generateRandom(parameters.samples[i]);
-        xvals = sort(list);
-        computeFunctionValues();
-        addNoise(parameters.noise_sigma[k]);
-        //plotData();
-        //mmlEstimate();
+        estimateAndPlotModel("laplace",list,j,k);
       }
     }
   }
@@ -75,13 +71,16 @@ void LaplaceDataGenerator::simulate()
 /*!
  *  This function computes the distribution values for the randomly generated
  *  x values.
+ *  \param x a reference to a vector<double>
+ *  \return the function values
  */
-void LaplaceDataGenerator::computeFunctionValues()
+vector<double> LaplaceDataGenerator::computeFunctionValues(vector<double> &x)
 {
-  int num_samples = xvals.size();
-  fxvals = vector<double>(num_samples,0);
+  int num_samples = x.size();
+  fx = vector<double>(num_samples,0);
   for (int i=0; i<num_samples; i++) {
-    fxvals[i] = laplace.value(xvals[i]);
+    fx[i] = laplace.value(x[i]);
   }
+  return fx;
 }
 

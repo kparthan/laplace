@@ -6,7 +6,7 @@
 class Message
 {
   private:
-    //! Data samples (SORTED) to be encoded
+    //! Data samples (sorted) to be encoded
     vector<double> data;
 
     //! Parameter estimates for the normal distribution
@@ -14,6 +14,12 @@ class Message
 
     //! Parameter estimates for the laplace distribution
     pair<double,double> laplaceEstimates;
+
+    //! Estimates the MML parameters for the Normal distribution
+    void estimateNormalParameters();
+
+    //! Estimates the MML parameters for the Laplace distribution
+    void estimateLaplaceParameters();
 
   public:
     //! Null constructor
@@ -24,12 +30,6 @@ class Message
 
     //! Estimate the parameters for the Normal & Laplace cases
     void estimateParameters();
-
-    //! Estimates the MML parameters for the Normal distribution
-    void estimateNormalParameters();
-
-    //! Estimates the MML parameters for the Laplace distribution
-    void estimateLaplaceParameters();
 
     //! Return the parameter estimates for the Normal distribution
     pair<double,double> getNormalEstimates();

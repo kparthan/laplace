@@ -13,6 +13,16 @@ struct Parameters
   string estimate;
 };
 
+struct MML_Estimates
+{
+  double normal_mean;
+  double normal_sigma;
+  double normal_mml;
+  double laplace_mean;
+  double laplace_scale;
+  double laplace_mml;
+};
+
 struct Parameters parseCommandLineInput(int, char **);
 void Usage(const char *, options_description &);
 int sign(double);
