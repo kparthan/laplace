@@ -16,8 +16,11 @@ class Plot
     void specifyDefault();
 
 	public:
-		//! Constructor
+		//! Null constructor
 		Plot();
+
+    //! Constructor
+    Plot(string &);
 
 		//! Labeling the axes & naming the graph
 		void label(vector<string> &);
@@ -27,6 +30,9 @@ class Plot
 
 		//! setting the ranges of X and Y axes
 		void setRange(pair<double,double>, pair<double,double>);
+
+    //! Plot the estimated predictions
+    void sketch(string &, vector<vector<double>> &);
 
 		//! plotting the data values(X's only)
 		void sketch(vector<double> &);

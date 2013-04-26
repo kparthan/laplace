@@ -2,10 +2,11 @@
 #define HEADER_H
 
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <vector>
 #include <array>
-#include <cstring>
+#include <string>
 #include <fstream>
 #include <cmath>
 #include <limits>
@@ -21,7 +22,7 @@
 #define DEFAULT_SAMPLES 100
 #define DEFAULT_MEAN 0.0
 #define DEFAULT_SCALE 2.0
-#define DEFAULT_NOISE_SIGMA 0.1
+#define DEFAULT_NOISE_SIGMA 0
 #define DEFAULT_GENERATE_DISTRIBUTION "laplace"
 #define DEFAULT_ESTIMATE_DISTRIBUTION "laplace"
 

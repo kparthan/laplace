@@ -56,6 +56,6 @@ double Laplace::value(double x)
 {
   double dev = fabs(x - mu);
   double exponent = -dev / (double)b;
-  return exp(exponent/(2*b));
+  return (exp(exponent))/(2*b);
 }
 

@@ -14,6 +14,7 @@ Plot::Plot()
 Plot::Plot(string &script_file) : script_file(script_file)
 {
   script.open(script_file.c_str());
+  script.close();
   specifyDefault();
 }
 
@@ -89,17 +90,17 @@ void Plot::setRange(pair<double,double> xrange, pair<double,double> yrange)
 void Plot::sketch(string &data_file, vector<vector<double>> &predictions)
 {
   script.open(script_file.c_str(),ios::app);
-  script << "set output \"predictions/plots/" << data_file << ".eps\"" << endl;
+  script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
 	script << "set multiplot" << endl;
-  script << "plot \"predictions/data/" << data_file << "\" using 1:2 title "
+  script << "plot \"results/data/" << data_file << "\" using 1:2 title "
          << "'original distribution' with points lc rgb \"red\", \\" << endl;
-  script << "\"predictions/data/" << data_file << "\" using 1:3 title "
+  script << "\"results/data/" << data_file << "\" using 1:3 title "
          << "'normal estimate' with points lc rgb \"blue\", \\" << endl;
-  script << "\"predictions/data/" << data_file << "\" using 1:4 title "
+  script << "\"results/data/" << data_file << "\" using 1:4 title "
          << "'laplace estimate' with points lc rgb \"green\"" << endl;
 	script.close();
 
-	system("gnuplot -persist predictions/script.p");	
+	system("gnuplot -persist results/script.p");	
 }
 
 /*!

@@ -1,4 +1,6 @@
+#include "DataGenerator.h"
 #include "NormalDataGenerator.h"
+#include "LaplaceDataGenerator.h"
 #include "Plot.h"
 #include "Message.h"
 
@@ -93,38 +95,51 @@ int DataGenerator::partition(vector<double> &list, vector<int> &index,
  *  \brief This function generates the relevant file name to which the data 
  *  needs to be added.
  *  \param name a pointer to a char 
+ *  \param num_samples an integer
  *  \param scale_index an integer 
  *  \param noise_index an integer 
  *  \return the file name
  */
-string DataGenerator::getFileName(const char *name,
+string DataGenerator::getFileName(const char *name, int num_samples,
                                   int scale_index, int noise_index)
 {
   string file = name;
+  file += "_n_" + boost::lexical_cast<string>(num_samples);
   double mean = parameters.mean;
   file += "_mean_" + boost::lexical_cast<string>(mean);
   double scale = parameters.scale[scale_index];
   file += "_scale_" + boost::lexical_cast<string>(scale);
   double noise_sigma = parameters.noise_sigma[noise_index];
-  file += "_noise_" + boost::lexical_cast<string>(noise_sigma);
-  file += ".txt";
+  //file += "_noise_" + boost::lexical_cast<string>(noise_sigma);
+  string s = convertToString(noise_sigma); 
+  file += "_noise_" + s;
+  cout << file << endl;
   return file;
 }
 
 /*!
  *  \brief This function outputs the data to a file.
- *  \param file_name a reference to a string
  *  \param num_samples an integer
+ *  \param scale_index an integer
+ *  \param noise_index an integer
  *  \param estimates a reference to a struct MML_Estimates
  */
-void DataGenerator::writeToFile(string &file_name, int num_samples,
-                                struct MML_Estimates &estimates)
+void DataGenerator::updateResults(int num_samples, int scale_index, 
+                                  int noise_index, 
+                                  struct MML_Estimates &estimates)
 {
-  string file = "estimates/data/" + file_name;
-  ofstream fp(file.c_str(),ios::app);
-  fp << num_samples << "\t";
-  fp << estimates.normal_mml << "\t";
-  fp << estimates.laplace_mml << endl;
+  ofstream fp("results/statistics",ios::app);
+  fp << setw(10) << num_samples << "\t";
+  fp << setw(5) << setprecision(3) << parameters.mean << "\t";
+  fp << setw(5) << setprecision(3) << parameters.scale[scale_index] << "\t";
+  fp << setw(5) << setprecision(3) << parameters.noise_sigma[noise_index] << "\t";
+  fp << setw(10) << parameters.distribution << "\t";
+  fp << setw(10) << setprecision(3) << estimates.normal_mean << "\t";
+  fp << setw(10) << setprecision(3) << estimates.normal_sigma << "\t";
+  fp << fixed << setw(10) << setprecision(3) << estimates.normal_mml << "\t";
+  fp << setw(10) << setprecision(3) << estimates.laplace_mean << "\t";
+  fp << setw(10) << setprecision(3) << estimates.laplace_scale << "\t";
+  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_mml << endl;
   fp.close();
 }
 
@@ -139,7 +154,7 @@ void DataGenerator::writeToFile(string &file_name,
                                 vector<double> &x, vector<double> &fx, 
                                 vector<vector<double>> &predictions)
 {
-  string file = "predictions/data/" + file_name;
+  string file = "results/data/" + file_name;
   ofstream fp(file.c_str());
   for (int i=0; i<x.size(); i++) {
     fp << x[i] << "\t" << fx[i] << "\t";
@@ -150,10 +165,12 @@ void DataGenerator::writeToFile(string &file_name,
 
 /*!
  *  \brief This function plots the predictions for a given parameter set
+ *  \param data_file a reference to a string
  */
 void DataGenerator::plotPredictions(string &data_file)
 {
-  Plot graph("predictions/script.p");
+  string script_file("results/script.p");
+  Plot graph(script_file);
   pair<double,double> xrange,yrange;
 
   vector<string> labels(3,"");
@@ -161,10 +178,10 @@ void DataGenerator::plotPredictions(string &data_file)
   labels[1] = "x";
   labels[2] = "predictions";
   graph.label(labels);
-  xrange = extremum(x);
-  yrange = extremum(predictions[0]);
-  graph.setRange(xrange,yrange);
-  graph.sketch(data_file,predictions);
+  //xrange = extremum(x);
+  //yrange = extremum(predictions[0]);
+  //graph.setRange(xrange,yrange);
+  graph.sketch(data_file,predictions_noise);
 }
 
 /*!
@@ -178,22 +195,23 @@ void DataGenerator::estimateAndPlotModel(const char *name,
                                          vector<double> &list, 
                                          int scale_index, int noise_index)
 {
-  string file_name = getFileName(name,scale_index,noise_index);
+  string file_name = getFileName(name,list.size(),scale_index,noise_index);
 
   x = sort(list);
-  fx = computeFunctionValues(x);
+  /*fx = computeFunctionValues(x);
   struct MML_Estimates estimates = mmlEstimate(x);
   predictions = predict(x,estimates);
   writeToFile(file_name,x,fx,predictions);
-  plotPredictions();
+  plotPredictions(file_name);*/
 
   addNoise(parameters.noise_sigma[noise_index]);
   fx_noise = computeFunctionValues(x_noise);
   struct MML_Estimates estimates_noise = mmlEstimate(x_noise);
   predictions_noise = predict(x_noise,estimates_noise);
-  plotPredictions();
+  writeToFile(file_name,x_noise,fx_noise,predictions_noise);
+  plotPredictions(file_name);
 
-  writeToFile(file_name,list.size(),estimates);
+  updateResults(list.size(),scale_index,noise_index,estimates_noise);
 }
 
 /*!
@@ -267,6 +285,7 @@ struct MML_Estimates DataGenerator::mmlEstimate(vector<double> &x)
   cout << "\tMean: " << estimates.laplace_mean << endl;
   cout << "\tScale: " << estimates.laplace_scale << endl;
   cout << "\tMessage length: " << estimates.laplace_mml << endl;
+  cout << endl;
 
   return estimates;
 }

@@ -44,5 +44,8 @@ Message.o: Message.cpp Message.h
 	g++ -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f *.o *~ laplace-fit temp/*
+	rm -f *.o *~ laplace-fit
+
+clean_results:
+	rm results/data/* results/plots/* results/script.p results/statistics
 

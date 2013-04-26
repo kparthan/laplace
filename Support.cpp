@@ -17,11 +17,12 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   options_description desc("Allowed options");
   desc.add_options()
        ("help","produce help message")
-       ("samples",value<vector<int>>(&parameters.samples),
+       ("samples",value<vector<int>>(&parameters.samples)->multitoken(),
                                     "number of points to be generated")
        ("mean",value<double>(&parameters.mean),"mean of the distribution")
-       ("scale",value<vector<double>>(&parameters.scale),"the scale values")
-       ("noise",value<vector<double>>(&parameters.noise_sigma),
+       ("scale",value<vector<double>>(&parameters.scale)->multitoken(),
+                                                        "the scale values")
+       ("noise",value<vector<double>>(&parameters.noise_sigma)->multitoken(),
                             "values of standard deviation of Gaussian noise")
        ("generate",value<string>(&parameters.distribution),
                                     "distribution used to generate the data")
@@ -90,11 +91,29 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     cout << "Distribution which is used to estimate the data: " 
          << parameters.estimate << endl;
   } else {
-    parameters.distribution = DEFAULT_ESTIMATE_DISTRIBUTION;
+    parameters.estimate = DEFAULT_ESTIMATE_DISTRIBUTION;
     cout << "Data estimated using the default distribution: "
          << DEFAULT_ESTIMATE_DISTRIBUTION << endl;
   }
 
+  cout << "Samples: ";
+  for (int i=0; i<parameters.samples.size(); i++) {
+    cout << parameters.samples[i] << " ";
+  }
+  cout << endl;
+  cout << "Mean: " << parameters.mean << endl;
+  cout << "Scale: ";
+  for (int i=0; i<parameters.scale.size(); i++) {
+    cout << parameters.scale[i] << " ";
+  }
+  cout << endl;
+  cout << "noise sigma: ";
+  for (int i=0; i<parameters.noise_sigma.size(); i++) {
+    cout << parameters.noise_sigma[i] << " ";
+  }
+  cout << endl;
+  cout << "Distribution: " << parameters.distribution << endl;
+  cout << "Estimate: " << parameters.estimate << endl;
   return parameters;
 }
 
@@ -132,15 +151,18 @@ int sign(double number)
  */
 void fitData(struct Parameters &parameters)
 {
-  DataGenerator *data_generator;
   if (boost::iequals(parameters.distribution,"laplace")) {
     LaplaceDataGenerator laplace_data_generator(parameters);
-    data_generator = &laplace_data_generator;
+    DataGenerator *data_generator = &laplace_data_generator;
+    data_generator->simulate();
   } else if (boost::iequals(parameters.distribution,"normal")) {
     NormalDataGenerator normal_data_generator(parameters);
-    data_generator = &normal_data_generator;
+    DataGenerator *data_generator = &normal_data_generator;
+    data_generator->simulate();
+  } else {
+    cout << "Distribution unknown ..." << endl;
+    exit(1);
   }
-  data_generator->simulate();
 }
 
 /*!
@@ -233,5 +255,15 @@ double computeMedian(vector<double> &list)
   } else {
     return (list[n/2-1]+list[n/2])/2;
   }
+}
+
+/*!
+ *
+ */
+string convertToString(double number)
+{
+  ostringstream convert ;
+  convert << number ;
+  return convert.str() ;
 }
 

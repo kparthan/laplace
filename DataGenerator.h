@@ -41,7 +41,7 @@ class DataGenerator
     vector<double> sort(vector<double> &);
 
     //! Plot the data
-    void plotData(); 
+    void plotPredictions(string &); 
 
     //! MML estimates
     struct MML_Estimates mmlEstimate(vector<double> &);
@@ -66,10 +66,10 @@ class DataGenerator
     int partition(vector<double> &, vector<int> &, int, int);
 
     //! Generates the file name to append data to
-    string getFileName(const char *, int, int);
+    string getFileName(const char *, int, int, int);
 
     //! Outputs the data to a file
-    void writeToFile(string &, int, struct MML_Estimates &);
+    void updateResults(int, int, int, struct MML_Estimates &);
 
     //! Outputs the predictions to a file
     void writeToFile(string &, vector<double> &, vector<double> &, 

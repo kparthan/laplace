@@ -33,6 +33,7 @@ double maximum(vector<double> &);
 void printError(const char *);
 double computeMean(vector<double> &);
 double computeMedian(vector<double> &);
+template<class T> string convertToString(T);
 
 #endif
 
