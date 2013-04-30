@@ -258,7 +258,9 @@ double computeMedian(vector<double> &list)
 }
 
 /*!
- *
+ *  \brief This function is used to convert a double to a string
+ *  \param number a double
+ *  \return a string
  */
 string convertToString(double number)
 {
