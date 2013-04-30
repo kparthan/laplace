@@ -9,9 +9,13 @@ Simulation::Simulation()
 
 /*!
  *  \brief This is a constructor module to instantiate the object.
+ *  \param moving a pointer to a ProteinStructure
+ *  \param fixed a pointer to a ProteinStructure
+ *  \param parameters a reference to a struct Parameters
  */
-Simulation::Simulation(ProteinStructure *moving, ProteinStructure *fixed):
-                       moving(moving), fixed(fixed)
+Simulation::Simulation(ProteinStructure *moving, ProteinStructure *fixed,
+                       struct Parameters &parameters) :
+                       moving(moving), fixed(fixed),
 {}
 
 /*!
@@ -116,7 +120,7 @@ void Simulation::perturb(int iterations, double acceptance, double move)
   }
   fw1.close();
   int count = 0;
-  ProteinStructure *moving_copy_persist = moving;
+  ProteinStructure moving_copy_persist = *moving;
   ProteinStructure moving_copy;
   previous_deviation = computeL1Deviation();
   for (int i=0; i<iterations; i++) {
@@ -131,31 +135,31 @@ void Simulation::perturb(int iterations, double acceptance, double move)
       current_transformation = randomRotation();
     }
 
-    moving_copy = *moving_copy_persist;
+    moving_copy = moving_copy_persist;
     moving_copy.transform(current_transformation);
     current_deviation = computeL1Deviation(moving_copy);
     if (current_deviation < previous_deviation) {
       // accept the new configuration
       count++;
-      moving_copy_persist = &moving_copy;
-      transformation = transformation * current_transformation;
+      moving_copy_persist = moving_copy;
+      transformation = current_transformation * transformation ;
       previous_deviation = current_deviation;
     } else {
       // accept the new configuration with a probability
       random = rand() / (double) RAND_MAX;
       if (random <= acceptance) {
         count++;
-        moving_copy_persist = &moving_copy;
-        transformation = transformation * current_transformation;
+        moving_copy_persist = moving_copy;
+        transformation = current_transformation * transformation ;
         previous_deviation = current_deviation;
       }
     }
     cout << i << endl;
   }
-  printf("M1: %p\nM2: %p\n", moving, moving_copy_persist);
+  printf("M1: %p\nM2: %p\n", moving, &moving_copy_persist);
   cout << "Count: " << count << endl;
   transformation.print();
-  moving->transform(transformation.inverse());
+  //moving->transform(transformation);
   c = moving->getAtomicCoordinates<double>();
   ofstream fw3("after1");
   for (int i=0; i<c.size(); i++) {
@@ -164,7 +168,7 @@ void Simulation::perturb(int iterations, double acceptance, double move)
   fw3.close();
   //delete moving;
   //moving = new ProteinStructure(*moving_copy_persist);
-  c = moving_copy_persist->getAtomicCoordinates<double>();
+  c = moving_copy_persist.getAtomicCoordinates<double>();
   ofstream fw2("after2");
   for (int i=0; i<c.size(); i++) {
     fw2 << c[i][0] << " " << c[i][1] << " " << c[i][2] << endl;

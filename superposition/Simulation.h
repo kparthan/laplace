@@ -12,6 +12,18 @@ class Simulation
     //! A fixed protein structure
     ProteinStructure *fixed;
 
+    //! Number of iterations
+    int iterations;
+
+    //! Acceptance probability
+    double acceptance_probability;
+
+    //! Length of the move during random translation
+    double step;
+
+    //! Verbose flag
+    int print_status;
+
     //! Generates a random translation matrix
     Matrix<double> randomTranslation(double);
 
