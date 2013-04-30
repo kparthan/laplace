@@ -3,7 +3,8 @@ LDFLAGS=$(shell pkg-config --libs liblcb-experimental) -lboost_program_options
 
 OBJECTS = superimpose.o \
   Support.o \
-  Simulation.o
+  Simulation.o \
+  Message.o
 
 all: superimpose
 
@@ -18,6 +19,12 @@ Support.o: Support.cpp Support.h
 
 Simulation.o: Simulation.cpp Simulation.h
 	g++ -c $(CFLAGS) $< -o $@
+
+Message.o: Message.cpp Message.h
+	g++ -c $(CFLAGS) $< -o $@
+
+clean_output:
+	rm output/* 
 
 clean:
 	rm -f *.o *~ superimpose

@@ -18,7 +18,7 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
        ("verbose","print some details")
        ("iterate",value<int>(&parameters.iterations),"number of iterations")
        ("accept",value<double>(&parameters.acceptance),"Acceptance probability")
-       ("move",value<double>(&parameters.move),
+       ("step",value<double>(&parameters.step),
                                          "increment during random translation")
        ("proteins",value<vector<string>>(&parameters.pdb_files)->multitoken(),
                                                              "Input PDB files")
@@ -57,12 +57,12 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
          << endl;
   }
 
-  if (vm.count("move")) {
-    cout << "Random increment during translation: " << parameters.move << endl;
+  if (vm.count("step")) {
+    cout << "Random increment during translation: " << parameters.step << endl;
   } else {
-    parameters.move = DEFAULT_RANDOM_MOVE;
+    parameters.step = DEFAULT_RANDOM_STEP;
     cout << "Using default value of random increment: " 
-         << DEFAULT_RANDOM_MOVE << endl;
+         << DEFAULT_RANDOM_STEP << endl;
   }
 
   if (vm.count("accept")) {
@@ -116,5 +116,34 @@ ProteinStructure *parsePDBFile(const char *pdbFile)
   ProteinStructure *structure = parser.getStructure(pdbFile)->select(CASelector());
   cout << " [OK]" << endl;
   return structure;
+}
+
+/*!
+ *  \brief This module computes the mean of a set of samples
+ *  \param list a reference to a vector<double>
+ *  \return the mean value
+ */
+double computeMean(vector<double> &list)
+{
+  double sum = 0;
+  for (int i=0; i<list.size(); i++) {
+    sum += list[i];
+  }
+  return sum / (double)list.size();
+}
+
+/*!
+ *  \brief This module computes the median of a sorted set of samples
+ *  \param list a reference to a vector<double>
+ *  \return the median value
+ */
+double computeMedian(vector<double> &list)
+{
+  int n = list.size();
+  if (n % 2 == 1) {
+    return list[n/2];
+  } else {
+    return (list[n/2-1]+list[n/2])/2;
+  }
 }
 

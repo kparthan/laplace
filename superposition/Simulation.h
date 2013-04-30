@@ -1,7 +1,7 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include "Header.h"
+#include "Support.h"
 
 class Simulation
 {
@@ -38,13 +38,13 @@ class Simulation
     Simulation();
 
     //! Constructor
-    Simulation(ProteinStructure *, ProteinStructure *);
+    Simulation(ProteinStructure *, ProteinStructure *, struct Parameters &);
 
     //! Superimpose the two structures
     void initialSuperposition();
 
     //! Perturb the protein structure
-    void perturb(int, double, double);
+    ProteinStructure perturb();
 
     //! Computes the L1 distance between the fixed and moving 
     //! protein structures
@@ -52,6 +52,19 @@ class Simulation
 
     //! Computes the L1 distance between two protein structures
     double computeL1Deviation(ProteinStructure &);
+
+    //! Computes the set of deviations
+    vector<array<double,3>> getDeviations();
+
+    //! Computes the set of deviations
+    vector<array<double,3>> getDeviations(ProteinStructure &);
+
+    //! Computes the message length of the deviations (L2 Norm)
+    void computeMessageLength();
+
+    //! Computes the message length of the deviations (L1 Norm)
+    void computeMessageLength(ProteinStructure &);
+
 };
 
 #endif

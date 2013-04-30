@@ -22,7 +22,7 @@
 
 #define DEFAULT_ITERATIONS 100
 #define DEFAULT_ACCEPTANCE_PROBABILITY 0.2
-#define DEFAULT_RANDOM_MOVE 0.5
+#define DEFAULT_RANDOM_STEP 0.5
 
 #define AOM 0.001
 #define PI boost::math::constants::pi<double>()
