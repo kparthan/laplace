@@ -188,8 +188,9 @@ ProteinStructure Simulation::perturb()
     transformation.print();
     cout << "Initial L1 distance after superposition: " 
          << initial_L1_deviation / coordinates.size()  << endl;
+    final_L1_deviation = computeL1Deviation(moving_copy_persist);
     cout << "Final L1 distance after perturbation: " 
-         << current_deviation / coordinates.size() << endl;
+         << final_L1_deviation / coordinates.size() << endl;
 
     /*moving->transform(transformation);
     coordinates = moving->getAtomicCoordinates<double>();
