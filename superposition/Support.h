@@ -11,6 +11,7 @@ struct Parameters
   double acceptance;
   double increment_translation;
   double increment_rotation_angle;
+  int encode_deviations;
 };
 
 struct Parameters parseCommandLineInput(int, char **);
@@ -19,6 +20,9 @@ bool checkFile(const char *);
 ProteinStructure* parsePDBFile(const char *);
 double computeMean(vector<double> &);
 double computeMedian(vector<double> &);
+vector<double> sort(vector<double> &);
+void quicksort(vector<double> &, vector<int> &, int, int);
+int partition(vector<double> &, vector<int> &, int, int);
 
 #endif
 

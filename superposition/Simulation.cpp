@@ -21,8 +21,14 @@ Simulation::Simulation(ProteinStructure *moving, ProteinStructure *fixed,
                        increment_translation(parameters.increment_translation), 
                        print_status(parameters.print)
 {
-  // convert the increment in rotaiton angle to radians
+  // convert the increment in rotation angle to radians
   increment_rotation_angle = parameters.increment_rotation_angle * PI / 180;
+
+  if (parameters.encode_deviations == ENCODE_DEVIATIONS_TOGETHER) {
+    num_deviations_sets = 1;
+  } else if (parameters.encode_deviations == ENCODE_DEVIATIONS_SEPARATE) {
+    num_deviations_sets = 3;
+  }
 }
 
 /*!
@@ -173,6 +179,8 @@ ProteinStructure Simulation::perturb()
   Matrix<double> current_transformation;
   double previous_deviation,current_deviation; 
   double initial_L1_deviation,final_L1_deviation;
+  Vector<double> rotation_axis_copy;
+  int flag = 0;
   srand(time(NULL));
 
   vector<array<double,3>> coordinates;
@@ -196,22 +204,26 @@ ProteinStructure Simulation::perturb()
     // if 0 < x <= 0.33 --> select translation
     // if 0.33 < x <= 0.67 --> perturb the rotation axis
     // if 0.67 < x <= 1 --> select rotation
+    flag = 0;
     double random = rand() / (double) RAND_MAX;
-    if (random <= 0.33) { 
+    if (random <= 1.0/3) { 
       // random translation
       current_transformation = randomTranslation();
-    } else if (random > 0.33 && random < 0.67) {
+    } else if (random > 1.0/3 && random <= 2.0/3) {
+      // random rotation
+      current_transformation = randomRotation();
+    } else {  
       // perturb the axis of rotation
+      rotation_axis_copy = rotation_axis;
+      flag = 1;
       perturbRotationAxis();
       perturb_axis++;
+      current_transformation = randomRotation();
       if (print_status == PRINT_DETAIL) {
         cout << "Iteration: " << i+1 << "\tPERTURBATION"
              << " OF AXIS" << endl;
       } 
-      continue;
-    } else {  
-      // random rotation
-      current_transformation = randomRotation();
+      //continue;
     }
 
     moving_copy = moving_copy_persist;
@@ -243,6 +255,9 @@ ProteinStructure Simulation::perturb()
         transformation = current_transformation * transformation ;
         previous_deviation = current_deviation;
       } else {
+        if (flag == 1) {
+          rotation_axis = rotation_axis_copy;
+        }
         if (print_status == PRINT_DETAIL) {
           cout << "Iteration: " << i+1 << "\tSTATE UNCHANGED" << endl;
         }
@@ -336,9 +351,9 @@ vector<array<double,3>> Simulation::getDeviations(ProteinStructure &protein)
     array<double,3> devs;
     Point<double> p1 = atoms_fixed[i].point<double>();
     Point<double> p2 = atoms_protein[i].point<double>();
-    devs[0] = p2.x() - p1.x();
-    devs[1] = p2.y() - p1.y();
-    devs[2] = p2.z() - p1.z();
+    devs[0] = (int ((p2.x() - p1.x())/AOM)) * AOM;
+    devs[1] = (int ((p2.y() - p1.y())/AOM)) * AOM;
+    devs[2] = (int ((p2.z() - p1.z())/AOM)) * AOM;
     deviations.push_back(devs);
   }
   return deviations;
@@ -351,19 +366,23 @@ vector<array<double,3>> Simulation::getDeviations(ProteinStructure &protein)
 void Simulation::computeMessageLength()
 {
   vector<array<double,3>> deviations = getDeviations();
-  Message message(deviations);
+  Message message(deviations,num_deviations_sets);
   vector<array<double,2>> normal_estimates = message.getNormalEstimates();
   vector<double> msglen = message.encodeUsingNormalModel();
   if (print_status == PRINT_DETAIL) {
     cout << "NORMAL ESTIMATES:-\n";
-    for (int i=0; i<1; i++) {
-      //cout << "DEVIATION " << i+1 << ":\n";
+    for (int i=0; i<num_deviations_sets; i++) {
+      cout << "DEVIATION " << i+1 << ":\n";
       cout << "\tMean: " << normal_estimates[i][0] << endl;
       cout << "\tSigma: " << normal_estimates[i][1] << endl;
       cout << "\tMsg. length: " << msglen[i] << endl;
     }
   }
-  cout << "Net message length: " << msglen[0] << endl;
+  double net_msglen = 0;
+  for (int i=0; i<num_deviations_sets; i++) {
+    net_msglen += msglen[i];
+  }
+  cout << "Net message length: " << net_msglen << endl;
 }
 
 /*!
@@ -373,18 +392,22 @@ void Simulation::computeMessageLength()
 void Simulation::computeMessageLength(ProteinStructure &protein)
 {
   vector<array<double,3>> deviations = getDeviations(protein);
-  Message message(deviations);
+  Message message(deviations,num_deviations_sets);
   vector<array<double,2>> laplace_estimates = message.getLaplaceEstimates();
   vector<double> msglen = message.encodeUsingLaplaceModel();
   if (print_status == PRINT_DETAIL) {
     cout << "\nLAPLACE ESTIMATES:-\n";
-    for (int i=0; i<1; i++) {
-      //cout << "DEVIATION " << i+1 << ":\n";
+    for (int i=0; i<num_deviations_sets; i++) {
+      cout << "DEVIATION " << i+1 << ":\n";
       cout << "\tMedian: " << laplace_estimates[i][0] << endl;
       cout << "\tScale: " << laplace_estimates[i][1] << endl;
       cout << "\tMsg. length: " << msglen[i] << endl;
     }
   }
-  cout << "Net message length: " << msglen[0] << endl;
+  double net_msglen = 0;
+  for (int i=0; i<num_deviations_sets; i++) {
+    net_msglen += msglen[i];
+  }
+  cout << "Net message length: " << net_msglen << endl;
 }
 

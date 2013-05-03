@@ -9,6 +9,9 @@ class Message
     //! Data samples (sorted) to be encoded
     vector<vector<double>> samples;
 
+    //! Number of sets of deviations
+    int num_deviations_sets;
+
     //! Parameter estimates for the normal distribution
     vector<array<double,2>> normal_estimates;
 
@@ -21,16 +24,12 @@ class Message
     //! Estimates the MML parameters for the Laplace distribution
     void estimateLaplaceParameters();
 
-    vector<double> sort(vector<double> &);
-    void quicksort(vector<double> &, vector<int> &, int, int);
-    int partition(vector<double> &, vector<int> &, int,int);
-
   public:
     //! Null constructor
     Message() ;
 
     //! Constructor
-    Message(vector<array<double,3>> &);
+    Message(vector<array<double,3>> &, int);
 
     //! Return the parameter estimates for the Normal distribution
     vector<array<double,2>> getNormalEstimates();

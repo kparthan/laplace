@@ -12,9 +12,13 @@ int main(int argc, char **argv)
   ProteinStructure *fixed = parsePDBFile(parameters.pdb_files[1].c_str());
   Simulation simulation(moving,fixed,parameters);
   simulation.initialSuperposition();
+  ProteinStructure protein = *moving;
   ProteinStructure final = simulation.perturb();
+  simulation.computeMessageLength(protein);
   simulation.computeMessageLength();
   simulation.computeMessageLength(final);
+  delete(moving);
+  delete(fixed);
 
   clock_t c_end = clock();
   auto t_end = high_resolution_clock::now();

@@ -27,6 +27,9 @@ class Simulation
     //! Verbose flag
     int print_status;
 
+    //! Method to encode deviations
+    int num_deviations_sets;
+
     //! Rotation axis
     Vector<double> rotation_axis;
 

@@ -10,6 +10,7 @@
 struct Parameters parseCommandLineInput(int argc, char **argv)
 {
   struct Parameters parameters;
+  string encode_deviations;
   
   cout << "Checking command-line input ..." << endl;
   options_description desc("Allowed options");
@@ -24,6 +25,8 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
                       "increment in angle (in degrees) during random rotation")
        ("proteins",value<vector<string>>(&parameters.pdb_files)->multitoken(),
                                                              "Input PDB files")
+       ("encode",value<string>(&encode_deviations),
+                  "method to encodine all the deviations [together/separate]")
   ;
   variables_map vm;
   store(parse_command_line(argc,argv,desc),vm);
@@ -84,6 +87,22 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     parameters.acceptance = DEFAULT_ACCEPTANCE_PROBABILITY;
     cout << "Using default acceptance probability: " 
          << DEFAULT_ACCEPTANCE_PROBABILITY << endl;
+  }
+
+  if (vm.count("encode")) {
+    if (encode_deviations.compare("together") == 0) {
+      parameters.encode_deviations = ENCODE_DEVIATIONS_TOGETHER;
+      cout << "Encoding deviations together ..." << endl;
+    } else if (encode_deviations.compare("separate") == 0) {
+      parameters.encode_deviations = ENCODE_DEVIATIONS_SEPARATE;
+      cout << "Encoding deviations separately ..." << endl;
+    } else {
+      cout << "Incorrect encoding option ..." << endl;
+      Usage(argv[0],desc);
+    }
+  } else {
+    parameters.encode_deviations = ENCODE_DEVIATIONS_TOGETHER;
+    cout << "Encoding deviations together ..." << endl;
   }
 
   return parameters;
@@ -157,5 +176,78 @@ double computeMedian(vector<double> &list)
   } else {
     return (list[n/2-1]+list[n/2])/2;
   }
+}
+
+/*!
+ *  \brief This function sorts the elements in the list
+ *  \param list a reference to a vector<double>
+ *  \return the sorted list
+ */
+vector<double> sort(vector<double> &list)
+{
+  int num_samples = list.size();
+	vector<double> sortedList(list);
+  vector<int> index(num_samples,0);
+	for(int i=0; i<num_samples; i++) {
+			index[i] = i;
+  }
+	quicksort(sortedList,index,0,num_samples-1);
+  return sortedList;
+}
+
+/*!
+ *  This is an implementation of the classic quicksort() algorithm to sort a
+ *  list of data values. The module uses the overloading operator(<) to 
+ *  compare two Point<T> objects. 
+ *  Pivot is chosen as the right most element in the list(default)
+ *  This function is called recursively.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ */
+void quicksort(vector<double> &list, vector<int> &index, 
+                              int left, int right)
+{
+	if(left < right)
+	{
+		int pivotNewIndex = partition(list,index,left,right);
+		quicksort(list,index,left,pivotNewIndex-1);
+		quicksort(list,index,pivotNewIndex+1,right);
+	}
+}
+
+/*!
+ *  This function is called from the quicksort() routine to compute the new
+ *  pivot index.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ *  \return the new pivot index
+ */
+int partition(vector<double> &list, vector<int> &index,
+                             int left, int right)
+{
+	double temp,pivotPoint = list[right];
+	int storeIndex = left,temp_i;
+	for(int i=left; i<right; i++) {
+		if(list[i] < pivotPoint) {
+			temp = list[i];
+			list[i] = list[storeIndex];
+			list[storeIndex] = temp;
+			temp_i = index[i];
+			index[i] = index[storeIndex];
+			index[storeIndex] = temp_i;
+			storeIndex += 1;	
+		}
+	}
+	temp = list[storeIndex];
+	list[storeIndex] = list[right];
+	list[right] = temp;
+	temp_i = index[storeIndex];
+	index[storeIndex] = index[right];
+	index[right] = temp_i;
+	return storeIndex;
 }
 
