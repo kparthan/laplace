@@ -9,7 +9,8 @@ struct Parameters
   vector<string> pdb_files;
   int iterations;
   double acceptance;
-  double step;
+  double increment_translation;
+  double increment_rotation_angle;
 };
 
 struct Parameters parseCommandLineInput(int, char **);

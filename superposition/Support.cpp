@@ -18,8 +18,10 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
        ("verbose","print some details")
        ("iterate",value<int>(&parameters.iterations),"number of iterations")
        ("accept",value<double>(&parameters.acceptance),"Acceptance probability")
-       ("step",value<double>(&parameters.step),
+       ("translate",value<double>(&parameters.increment_translation),
                                          "increment during random translation")
+       ("rotate",value<double>(&parameters.increment_rotation_angle),
+                      "increment in angle (in degrees) during random rotation")
        ("proteins",value<vector<string>>(&parameters.pdb_files)->multitoken(),
                                                              "Input PDB files")
   ;
@@ -57,12 +59,22 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
          << endl;
   }
 
-  if (vm.count("step")) {
-    cout << "Random increment during translation: " << parameters.step << endl;
+  if (vm.count("translate")) {
+    cout << "Increment during random translation: " 
+         << parameters.increment_translation << endl;
   } else {
-    parameters.step = DEFAULT_RANDOM_STEP;
-    cout << "Using default value of random increment: " 
-         << DEFAULT_RANDOM_STEP << endl;
+    parameters.increment_translation = DEFAULT_INCREMENT_TRANSLATION;
+    cout << "Using default value of random increment during translation: "
+         << DEFAULT_INCREMENT_TRANSLATION << endl;
+  }
+
+  if (vm.count("rotate")) {
+    cout << "Increment during random rotation: " 
+         << parameters.increment_rotation_angle << " degrees" << endl;
+  } else {
+    parameters.increment_rotation_angle = DEFAULT_INCREMENT_ROTATION_ANGLE;
+    cout << "Using default value of increment of angle of rotation: "
+         << DEFAULT_INCREMENT_ROTATION_ANGLE << endl;
   }
 
   if (vm.count("accept")) {

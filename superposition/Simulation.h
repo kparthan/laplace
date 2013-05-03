@@ -18,14 +18,23 @@ class Simulation
     //! Acceptance probability
     double acceptance_probability;
 
-    //! Length of the move during random translation
-    double step;
+    //! Increment during random translation
+    double increment_translation;
+
+    //! Increment (in degrees) to the angle of 
+    double increment_rotation_angle;
 
     //! Verbose flag
     int print_status;
 
+    //! Rotation axis
+    Vector<double> rotation_axis;
+
     //! Generates a random translation matrix
-    Matrix<double> randomTranslation(double);
+    Matrix<double> randomTranslation();
+
+    //! Perturbs the axis of rotation
+    void perturbRotationAxis();
 
     //! Generates a random rotation matrix
     Matrix<double> randomRotation();

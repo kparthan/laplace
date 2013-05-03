@@ -13,14 +13,21 @@ Message::Message()
  */
 Message::Message(vector<array<double,3>> &deviations)
 {
-  vector<double> tmp;
+  /*vector<double> tmp;
   for (int i=0; i<3; i++){
     for (int j=0; j<deviations.size(); j++){
       tmp.push_back(deviations[j][i]);
     }
     samples.push_back(tmp);
     tmp.clear();
+  }*/
+  vector<double> tmp;
+  for (int i=0; i<deviations.size(); i++) {
+    for (int j=0; j<3; j++) {
+      tmp.push_back(deviations[i][j]);
+    }
   }
+  samples.push_back(tmp);
 }
 
 /*!
@@ -29,9 +36,10 @@ Message::Message(vector<array<double,3>> &deviations)
  */
 void Message::estimateNormalParameters()
 {
-  for (int i=0; i<3; i++) {
+  for (int i=0; i<1; i++) {
     array<double,2> estimates;
     double mean = computeMean(samples[i]); 
+    //mean = 0;
     estimates[0] = mean;
     double sum = 0;
     for (int j=0; j<samples[i].size(); j++) {
@@ -44,14 +52,89 @@ void Message::estimateNormalParameters()
 }
 
 /*!
+ *  \brief This function sorts the elements in the list
+ *  \param list a reference to a vector<double>
+ *  \return the sorted list
+ */
+vector<double> Message::sort(vector<double> &list)
+{
+  int num_samples = list.size();
+	vector<double> sortedList(list);
+  vector<int> index(num_samples,0);
+	for(int i=0; i<num_samples; i++) {
+			index[i] = i;
+  }
+	quicksort(sortedList,index,0,num_samples-1);
+  return sortedList;
+}
+
+/*!
+ *  This is an implementation of the classic quicksort() algorithm to sort a
+ *  list of data values. The module uses the overloading operator(<) to 
+ *  compare two Point<T> objects. 
+ *  Pivot is chosen as the right most element in the list(default)
+ *  This function is called recursively.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ */
+void Message::quicksort(vector<double> &list, vector<int> &index, 
+                              int left, int right)
+{
+	if(left < right)
+	{
+		int pivotNewIndex = partition(list,index,left,right);
+		quicksort(list,index,left,pivotNewIndex-1);
+		quicksort(list,index,pivotNewIndex+1,right);
+	}
+}
+
+/*!
+ *  This function is called from the quicksort() routine to compute the new
+ *  pivot index.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ *  \return the new pivot index
+ */
+int Message::partition(vector<double> &list, vector<int> &index,
+                             int left, int right)
+{
+	double temp,pivotPoint = list[right];
+	int storeIndex = left,temp_i;
+	for(int i=left; i<right; i++) {
+		if(list[i] < pivotPoint) {
+			temp = list[i];
+			list[i] = list[storeIndex];
+			list[storeIndex] = temp;
+			temp_i = index[i];
+			index[i] = index[storeIndex];
+			index[storeIndex] = temp_i;
+			storeIndex += 1;	
+		}
+	}
+	temp = list[storeIndex];
+	list[storeIndex] = list[right];
+	list[right] = temp;
+	temp_i = index[storeIndex];
+	index[storeIndex] = index[right];
+	index[right] = temp_i;
+	return storeIndex;
+}
+
+/*!
  *  \brief This function computes the MML estimates of the parameters
  *  of a Laplace distribution
  */
 void Message::estimateLaplaceParameters()
 {
-  for (int i=0; i<3; i++) {
+  for (int i=0; i<1; i++) {
     array<double,2> estimates;
-    double median = computeMedian(samples[i]);
+    vector<double> list = sort(samples[i]);
+    double median = computeMedian(list);
+    //median = 0;
     estimates[0] = median;
     double sum = 0;
     for (int j=0; j<samples[i].size(); j++) {
@@ -89,11 +172,11 @@ vector<array<double,2>> Message::getLaplaceEstimates()
  */
 vector<double> Message::encodeUsingNormalModel()
 {
-  vector<double> msglen(3,0);
+  vector<double> msglen(1,0);
   double K2 = 5.0 / (36 * sqrt(3));
   double rangeMu = 5.0;
   double rangeLogSigma = 3.0;
-  for (int i=0; i<3; i++) {
+  for (int i=0; i<1; i++) {
     int N = samples[i].size();
     double part1 = log(K2) + log(rangeMu * rangeLogSigma) + 0.5 * log(2 * N * N) 
                    - log(normal_estimates[i][1]);
@@ -111,11 +194,11 @@ vector<double> Message::encodeUsingNormalModel()
  */
 vector<double> Message::encodeUsingLaplaceModel()
 {
-  vector<double> msglen(3,0);
+  vector<double> msglen(1,0);
   double K2 = 5.0 / (36 * sqrt(3));
   double rangeMu = 5.0;
   double rangeSigma = 3.0;
-  for (int i=0; i<3; i++) {
+  for (int i=0; i<1; i++) {
     int N = samples[i].size();
     double part1 = log(K2) + log(rangeMu * rangeSigma) + log(N)
                    - log(laplace_estimates[i][1]);

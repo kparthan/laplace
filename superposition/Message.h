@@ -21,6 +21,10 @@ class Message
     //! Estimates the MML parameters for the Laplace distribution
     void estimateLaplaceParameters();
 
+    vector<double> sort(vector<double> &);
+    void quicksort(vector<double> &, vector<int> &, int, int);
+    int partition(vector<double> &, vector<int> &, int,int);
+
   public:
     //! Null constructor
     Message() ;

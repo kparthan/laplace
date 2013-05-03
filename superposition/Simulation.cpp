@@ -18,8 +18,12 @@ Simulation::Simulation(ProteinStructure *moving, ProteinStructure *fixed,
                        moving(moving), fixed(fixed), 
                        iterations(parameters.iterations),
                        acceptance_probability(parameters.acceptance),
-                       step(parameters.step), print_status(parameters.print)
-{}
+                       increment_translation(parameters.increment_translation), 
+                       print_status(parameters.print)
+{
+  // convert the increment in rotaiton angle to radians
+  increment_rotation_angle = parameters.increment_rotation_angle * PI / 180;
+}
 
 /*!
  *  \brief This function superimposes the moving protein onto the
@@ -34,6 +38,10 @@ void Simulation::initialSuperposition()
   if (print_status == PRINT_DETAIL) {
     cout << "RMSD: " << superimposer.rmsd() << endl;
   }
+  cout << superimposer.getRotationAngle() * 180 / PI << endl;
+  rotation_axis = superimposer.getRotationAxis();
+  //cout << rotation_axis.l2Norm() << endl;
+  //rotation_axis.print();
   //Matrix<double> rot = superimposer.getRotationMatrix();
   //rot.print();
   //cout << superimposer.rmsd() << endl;
@@ -43,13 +51,29 @@ void Simulation::initialSuperposition()
 
 /*!
  *  \brief This function generates a random translation matrix.
- *  \param move a double
  */
-Matrix<double> Simulation::randomTranslation(double move)
+Matrix<double> Simulation::randomTranslation()
 {
+  // randomly choose a point on a unit sphere
+  /* choose theta \in [0,PI] -- the angle with Z-axis */
+  double theta = ((double)rand() * PI) / RAND_MAX;
+
+  /* choose phi \in [0, 2 PI] -- the angle in the XY plane */
+  double phi = ((double)rand() * 2 * PI) / RAND_MAX;
+
+  Vector<double> direction(3);
+  direction[0] = sin(theta) * cos(phi);
+  direction[1] = sin(theta) * sin(phi);
+  direction[2] = cos(theta);
+  direction = direction * increment_translation;
+  //direction.print();
   Matrix<double> translation_matrix = Matrix<double>::identity(4,4);
+  translation_matrix[0][3] = direction[0];  
+  translation_matrix[1][3] = direction[1];  
+  translation_matrix[2][3] = direction[2];  
+
   // randomly choose the axis along which the structure is translated
-  double random = rand() / (double) RAND_MAX;
+  /*double random = rand() / (double) RAND_MAX;
   if (random <= 0.33) {
     // translate along x-axis
     translation_matrix[0][3] = move;
@@ -59,8 +83,40 @@ Matrix<double> Simulation::randomTranslation(double move)
   } else {
     // translate along z-axis
     translation_matrix[2][3] = move;
-  }
+  }*/
   return translation_matrix;
+}
+
+/*!
+ *  \brief This function perturbs the existing axis of rotation.
+ */
+void Simulation::perturbRotationAxis()
+{
+  array<double,2> angles = angleWithAxes(rotation_axis);
+
+  // perturb theta
+  double sign = rand() / RAND_MAX;
+  if (sign < 0.5) {
+    angles[0] -= increment_rotation_angle;
+  } else {
+    angles[0] += increment_rotation_angle;
+  }
+
+  // perturb phi 
+  sign = rand() / RAND_MAX;
+  if (sign < 0.5) {
+    angles[1] -= increment_rotation_angle;
+  } else {
+    angles[1] += increment_rotation_angle;
+  }
+
+  double theta = angles[0];
+  double phi = angles[1];
+
+  // reconstruct the axis
+  rotation_axis[0] = sin(theta) * cos(phi);
+  rotation_axis[1] = sin(theta) * sin(phi);
+  rotation_axis[2] = cos(theta);
 }
 
 /*!
@@ -68,7 +124,7 @@ Matrix<double> Simulation::randomTranslation(double move)
  */
 Matrix<double> Simulation::randomRotation()
 {
-  Vector<double> axis(3);
+  /*Vector<double> axis(3);
 
   // randomly choose the axis about which the structure is rotated
   double random = rand() / (double) RAND_MAX;
@@ -83,8 +139,9 @@ Matrix<double> Simulation::randomRotation()
     axis[2] = 1;
   }
   // randomly select an angle in [0,2 PI]
-  double angle = ((double)rand() * 2 * PI) / RAND_MAX;
-  Matrix<double> rotation_matrix = rotationMatrix(axis,angle);
+  double angle = ((double)rand() * 2 * PI) / RAND_MAX;*/
+  Matrix<double> rotation_matrix = rotationMatrix(rotation_axis,
+                                                  increment_rotation_angle);
   rotation_matrix.changeDimensions(4,4);
   rotation_matrix[3][3] = 1;
   return rotation_matrix;
@@ -128,7 +185,7 @@ ProteinStructure Simulation::perturb()
     }
     file.close();
   }
-  int accept = 0, accept_with_prob = 0, reject = 0;
+  int accept = 0, accept_with_prob = 0, perturb_axis = 0, reject = 0;
   ProteinStructure moving_copy_persist = *moving;
   ProteinStructure moving_copy;
   previous_deviation = computeL1Deviation();
@@ -136,12 +193,24 @@ ProteinStructure Simulation::perturb()
   for (int i=0; i<iterations; i++) {
     // select translation or rotation randomly
     // choose a random number x between 0 and 1
-    // if 0 < x <= 0.5 --> select translation
-    // if 0.5 < x <= 1 --> select rotation
+    // if 0 < x <= 0.33 --> select translation
+    // if 0.33 < x <= 0.67 --> perturb the rotation axis
+    // if 0.67 < x <= 1 --> select rotation
     double random = rand() / (double) RAND_MAX;
-    if (random <= 0.5) { // random translation
-      current_transformation = randomTranslation(step);
-    } else {  // random rotation
+    if (random <= 0.33) { 
+      // random translation
+      current_transformation = randomTranslation();
+    } else if (random > 0.33 && random < 0.67) {
+      // perturb the axis of rotation
+      perturbRotationAxis();
+      perturb_axis++;
+      if (print_status == PRINT_DETAIL) {
+        cout << "Iteration: " << i+1 << "\tPERTURBATION"
+             << " OF AXIS" << endl;
+      } 
+      continue;
+    } else {  
+      // random rotation
       current_transformation = randomRotation();
     }
 
@@ -184,6 +253,7 @@ ProteinStructure Simulation::perturb()
   if (print_status == PRINT_DETAIL) {
     cout << "\n# of acceptances: " << accept << endl;
     cout << "# of acceptances with a probability: " << accept_with_prob << endl;
+    cout << "# of random perturbations of axis: " << perturb_axis << endl;
     cout << "# of rejections: " << reject << endl << endl;
     transformation.print();
     cout << "Initial L1 distance after superposition: " 
@@ -199,8 +269,8 @@ ProteinStructure Simulation::perturb()
       file << coordinates[i][0] << " " << coordinates[i][1] 
            << " " << coordinates[i][2] << endl;
     }
-    file.close();*/
-    /*coordinates = moving_copy_persist.getAtomicCoordinates<double>();
+    file.close();
+    coordinates = moving_copy_persist.getAtomicCoordinates<double>();
     ofstream fw2("output/after2");
     for (int i=0; i<coordinates.size(); i++) {
       fw2 << coordinates[i][0] << " " << coordinates[i][1] 
@@ -286,14 +356,14 @@ void Simulation::computeMessageLength()
   vector<double> msglen = message.encodeUsingNormalModel();
   if (print_status == PRINT_DETAIL) {
     cout << "NORMAL ESTIMATES:-\n";
-    for (int i=0; i<3; i++) {
-      cout << "DEVIATION " << i+1 << ":\n";
+    for (int i=0; i<1; i++) {
+      //cout << "DEVIATION " << i+1 << ":\n";
       cout << "\tMean: " << normal_estimates[i][0] << endl;
       cout << "\tSigma: " << normal_estimates[i][1] << endl;
       cout << "\tMsg. length: " << msglen[i] << endl;
     }
   }
-  cout << "Net message length: " << msglen[0]+msglen[1]+msglen[2] << endl;
+  cout << "Net message length: " << msglen[0] << endl;
 }
 
 /*!
@@ -307,14 +377,14 @@ void Simulation::computeMessageLength(ProteinStructure &protein)
   vector<array<double,2>> laplace_estimates = message.getLaplaceEstimates();
   vector<double> msglen = message.encodeUsingLaplaceModel();
   if (print_status == PRINT_DETAIL) {
-    cout << "LAPLACE ESTIMATES:-\n";
-    for (int i=0; i<3; i++) {
-      cout << "DEVIATION " << i+1 << ":\n";
-      cout << "\tMean: " << laplace_estimates[i][0] << endl;
+    cout << "\nLAPLACE ESTIMATES:-\n";
+    for (int i=0; i<1; i++) {
+      //cout << "DEVIATION " << i+1 << ":\n";
+      cout << "\tMedian: " << laplace_estimates[i][0] << endl;
       cout << "\tScale: " << laplace_estimates[i][1] << endl;
       cout << "\tMsg. length: " << msglen[i] << endl;
     }
   }
-  cout << "Net message length: " << msglen[0]+msglen[1]+msglen[2] << endl;
+  cout << "Net message length: " << msglen[0] << endl;
 }
 
