@@ -30,6 +30,9 @@ class Simulation
     //! Method to encode deviations
     int num_deviations_sets;
 
+    //! Estimating method
+    int estimate_method;
+
     //! Rotation axis
     Vector<double> rotation_axis;
 

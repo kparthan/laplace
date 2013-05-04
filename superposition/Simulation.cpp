@@ -19,6 +19,7 @@ Simulation::Simulation(ProteinStructure *moving, ProteinStructure *fixed,
                        iterations(parameters.iterations),
                        acceptance_probability(parameters.acceptance),
                        increment_translation(parameters.increment_translation), 
+                       estimate_method(parameters.estimate_method),
                        print_status(parameters.print)
 {
   // convert the increment in rotation angle to radians
@@ -28,7 +29,7 @@ Simulation::Simulation(ProteinStructure *moving, ProteinStructure *fixed,
     num_deviations_sets = 1;
   } else if (parameters.encode_deviations == ENCODE_DEVIATIONS_SEPARATE) {
     num_deviations_sets = 3;
-  }
+  } 
 }
 
 /*!
@@ -366,13 +367,15 @@ vector<array<double,3>> Simulation::getDeviations(ProteinStructure &protein)
 void Simulation::computeMessageLength()
 {
   vector<array<double,3>> deviations = getDeviations();
-  Message message(deviations,num_deviations_sets);
+  Message message(deviations,num_deviations_sets,estimate_method);
   vector<array<double,2>> normal_estimates = message.getNormalEstimates();
   vector<double> msglen = message.encodeUsingNormalModel();
   if (print_status == PRINT_DETAIL) {
-    cout << "NORMAL ESTIMATES:-\n";
+    cout << "\nNORMAL ESTIMATES:-\n";
     for (int i=0; i<num_deviations_sets; i++) {
-      cout << "DEVIATION " << i+1 << ":\n";
+      if (num_deviations_sets == 3) {
+        cout << "DEVIATION " << i+1 << ":\n";
+      }
       cout << "\tMean: " << normal_estimates[i][0] << endl;
       cout << "\tSigma: " << normal_estimates[i][1] << endl;
       cout << "\tMsg. length: " << msglen[i] << endl;
@@ -392,13 +395,15 @@ void Simulation::computeMessageLength()
 void Simulation::computeMessageLength(ProteinStructure &protein)
 {
   vector<array<double,3>> deviations = getDeviations(protein);
-  Message message(deviations,num_deviations_sets);
+  Message message(deviations,num_deviations_sets,estimate_method);
   vector<array<double,2>> laplace_estimates = message.getLaplaceEstimates();
   vector<double> msglen = message.encodeUsingLaplaceModel();
   if (print_status == PRINT_DETAIL) {
     cout << "\nLAPLACE ESTIMATES:-\n";
     for (int i=0; i<num_deviations_sets; i++) {
-      cout << "DEVIATION " << i+1 << ":\n";
+      if (num_deviations_sets == 3) {
+        cout << "DEVIATION " << i+1 << ":\n";
+      }
       cout << "\tMedian: " << laplace_estimates[i][0] << endl;
       cout << "\tScale: " << laplace_estimates[i][1] << endl;
       cout << "\tMsg. length: " << msglen[i] << endl;

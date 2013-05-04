@@ -11,6 +11,7 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
 {
   struct Parameters parameters;
   string encode_deviations;
+  string estimate_method;
   
   cout << "Checking command-line input ..." << endl;
   options_description desc("Allowed options");
@@ -27,6 +28,8 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
                                                              "Input PDB files")
        ("encode",value<string>(&encode_deviations),
                   "method to encodine all the deviations [together/separate]")
+       ("estimate",value<string>(&estimate_method),
+                        "method used to estimate parameters [custom/general]")
   ;
   variables_map vm;
   store(parse_command_line(argc,argv,desc),vm);
@@ -103,6 +106,22 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   } else {
     parameters.encode_deviations = ENCODE_DEVIATIONS_TOGETHER;
     cout << "Encoding deviations together ..." << endl;
+  }
+
+  if (vm.count("estimate")) {
+    if (estimate_method.compare("custom") == 0) {
+      parameters.estimate_method = ESTIMATE_METHOD_CUSTOM;
+      cout << "Estimating one parameter ..." << endl;
+    } else if (estimate_method.compare("general") == 0) {
+      parameters.estimate_method = ESTIMATE_METHOD_GENERAL;
+      cout << "Estimating both parameters ..." << endl;
+    } else {
+      cout << "Incorrect estimate method option supplied ..." << endl;
+      Usage(argv[0],desc);
+    }
+  } else {
+    parameters.estimate_method = ESTIMATE_METHOD_CUSTOM;
+    cout << "Estimating one parameter ..." << endl;
   }
 
   return parameters;

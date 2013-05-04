@@ -12,6 +12,7 @@ struct Parameters
   double increment_translation;
   double increment_rotation_angle;
   int encode_deviations;
+  int estimate_method;
 };
 
 struct Parameters parseCommandLineInput(int, char **);

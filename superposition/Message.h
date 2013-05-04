@@ -12,6 +12,9 @@ class Message
     //! Number of sets of deviations
     int num_deviations_sets;
 
+    //! Estimate method
+    int estimate_method;
+
     //! Parameter estimates for the normal distribution
     vector<array<double,2>> normal_estimates;
 
@@ -29,7 +32,7 @@ class Message
     Message() ;
 
     //! Constructor
-    Message(vector<array<double,3>> &, int);
+    Message(vector<array<double,3>> &, int, int);
 
     //! Return the parameter estimates for the Normal distribution
     vector<array<double,2>> getNormalEstimates();
