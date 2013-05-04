@@ -47,5 +47,5 @@ clean:
 	rm -f *.o *~ laplace-fit
 
 clean_results:
-	rm results/data/* results/plots/* results/script.p results/statistics
+	rm results/data/* results/plots/* results/script.p 
 

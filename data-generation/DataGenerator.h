@@ -54,10 +54,10 @@ class DataGenerator
     struct Parameters parameters;
 
     //! Random samples generated
-    vector<double> x,fx,x_noise,fx_noise;
+    vector<double> x,fx;
 
     //! List of predictions
-    vector<vector<double>> predictions, predictions_noise;
+    vector<vector<double>> predictions;
 
     //! Quciksort algorithm
     void quicksort(vector<double> &, vector<int> &, int, int);
@@ -66,10 +66,10 @@ class DataGenerator
     int partition(vector<double> &, vector<int> &, int, int);
 
     //! Generates the file name to append data to
-    string getFileName(const char *, int, int, int);
+    string getFileName(const char *, int, int);
 
     //! Outputs the data to a file
-    void updateResults(int, int, int, struct MML_Estimates &);
+    void updateResults(string &, struct MML_Estimates &);
 
     //! Outputs the predictions to a file
     void writeToFile(string &, vector<double> &, vector<double> &, 

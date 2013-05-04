@@ -8,9 +8,10 @@ struct Parameters
   vector<int> samples;
   double mean;
   vector<double> scale;
-  vector<double> noise_sigma;
+  //vector<double> noise_sigma;
   string distribution;
   string estimate;
+  int iterations;
 };
 
 struct MML_Estimates

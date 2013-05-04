@@ -48,8 +48,8 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
   double mu = normal.mean();
   double sigma = normal.standardDeviation();
   vector<double> x(samples,0);
-  //srand(time(NULL));
-  srand(1000);
+  srand(time(NULL));
+  //srand(1000);
   for (int i=0; i<samples; i=i+2) {
     double u = (double) rand() / RAND_MAX;
     double v = (double) rand() / RAND_MAX;
@@ -73,12 +73,12 @@ void NormalDataGenerator::simulate()
 {
   for (int i=0; i<parameters.samples.size(); i++) {
     for (int j=0; j<parameters.scale.size(); j++) {
-      for (int k=0; k<parameters.noise_sigma.size(); k++) {
+      for (int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
         normal = Normal(mean,scale);
         vector<double> list = generateRandom(parameters.samples[i]);
-        estimateAndPlotModel("normal",list,j,k);
+        estimateAndPlotModel("normal",list,j,n);
       }
     }
   }

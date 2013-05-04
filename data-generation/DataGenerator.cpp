@@ -97,11 +97,10 @@ int DataGenerator::partition(vector<double> &list, vector<int> &index,
  *  \param name a pointer to a char 
  *  \param num_samples an integer
  *  \param scale_index an integer 
- *  \param noise_index an integer 
  *  \return the file name
  */
 string DataGenerator::getFileName(const char *name, int num_samples,
-                                  int scale_index, int noise_index)
+                                  int scale_index)
 {
   string file = name;
   file += "_n_" + boost::lexical_cast<string>(num_samples);
@@ -109,31 +108,28 @@ string DataGenerator::getFileName(const char *name, int num_samples,
   file += "_mean_" + boost::lexical_cast<string>(mean);
   double scale = parameters.scale[scale_index];
   file += "_scale_" + boost::lexical_cast<string>(scale);
-  double noise_sigma = parameters.noise_sigma[noise_index];
-  //file += "_noise_" + boost::lexical_cast<string>(noise_sigma);
+  /*double noise_sigma = parameters.noise_sigma[noise_index];
   string s = convertToString(noise_sigma); 
-  file += "_noise_" + s;
+  file += "_noise_" + s;*/
   cout << file << endl;
   return file;
 }
 
 /*!
  *  \brief This function outputs the data to a file.
- *  \param num_samples an integer
- *  \param scale_index an integer
- *  \param noise_index an integer
+ *  \param file_name a reference to a string 
  *  \param estimates a reference to a struct MML_Estimates
  */
-void DataGenerator::updateResults(int num_samples, int scale_index, 
-                                  int noise_index, 
+void DataGenerator::updateResults(string &file_name,
                                   struct MML_Estimates &estimates)
 {
-  ofstream fp("results/statistics",ios::app);
-  fp << setw(10) << num_samples << "\t";
+  string file = "results/data/statistics_" + file_name; 
+  ofstream fp(file.c_str(),ios::app);
+  /*fp << setw(10) << num_samples << "\t";
   fp << setw(5) << setprecision(3) << parameters.mean << "\t";
   fp << setw(5) << setprecision(3) << parameters.scale[scale_index] << "\t";
-  fp << setw(5) << setprecision(3) << parameters.noise_sigma[noise_index] << "\t";
-  fp << setw(10) << parameters.distribution << "\t";
+  //fp << setw(5) << setprecision(3) << parameters.noise_sigma[noise_index] << "\t";
+  fp << setw(10) << parameters.distribution << "\t";*/
   fp << setw(10) << setprecision(3) << estimates.normal_mean << "\t";
   fp << setw(10) << setprecision(3) << estimates.normal_sigma << "\t";
   fp << fixed << setw(10) << setprecision(3) << estimates.normal_mml << "\t";
@@ -181,7 +177,7 @@ void DataGenerator::plotPredictions(string &data_file)
   //xrange = extremum(x);
   //yrange = extremum(predictions[0]);
   //graph.setRange(xrange,yrange);
-  graph.sketch(data_file,predictions_noise);
+  graph.sketch(data_file,predictions);
 }
 
 /*!
@@ -189,36 +185,38 @@ void DataGenerator::plotPredictions(string &data_file)
  *  \param name a pointer to a char 
  *  \param list a reference to a vector<double>
  *  \param scale_index an integer 
- *  \param noise_index an integer 
+ *  \param iteration an integer
  */
 void DataGenerator::estimateAndPlotModel(const char *name,
                                          vector<double> &list, 
-                                         int scale_index, int noise_index)
+                                         int scale_index, int iteration)
 {
-  string file_name = getFileName(name,list.size(),scale_index,noise_index);
-
   x = sort(list);
-  /*fx = computeFunctionValues(x);
+  fx = computeFunctionValues(x);
   struct MML_Estimates estimates = mmlEstimate(x);
   predictions = predict(x,estimates);
-  writeToFile(file_name,x,fx,predictions);
-  plotPredictions(file_name);*/
 
-  addNoise(parameters.noise_sigma[noise_index]);
+  string file_name = getFileName(name,list.size(),scale_index);
+  if (parameters.iterations == 1) {
+    writeToFile(file_name,x,fx,predictions);
+    plotPredictions(file_name);
+  }
+
+  /*addNoise(parameters.noise_sigma[noise_index]);
   fx_noise = computeFunctionValues(x_noise);
   struct MML_Estimates estimates_noise = mmlEstimate(x_noise);
   predictions_noise = predict(x_noise,estimates_noise);
   writeToFile(file_name,x_noise,fx_noise,predictions_noise);
-  plotPredictions(file_name);
+  plotPredictions(file_name);*/
 
-  updateResults(list.size(),scale_index,noise_index,estimates_noise);
+  updateResults(file_name,estimates);
 }
 
 /*!
  *  \brief This function adds noise to the generated fucntion values
  *  \param sigma a double
  */
-void DataGenerator::addNoise(double sigma)
+/*void DataGenerator::addNoise(double sigma)
 {
   x_noise = vector<double>(x);
   NormalDataGenerator noise_generator(0,sigma);
@@ -226,7 +224,7 @@ void DataGenerator::addNoise(double sigma)
   for(int i=0; i<x.size(); i++) {
     x_noise[i] += noise[i];
   }
-}
+}*/
 
 /*!
  *  \brief This function predicts the distribution with respect to the
@@ -289,45 +287,4 @@ struct MML_Estimates DataGenerator::mmlEstimate(vector<double> &x)
 
   return estimates;
 }
-
-/*!
- *  \brief This function plots the random generated data
- *//*
-void DataGenerator::plotData()
-{
-  pair<double,double> xrange,yrange;
-
-  Plot graph1;
-  vector<string> labels1(3,"");
-  labels1[0] = "Laplace data plot";
-  labels1[1] = "samples";
-  labels1[2] = "x";
-  graph1.label(labels1);
-  xrange.first = 1;
-  xrange.second = samples;
-  yrange = extremum(x);
-  graph1.setRange(xrange,yrange);
-  graph1.sketch(x);
-
-  Plot graph2;
-  vector<string> labels2(3,"");
-  labels2[0] = "Laplace data plot";
-  labels2[1] = "x";
-  labels2[2] = "f(x)";
-  graph2.label(labels2);
-  xrange = extremum(x);
-  yrange = extremum(fx);
-  graph2.setRange(xrange,yrange);
-  graph2.sketch(x,fx);
-
-  Plot graph3;
-  vector<string> labels3(3,"");
-  labels3[0] = "Laplace data plot";
-  labels3[1] = "x";
-  graph3.label(labels3);
-  xrange = extremum(x);
-  yrange = extremum(y);
-  graph3.setRange(xrange,yrange);
-  graph3.sketch(x,fx,y);
-}*/
 

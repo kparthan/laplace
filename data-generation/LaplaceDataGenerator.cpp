@@ -40,7 +40,8 @@ vector<double> LaplaceDataGenerator::generateRandom(int samples)
   double mu = laplace.mean();
   double b = laplace.scaleParameter();
   vector<double> x(samples,0);
-  srand(1000);
+  srand(time(NULL));
+  //srand(1000);
   for (int i=0; i<samples; i++) {
     double random = (double)rand() / RAND_MAX;
     random -= 0.5;
@@ -57,12 +58,12 @@ void LaplaceDataGenerator::simulate()
 {
   for (int i=0; i<parameters.samples.size(); i++) {
     for (int j=0; j<parameters.scale.size(); j++) {
-      for (int k=0; k<parameters.noise_sigma.size(); k++) {
+      for (int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
         laplace = Laplace(mean,scale);
         vector<double> list = generateRandom(parameters.samples[i]);
-        estimateAndPlotModel("laplace",list,j,k);
+        estimateAndPlotModel("laplace",list,j,n);
       }
     }
   }

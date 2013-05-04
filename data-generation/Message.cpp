@@ -82,7 +82,7 @@ double Message::encodeUsingNormalModel()
 {
   double K2 = 5.0 / (36 * sqrt(3));
   double rangeMu = 5.0;
-  double rangeLogSigma = 3.0;
+  double rangeLogSigma = log(4/(3*AOM));
   int N = data.size();
   double part1 = log(K2) + log(rangeMu * rangeLogSigma) + 0.5 * log(2 * N * N) 
                  - log(normalEstimates.second);
@@ -100,9 +100,9 @@ double Message::encodeUsingLaplaceModel()
 {
   double K2 = 5.0 / (36 * sqrt(3));
   double rangeMu = 5.0;
-  double rangeSigma = 3.0;
+  double rangeLogSigma = log(4/(3*AOM));
   int N = data.size();
-  double part1 = log(K2) + log(rangeMu * rangeSigma) + log(N)
+  double part1 = log(K2) + log(rangeMu * rangeLogSigma) + log(N)
                  - log(laplaceEstimates.second);
   double part2 = N * log(2/AOM) + N * log(laplaceEstimates.second) + N;
   return (part1+part2)/log(2);
