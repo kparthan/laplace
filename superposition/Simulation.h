@@ -75,10 +75,10 @@ class Simulation
     vector<array<double,3>> getDeviations(ProteinStructure &);
 
     //! Computes the message length of the deviations (L2 Norm)
-    void computeMessageLength();
+    double computeMessageLength();
 
     //! Computes the message length of the deviations (L1 Norm)
-    void computeMessageLength(ProteinStructure &);
+    double computeMessageLength(ProteinStructure &);
 
 };
 

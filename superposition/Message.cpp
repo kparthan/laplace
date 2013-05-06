@@ -33,7 +33,7 @@ Message::Message(vector<array<double,3>> &deviations, int num_deviations_sets,
       }
     }
     samples.push_back(tmp);
-    cout << samples[0].size() << endl;
+    //cout << samples[0].size() << endl;
   }
 }
 

@@ -1,0 +1,139 @@
+%\documentclass[wcp,gray]{jmlr} % test grayscale version
+\documentclass[wcp]{jmlr}
+
+% The following packages will be automatically loaded:
+% amsmath, amssymb, natbib, graphicx, url, algorithm2e
+
+%\usepackage{rotating}% for sideways figures and tables
+\usepackage{longtable}% for long tables
+
+% The booktabs package is used by this sample document
+% (it provides \toprule, \midrule and \bottomrule).
+% Remove the next line if you don't require it.
+\usepackage{booktabs}
+% The siunitx package is used by this sample document
+% to align numbers in a column by their decimal point.
+% Remove the next line if you don't require it.
+%\usepackage[load-configurations=version-1]{siunitx} % newer version
+%\usepackage{siunitx}
+
+% The following command is just for this sample document:
+\newcommand{\cs}[1]{\texttt{\char`\\#1}}
+
+\jmlrvolume{29}
+\jmlryear{2013}
+\jmlrworkshop{ACML 2013}
+
+\title[Short Title]{Full Title of Article}
+
+ % Use \Name{Author Name} to specify the name.
+ % If the surname contains spaces, enclose the surname
+ % in braces, e.g. \Name{John {Smith Jones}} similarly
+ % if the name has a "von" part, e.g \Name{Jane {de Winter}}.
+ % If the first letter in the forenames is a diacritic
+ % enclose the diacritic in braces, e.g. \Name{{\'E}louise Smith}
+
+ % Two authors with the same address
+ % \author{\Name{Author Name1} \Email{abc@sample.com}\and
+ %  \Name{Author Name2} \Email{xyz@sample.com}\\
+ %  \addr Address}
+
+ % Three or more authors with the same address:
+ % \author{\Name{Author Name1} \Email{an1@sample.com}\\
+ %  \Name{Author Name2} \Email{an2@sample.com}\\
+ %  \Name{Author Name3} \Email{an3@sample.com}\\
+ %  \Name{Author Name4} \Email{an4@sample.com}\\
+ %  \Name{Author Name5} \Email{an5@sample.com}\\
+ %  \Name{Author Name6} \Email{an6@sample.com}\\
+ %  \Name{Author Name7} \Email{an7@sample.com}\\
+ %  \Name{Author Name8} \Email{an8@sample.com}\\
+ %  \Name{Author Name9} \Email{an9@sample.com}\\
+ %  \Name{Author Name10} \Email{an10@sample.com}\\
+ %  \Name{Author Name11} \Email{an11@sample.com}\\
+ %  \Name{Author Name12} \Email{an12@sample.com}\\
+ %  \Name{Author Name13} \Email{an13@sample.com}\\
+ %  \Name{Author Name14} \Email{an14@sample.com}\\
+ %  \addr Address}
+
+
+ % Authors with different addresses:
+  \author{\Name{Author Name1} \Email{abc@sample.com}\\
+  \addr Address 1
+  \AND
+  \Name{Author Name2} \Email{xyz@sample.com}\\
+  \addr Address 2
+ }
+
+\editor{Cheng Soon Ong and Tu Bao Ho}
+% \editors{List of editors' names}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This paper aims at bringing out the merits of using the Laplace distribution over
+the Normal distribution. The choice of the best distribution is objectively
+made using the minimum message length (MML) principle. The message length for
+transmitting data using a Laplace distribution is derived and its parameters are
+estimated. This method of transmission is compared with that of transmistting the data
+using the Normal distribution. This is explored in the context of superposition
+of protein structures. The optimal superposition of protein structures (described
+using a Normal distribution) minimizing the L2 norm is computed using the 
+Kearsley's method and the superposition minimizing the
+L1 norm (described using a Laplace model) is approximated using Monte Carlo 
+simulation. These two are compared with respect
+to their model complexity and the overall fit to the data using MML. 
+\end{abstract}
+
+\begin{keywords}
+Laplace, Normal, MML, Kearsley, Monte Carlo simulation
+\end{keywords}
+
+\section{Introduction}
+Normal distribution is widely used in modelling a set of data whose true distribution
+is unknown. In many problems, the objective function is formulated as a sum of squares,
+(the L2 norm) and this function is minimized or maximized depending on the application. 
+Normal distribution has a huge impact on the cost function because of the squared nature of 
+the individual terms. If there are outliers in the dataset, the final inference might be 
+skewed to accommodate the outliers in the model description. The Laplace distribution, 
+however, is robust to
+outliers as the objective function involves the sum of the absolute values of the difference 
+of the individual terms (L1 norm).
+The choice of selecting a Laplace over Normal is investigated in this paper. This
+selection is made by formulating the objective function using Minimum Message
+Length (MML). The distribution which results in the best compression of data is chosen
+to be the best model. \\
+
+The general procedure to formulate the message length expression for transmitting
+data using some statistical model is outlined in \citet{wallace-87}. The MML method
+of estimating parameters for a number of distributions has been well established
+\citep{WallaceBook}. This general approach is followed in the derivation of the
+message length expression for the Laplace distribution. Although this has not been
+done previously, we believe that it has potential benefits. Laplace distribution
+is a model of choice in several applications
+If the data is generated from a Normal distribution, its approximation using a Normal
+distribution would result in a better compression
+
+Examples of protein structures are considered
+and they are superposed using Kearsley's transformation. This results in an
+orientation of the proteins which minimizes the total least squares of the
+corresponding coordinates. A superposition which minimizes the total absolute 
+value of the difference of the coordinates is computed using a Monte Carlo 
+simulation. The two orientations 
+
+\acks{Acknowledgements should go at the end, before appendices and references.}
+
+\bibliography{references}
+
+\appendix
+
+\section{First Appendix}\label{apd:first}
+
+This is the first appendix.
+
+\section{Second Appendix}\label{apd:second}
+
+This is the second appendix.
+
+\end{document}

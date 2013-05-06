@@ -1,0 +1,20 @@
+\begin{thebibliography}{2}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Wallace(2005)]{WallaceBook}
+C.~S Wallace.
+\newblock \emph{Statistical and Inductive Inference using Minimum Message
+  Length}.
+\newblock Information Science and Statistics. {SpringerVerlag}, 2005.
+
+\bibitem[Wallace and Freeman(1987)]{wallace-87}
+C.~S. Wallace and P.~R. Freeman.
+\newblock Estimation and inference by compact coding.
+\newblock \emph{Journal of the Royal Statistical Society. Series B
+  (Methodological)}, 49\penalty0 (3):\penalty0 pp. 240--265, 1987.
+
+\end{thebibliography}

@@ -45,6 +45,8 @@ void Simulation::initialSuperposition()
   if (print_status == PRINT_DETAIL) {
     cout << "RMSD: " << superimposer.rmsd() << endl;
   }
+  ofstream results("results",ios::app);
+  results << setw(10) << setprecision(6) << superimposer.rmsd() << "\t";
   cout << superimposer.getRotationAngle() * 180 / PI << endl;
   rotation_axis = superimposer.getRotationAxis();
   //cout << rotation_axis.l2Norm() << endl;
@@ -185,8 +187,8 @@ ProteinStructure Simulation::perturb()
   srand(time(NULL));
 
   vector<array<double,3>> coordinates;
+  coordinates = moving->getAtomicCoordinates<double>();
   if (print_status == PRINT_DETAIL) {
-    coordinates = moving->getAtomicCoordinates<double>();
     ofstream file("output/original_coordinates");
     for (int i=0; i<coordinates.size(); i++) {
       file << coordinates[i][0] << " " << coordinates[i][1] 
@@ -266,7 +268,7 @@ ProteinStructure Simulation::perturb()
       }
     }
   }
-  if (print_status == PRINT_DETAIL) {
+  //if (print_status == PRINT_DETAIL) {
     cout << "\n# of acceptances: " << accept << endl;
     cout << "# of acceptances with a probability: " << accept_with_prob << endl;
     cout << "# of random perturbations of axis: " << perturb_axis << endl;
@@ -277,6 +279,12 @@ ProteinStructure Simulation::perturb()
     final_L1_deviation = computeL1Deviation(moving_copy_persist);
     cout << "Final L1 distance after perturbation: " 
          << final_L1_deviation / coordinates.size() << endl;
+    ofstream results("results",ios::app);
+    results << setw(10) << setprecision(6) 
+            << initial_L1_deviation / coordinates.size() << "\t";
+    results << setw(10) << setprecision(6) 
+            << final_L1_deviation / coordinates.size() << "\t";
+    results.close();
 
     /*moving->transform(transformation);
     coordinates = moving->getAtomicCoordinates<double>();
@@ -293,7 +301,7 @@ ProteinStructure Simulation::perturb()
           << " " << coordinates[i][2] << endl;
     }
     fw2.close();*/
-  }
+  //}
   return moving_copy_persist;
 }
 
@@ -352,9 +360,12 @@ vector<array<double,3>> Simulation::getDeviations(ProteinStructure &protein)
     array<double,3> devs;
     Point<double> p1 = atoms_fixed[i].point<double>();
     Point<double> p2 = atoms_protein[i].point<double>();
-    devs[0] = (int ((p2.x() - p1.x())/AOM)) * AOM;
+    /*devs[0] = (int ((p2.x() - p1.x())/AOM)) * AOM;
     devs[1] = (int ((p2.y() - p1.y())/AOM)) * AOM;
-    devs[2] = (int ((p2.z() - p1.z())/AOM)) * AOM;
+    devs[2] = (int ((p2.z() - p1.z())/AOM)) * AOM;*/
+    devs[0] = p2.x() - p1.x();
+    devs[1] = p2.y() - p1.y();
+    devs[2] = p2.z() - p1.z();
     deviations.push_back(devs);
   }
   return deviations;
@@ -363,8 +374,9 @@ vector<array<double,3>> Simulation::getDeviations(ProteinStructure &protein)
 /*!
  *  \brief This function computes the message lengths with respect to
  *  the deviations computed using the L2 norm.
+ *  \return the net message length
  */
-void Simulation::computeMessageLength()
+double Simulation::computeMessageLength()
 {
   vector<array<double,3>> deviations = getDeviations();
   Message message(deviations,num_deviations_sets,estimate_method);
@@ -386,13 +398,16 @@ void Simulation::computeMessageLength()
     net_msglen += msglen[i];
   }
   cout << "Net message length: " << net_msglen << endl;
+  return net_msglen;
 }
 
 /*!
  *  \brief This function computes the message lengths with respect to
  *  the deviations computed using the L1 norm.
+ *  \param protein a reference to a ProteinStructure
+ *  \return the net message length
  */
-void Simulation::computeMessageLength(ProteinStructure &protein)
+double Simulation::computeMessageLength(ProteinStructure &protein)
 {
   vector<array<double,3>> deviations = getDeviations(protein);
   Message message(deviations,num_deviations_sets,estimate_method);
@@ -414,5 +429,6 @@ void Simulation::computeMessageLength(ProteinStructure &protein)
     net_msglen += msglen[i];
   }
   cout << "Net message length: " << net_msglen << endl;
+  return net_msglen;
 }
 

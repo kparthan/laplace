@@ -1,0 +1,52 @@
+./extract.sh: line 1872: 14038 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2264-2294 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_C_2264-2294.pdb
+./extract.sh: line 1873: 14040 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2265-2295 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_C_2265-2295.pdb
+./extract.sh: line 1874: 14042 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2266-2296 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_C_2266-2296.pdb
+./extract.sh: line 1875: 14044 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2267-2297 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_C_2267-2297.pdb
+./extract.sh: line 1876: 14046 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3264-3294 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_D_3264-3294.pdb
+./extract.sh: line 1877: 14048 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3265-3295 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_D_3265-3295.pdb
+./extract.sh: line 1878: 14050 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3266-3296 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_D_3266-3296.pdb
+./extract.sh: line 1879: 14052 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3267-3297 test/pdb_files/1DDX.pdb.gz > test/extracted_pdb_files/1DDX_D_3267-3297.pdb
+terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::bad_lexical_cast> >'
+  what():  bad lexical cast: source type value could not be interpreted as target
+./extract.sh: line 6941: 19118 Aborted                 (core dumped) pdb-extract structure --chain E --residue -1-29 test/pdb_files/3MQH.pdb.gz > test/extracted_pdb_files/3MQH_E_-1-29.pdb
+./extract.sh: line 16165: 28349 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2264-2294 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_C_2264-2294.pdb
+./extract.sh: line 16166: 28351 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2265-2295 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_C_2265-2295.pdb
+./extract.sh: line 16167: 28353 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2266-2296 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_C_2266-2296.pdb
+./extract.sh: line 16168: 28355 Segmentation fault      (core dumped) pdb-extract structure --chain C --residue 2267-2297 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_C_2267-2297.pdb
+./extract.sh: line 16169: 28357 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3264-3294 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_D_3264-3294.pdb
+./extract.sh: line 16170: 28359 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3265-3295 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_D_3265-3295.pdb
+./extract.sh: line 16171: 28361 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3266-3296 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_D_3266-3296.pdb
+./extract.sh: line 16172: 28363 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 3267-3297 test/pdb_files/1PXX.pdb.gz > test/extracted_pdb_files/1PXX_D_3267-3297.pdb
+./extract.sh: line 19177: 31371 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 396-426 test/pdb_files/3AOI.pdb.gz > test/extracted_pdb_files/3AOI_D_396-426.pdb
+./extract.sh: line 19178: 31373 Segmentation fault      (core dumped) pdb-extract structure --chain I --residue 395-425 test/pdb_files/3AOI.pdb.gz > test/extracted_pdb_files/3AOI_I_395-425.pdb
+./extract.sh: line 19179: 31375 Segmentation fault      (core dumped) pdb-extract structure --chain I --residue 396-426 test/pdb_files/3AOI.pdb.gz > test/extracted_pdb_files/3AOI_I_396-426.pdb
+./extract.sh: line 19180: 31377 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 396-426 test/pdb_files/3AOH.pdb.gz > test/extracted_pdb_files/3AOH_D_396-426.pdb
+./extract.sh: line 19181: 31379 Segmentation fault      (core dumped) pdb-extract structure --chain I --residue 396-426 test/pdb_files/3AOH.pdb.gz > test/extracted_pdb_files/3AOH_I_396-426.pdb
+./extract.sh: line 19182: 31381 Segmentation fault      (core dumped) pdb-extract structure --chain N --residue 396-426 test/pdb_files/3AOH.pdb.gz > test/extracted_pdb_files/3AOH_N_396-426.pdb
+terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::bad_lexical_cast> >'
+  what():  bad lexical cast: source type value could not be interpreted as target
+./extract.sh: line 20543: 32743 Aborted                 (core dumped) pdb-extract structure --chain A --residue -2-29 test/pdb_files/1XHD.pdb.gz > test/extracted_pdb_files/1XHD_A_-2-29.pdb
+terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::bad_lexical_cast> >'
+  what():  bad lexical cast: source type value could not be interpreted as target
+./extract.sh: line 22206:  2247 Aborted                 (core dumped) pdb-extract structure --chain A --residue -1-29 test/pdb_files/2JF2.pdb.gz > test/extracted_pdb_files/2JF2_A_-1-29.pdb
+./extract.sh: line 28693:  8850 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 396-426 test/pdb_files/1YNN.pdb.gz > test/extracted_pdb_files/1YNN_D_396-426.pdb
+terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::bad_lexical_cast> >'
+  what():  bad lexical cast: source type value could not be interpreted as target
+./extract.sh: line 31169: 11348 Aborted                 (core dumped) pdb-extract structure --chain A --residue -4-31 test/pdb_files/4E6T.pdb.gz > test/extracted_pdb_files/4E6T_A_-4-31.pdb
+terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::bad_lexical_cast> >'
+  what():  bad lexical cast: source type value could not be interpreted as target
+./extract.sh: line 31170: 11350 Aborted                 (core dumped) pdb-extract structure --chain A --residue -3-32 test/pdb_files/4E6T.pdb.gz > test/extracted_pdb_files/4E6T_A_-3-32.pdb
+terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::bad_lexical_cast> >'
+  what():  bad lexical cast: source type value could not be interpreted as target
+./extract.sh: line 31171: 11352 Aborted                 (core dumped) pdb-extract structure --chain A --residue -2-33 test/pdb_files/4E6T.pdb.gz > test/extracted_pdb_files/4E6T_A_-2-33.pdb
+terminate called after throwing an instance of 'boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<boost::bad_lexical_cast> >'
+  what():  bad lexical cast: source type value could not be interpreted as target
+./extract.sh: line 31172: 11354 Aborted                 (core dumped) pdb-extract structure --chain A --residue -1-34 test/pdb_files/4E6T.pdb.gz > test/extracted_pdb_files/4E6T_A_-1-34.pdb
+./extract.sh: line 32178: 12378 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 395-425 test/pdb_files/2O5J.pdb.gz > test/extracted_pdb_files/2O5J_D_395-425.pdb
+./extract.sh: line 32179: 12380 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 396-426 test/pdb_files/2O5J.pdb.gz > test/extracted_pdb_files/2O5J_D_396-426.pdb
+./extract.sh: line 32180: 12382 Segmentation fault      (core dumped) pdb-extract structure --chain N --residue 396-426 test/pdb_files/2O5J.pdb.gz > test/extracted_pdb_files/2O5J_N_396-426.pdb
+./extract.sh: line 32609: 12812 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 396-426 test/pdb_files/2O5I.pdb.gz > test/extracted_pdb_files/2O5I_D_396-426.pdb
+./extract.sh: line 32850: 13054 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 395-425 test/pdb_files/2PPB.pdb.gz > test/extracted_pdb_files/2PPB_D_395-425.pdb
+./extract.sh: line 32851: 13056 Segmentation fault      (core dumped) pdb-extract structure --chain D --residue 396-426 test/pdb_files/2PPB.pdb.gz > test/extracted_pdb_files/2PPB_D_396-426.pdb
+./extract.sh: line 32852: 13058 Segmentation fault      (core dumped) pdb-extract structure --chain N --residue 396-426 test/pdb_files/2PPB.pdb.gz > test/extracted_pdb_files/2PPB_N_396-426.pdb
+
