@@ -105,23 +105,100 @@ selection is made by formulating the objective function using Minimum Message
 Length (MML). The distribution which results in the best compression of data is chosen
 to be the best model. \\
 
+Normal distribution is expressed in terms of squared difference from the mean $\mu$
+\eqref{eqn:normal_pdf},
+\begin{equation}
+\mathrm{pdf}(x) = \frac{1}{\sqrt{2\pi\sigma}} \mathrm{exp}\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \label{eqn:normal_pdf}
+\end{equation}
+and hence objective functions based on minimizing the total least squares result in a 
+closed form analytical solution. On the contrary, because of the mathematical
+nature of the Laplace \eqref{eqn:laplace_pdf} which is expressed as the absolute 
+difference from the mean, does not offer a closed form solution.
+\begin{equation}
+\mathrm{pdf}(x) = \frac{1}{2b}\mathrm{exp}\left(-\frac{|x-\mu|}{b}\right) \label{eqn:laplace_pdf}
+\end{equation}
+That being said, we however, believe that it has potential benefits. Laplace distribution
+is a model of choice in areas as diverse as signal processing 
+\citep{laplace-signal-processing}, image denoising \citep{image-denoising},
+gene expression studies \citep{Bhowmick01102006}, market risk prediction
+\citep{haas2005modeling}, and machine learning \citep{Cord:2006:FSR:1167556.1167570}.
+In most of these applications, a mixture model of Laplace distributions is used. \\
+
+The main contribution of this work is the derivation of the message length 
+expression and estimation of the MML parameters for the Laplace distribution.
 The general procedure to formulate the message length expression for transmitting
 data using some statistical model is outlined in \citet{wallace-87}. The MML method
 of estimating parameters for a number of distributions has been well established
 \citep{WallaceBook}. This general approach is followed in the derivation of the
-message length expression for the Laplace distribution. Although this has not been
-done previously, we believe that it has potential benefits. Laplace distribution
-is a model of choice in several applications
-If the data is generated from a Normal distribution, its approximation using a Normal
-distribution would result in a better compression
+message length expression for the Laplace distribution. \\
 
+We demonstrate its use in two cases. The first scenario involves data being randomly
+generated from an underlying Laplace distribution. This data is then fitted using
+both Normal and Laplace models. We use the derived formulation of MML for modelling
+the data using Laplace distribution. It is observed that the compression in message
+length is better when compared to transmitting it over a Normal distribution. Since
+the original distribution from which the data was generated happens to be Laplace,
+it is reasonable to guess that a Laplace model fits better. In general, if the
+data is generated from an underlying true distribution, modelling that data using
+the same statistical model results in a better fit.
+This is done as a validation check to ensure that the MML formulation for the 
+Laplace case is consistent with this observation. \\
+
+Further, we demonstrate its use by applying to the problem of optimal superposition.
 Examples of protein structures are considered
 and they are superposed using Kearsley's transformation. This results in an
-orientation of the proteins which minimizes the total least squares of the
-corresponding coordinates. A superposition which minimizes the total absolute 
-value of the difference of the coordinates is computed using a Monte Carlo 
-simulation. The two orientations 
+orientation of the proteins which minimizes the total least squares deviations. 
+This optimal superposition is then encoded using a Normal distribution.
+A related superposition which minimizes the total absolute 
+value of the deviations is then computed using a Monte Carlo 
+simulation. This optimal superposition is encoded using a Laplace distribution.
 
+\section{The Minimum Message Length (MML) Framework}
+\subsection{Inductive Inference}
+\citet{wallace68} developed the first practical criterion for model selection using 
+information theory. MML provides an elegant framework to compare any two competing 
+hypotheses that model some observed data. The hypothesis that results in the shortest 
+overall message length is chosen as the best one, in line with traditional statistical 
+inference using the Bayesian method.\footnote{http://allisons.org/ll/MML/} \\
+
+Using Bayes' theorem to explain some observed data $D$ by hypothesis $H$, we get:
+\begin{equation*}
+  \Pr(H\&D) = \Pr(H) \times \Pr(D|H) = \Pr(D) \times \Pr(H|D)
+\end{equation*}
+where $\Pr(H\&D)$ is the joint probability of data $D$ and hypothesis $H$. $\Pr(H)$
+is the prior probability of hypothesis $H$, $\Pr(D)$ is the prior probability of 
+probability of data $D$, $\Pr(H|D)$ is the posterior probability of $H$
+given $D$, and $\Pr(D|H)$ is the likelihood.
+MML uses the following result from information theory: given an event $E$
+with a probability $\Pr(E)$, the message length $I(E)$ for an optimal
+code is given by $I(E) = -\log_2 (\Pr(E))$ bits \citep{shannon1948}. Applying this insight
+to the Bayes' theorem, we get the following relationship between
+conditional probabilities in terms of optimal message lengths:
+\begin{equation*}
+  I(H\&D) = I(H) + I(D|H) = I(D) + I(H|D)
+\end{equation*}
+In the traditional Bayesian framework, the hypothesis $H$ with
+the largest posterior probability $\Pr(H|D)$ is often preferred.
+Among the terms in the above equation, $\Pr(H)$ (and hence $I(H)$) can
+usually be estimated well for \emph{some} reasonable prior(s) on hypotheses.
+Given the data $D$ and a chosen prior $H$, the likelihood $\Pr(D|H)$ can also be estimated.
+Whilst comparing two competing hypotheses, the prior of observed data $\Pr(D)$
+can be ignored as it is a common factor. Hence, for two competing hypotheses, $H$ and $H^\prime$, we have:
+\begin{equation*}
+I(H|D) - I(H^\prime|D) = I(H) + I(D|H) - I(H^\prime) - I(D|H^\prime)
+\end{equation*}
+The message, therefore, comprises of two parts: 
+\begin{enumerate}
+\item Statement of the hypothesis $H$ (given by $I(H)$)  
+\item Statement of the data $D$ using the hypothesis (given by $I(D|H)$) 
+\end{enumerate}
+
+\subsection{Parameter Estimation using MML}
+The hypothesis is a statistical model which is characterized by a set of parameters.
+MML treats the parameters and data as entities which need to be passed on as 
+information by a transmitter to a receiver. There is a message length associated
+with encoding both the parameters and the data. The main difference between MML and
+other Bayesian methods of inference 
 \acks{Acknowledgements should go at the end, before appendices and references.}
 
 \bibliography{references}
