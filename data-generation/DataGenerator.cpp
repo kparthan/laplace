@@ -172,7 +172,7 @@ void DataGenerator::plotPredictions(string &data_file)
   vector<string> labels(3,"");
   labels[0] = "";
   labels[1] = "x";
-  labels[2] = "predictions";
+  labels[2] = "probability density";
   graph.label(labels);
   //xrange = extremum(x);
   //yrange = extremum(predictions[0]);

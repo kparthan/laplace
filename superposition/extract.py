@@ -12,7 +12,7 @@ pdb_files_count = 0
 file_simulate = open('simulate.sh','w')
 while line != '':
   x = line.strip('\n')
-  y = line.split()
+  y = x.split()
   pdb_id = y[0]
 
   # check if pdb file exists

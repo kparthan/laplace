@@ -95,9 +95,9 @@ void Plot::sketch(string &data_file, vector<vector<double>> &predictions)
   script << "plot \"results/data/" << data_file << "\" using 1:2 title "
          << "'original distribution' with points lc rgb \"red\", \\" << endl;
   script << "\"results/data/" << data_file << "\" using 1:3 title "
-         << "'normal estimate' with points lc rgb \"blue\", \\" << endl;
+         << "'normal approximation' with points lc rgb \"blue\", \\" << endl;
   script << "\"results/data/" << data_file << "\" using 1:4 title "
-         << "'laplace estimate' with points lc rgb \"green\"" << endl;
+         << "'laplace approximation' with points lc rgb \"green\"" << endl;
 	script.close();
 
 	system("gnuplot -persist results/script.p");	

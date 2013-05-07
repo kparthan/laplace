@@ -23,9 +23,6 @@ Simulation.o: Simulation.cpp Simulation.h
 Message.o: Message.cpp Message.h
 	g++ -c $(CFLAGS) $< -o $@
 
-clean_output:
-	rm output/* 
-
 clean:
 	rm -f *.o *~ superimpose
 
