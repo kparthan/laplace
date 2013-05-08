@@ -34,6 +34,9 @@ class Plot
     //! Plot the estimated predictions
     void sketch(string &, vector<vector<double>> &);
 
+    //!
+    void sketchStatistics(string &);
+
 		//! plotting the data values(X's only)
 		void sketch(vector<double> &);
 

@@ -58,12 +58,16 @@ void LaplaceDataGenerator::simulate()
 {
   for (int i=0; i<parameters.samples.size(); i++) {
     for (int j=0; j<parameters.scale.size(); j++) {
-      for (int n=1; n<=parameters.iterations; n++) {
+      vector<double> list;  
+      for(int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
         laplace = Laplace(mean,scale);
-        vector<double> list = generateRandom(parameters.samples[i]);
+        list = generateRandom(parameters.samples[i]);
         estimateAndPlotModel("laplace",list,j,n);
+      }
+      if (parameters.iterations > 1) {
+        plotStatistics("laplace",list.size(),j);
       }
     }
   }

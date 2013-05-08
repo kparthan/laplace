@@ -104,6 +104,23 @@ void Plot::sketch(string &data_file, vector<vector<double>> &predictions)
 }
 
 /*!
+ *
+ */
+void Plot::sketchStatistics(string &data_file)
+{
+  script.open(script_file.c_str(),ios::app);
+  script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
+	script << "set multiplot" << endl;
+  script << "plot \"results/data/" << data_file << "\" using (column(0)):3 title "
+         << "'normal message length' with lines lc rgb \"red\", \\" << endl;
+  script << "\"results/data/" << data_file << "\" using (column(0)):6 title "
+         << "'laplace message length' with lines lc rgb \"blue\"" << endl;
+	script.close();
+
+	system("gnuplot -persist results/script.p");	
+}
+
+/*!
  *	\brief This function is used to plot the generated X values
  * 	\param randomData a reference to a vector<double>
  */

@@ -28,6 +28,9 @@ class DataGenerator
     //! Calculate the minimum message length and plot
     void estimateAndPlotModel(const char *, vector<double> &, int, int);
 
+    //! Plot the message lengths for all iterations
+    void plotStatistics(const char *, int, int);
+
     //! Compute the corresponding function values
     virtual vector<double> computeFunctionValues(vector<double> &){}
 

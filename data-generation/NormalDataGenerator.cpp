@@ -73,18 +73,22 @@ void NormalDataGenerator::simulate()
 {
   for (int i=0; i<parameters.samples.size(); i++) {
     for (int j=0; j<parameters.scale.size(); j++) {
+      vector<double> list;
       for (int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
         normal = Normal(mean,scale);
-        vector<double> list = generateRandom(parameters.samples[i]);
-        string fname = "data_" + boost::lexical_cast<string>(n);
+        list = generateRandom(parameters.samples[i]);
+        /*string fname = "data_" + boost::lexical_cast<string>(n);
         ofstream fw(fname.c_str());
         for (int k=0; k<list.size(); k++) {
           fw << list[k] << endl;
         }
-        fw.close();
+        fw.close();*/
         estimateAndPlotModel("normal",list,j,n);
+      }
+      if (parameters.iterations > 1) {
+        plotStatistics("normal",list.size(),j);
       }
     }
   }

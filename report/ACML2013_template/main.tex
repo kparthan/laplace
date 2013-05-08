@@ -60,11 +60,11 @@
 
 
  % Authors with different addresses:
-  \author{\Name{Author Name1} \Email{abc@sample.com}\\
-  \addr Address 1
+  \author{\Name{Parthan Kasarapu} \Email{parthan.kasarapu@monash.edu}\\
+  \addr Faculty of IT, Monash University, Clayton 3800, Australia
   \AND
-  \Name{Author Name2} \Email{xyz@sample.com}\\
-  \addr Address 2
+  \Name{Lloyd Allison} \Email{lloyd.allison@monash.edu}\\
+  \addr Faculty of IT, Monash University, Clayton 3800, Australia
  }
 
 \editor{Cheng Soon Ong and Tu Bao Ho}
@@ -161,29 +161,31 @@ encoding the model and its fit to the data. This encoded message needs to be com
 between a hypothetical transmitter and a receiver. A model with the smallest message
 length directly relates to a better fit. This provides a mechanism to select the
 best model from a set of models. In this paper, we use this intuition to 
-evaluate the fit when the data is modelled  using a Normal and a Laplace distribution. \\
+evaluate the overall fit when the data is modelled  using a Normal and a Laplace distribution. \\
 
 We demonstrate the use of Laplace estimates in two cases. 
 The first scenario involves data being randomly
 generated from a Laplace distribution. This data is then fitted using
 both Normal and Laplace models. We use the derived formulation of Laplace MML to
 compute the Laplace fit. This is then compared against the fit using a Normal
-distribution.
+distribution. \\
 
 We show a practical application of this research on the problem of superposition of 
 vector sets. The objective function for the superposition problem can be formulated
 where the deviations of the corresponding vectors are calculated using the L1 norm 
 or the L2 norm. An optimal superposition would effectively minimize the sum of all
 the deviations. In MML parlance, the optimal superposition would correspond to stating
-the deviations concisely
-correspond to the one which re
-Examples of protein structures are considered
-and they are superposed using Kearsley's transformation. This results in an
-orientation of the proteins which minimizes the total least squares deviations. 
-This optimal superposition is then encoded using a Normal distribution.
-A related superposition which minimizes the total absolute 
-value of the deviations is then computed using a Monte Carlo 
-simulation. This optimal superposition is encoded using a Laplace distribution.
+the deviations concisely. We encode the deviations using both Normal and Laplace
+distributions and compare them. In particular, we experiment with protein structures,
+in which case, the vector sets correspond to the three dimensional coordinates of the atoms.
+
+%Examples of protein structures are considered
+%and they are superposed using Kearsley's transformation. This results in an
+%orientation of the proteins which minimizes the total least squares deviations. 
+%This optimal superposition is then encoded using a Normal distribution.
+%A related superposition which minimizes the total absolute 
+%value of the deviations is then computed using a Monte Carlo 
+%simulation. This optimal superposition is encoded using a Laplace distribution.
 
 \section{The Minimum Message Length (MML) Framework}
 \subsection{Inductive Inference}
@@ -204,7 +206,7 @@ given $D$, and $\Pr(D|H)$ is the likelihood.
 MML uses the following result from information theory: given an event $E$
 with a probability $\Pr(E)$, the message length $I(E)$ for an optimal
 code is given by $I(E) = -\log_2 (\Pr(E))$ bits \citep{shannon1948}. Applying this insight
-to the Bayes' theorem, we get the following relationship between
+to the Bayes's theorem, we get the following relationship between
 conditional probabilities in terms of optimal message lengths:
 \begin{equation*}
   I(H\&D) = I(H) + I(D|H) = I(D) + I(H|D)
@@ -212,7 +214,7 @@ conditional probabilities in terms of optimal message lengths:
 In the traditional Bayesian framework, the hypothesis $H$ with
 the largest posterior probability $\Pr(H|D)$ is often preferred.
 Among the terms in the above equation, $\Pr(H)$ (and hence $I(H)$) can
-usually be estimated well for \emph{some} reasonable prior(s) on hypotheses.
+usually be estimated well for some \emph{reasonable} prior(s) on hypotheses.
 Given the data $D$ and a chosen prior $H$, the likelihood $\Pr(D|H)$ can also be estimated.
 Whilst comparing two competing hypotheses, the prior of observed data $\Pr(D)$
 can be ignored as it is a common factor. Hence, for two competing hypotheses, $H$ and $H^\prime$, we have:
@@ -226,24 +228,32 @@ The message, therefore, comprises of two parts:
 \end{enumerate}
 
 \subsection{Parameter Estimation using MML}
-The hypothesis is a statistical model which is characterized by a set of parameters.
+The hypothesis is a statistical model which is characterized by its parameters.
 MML treats the parameters and data as entities which need to be passed on as 
 information by a transmitter to a receiver. There is a message length associated
-with encoding both the parameters and the data. The main difference between MML and
-other Bayesian methods of inference is in the importance they give to the
-parameters of the model. As an example, most methods based on manimum likelihood (ML)
-ignore the prior distribution of the parameters. In the MML approach, both the 
-parameters and the data are stated to some precision. The message length varies
-with the precision. If the parameters are stated more accurately than required, the 
+with encoding both the parameters and the data given the parameters. To calculate the message length
+to encode parameters, the prior density on the parameters is partitioned into cells
+each with a distinct index. It is this unique identifier that is transmitted across and the
+receiver interprets the parameters as the mid-point of the corresponding cell. If there are $d$
+parameters describing the model, each cell has an uncertainty in volume which is called the
+\emph{accuracy of parameter value (AOPV)}. The parameter estimation process requires the
+determination of this precision to which the parameters need to be stated. A good
+description of the procedure is outlined in \citet{oliver1994mml}. \\
+
+The message length varies with the precision to which the parameters are stated. 
+If the parameters are stated more accurately than required, the 
 message length might be longer although this might lead to a better fit to the data. 
 MML works by identifying the precision to which these 
-parameters need to be stated. \citet{wallace-87} provide an approximation to infer
-these precision values which balance the tradeoff of precision of parameters and the 
-fit to the data. Such an elegant way allows us to compare two hypotheses which
-model the same data but using different sets of parameters.
+parameters need to be stated. The optimal precision is expressed in terms of the 
+determinant of the Fisher information matrix as shown in \citet{oliver1994mml}. \\
+
+The overall message length consists of the contribution due to the parameters (model complexity) 
+and the data given the parameters (error of fit). MML allows us to balance this tradeoff
+by choosing the parameters that minimize the overall message length. Such an elegant way 
+allows us to compare two hypotheses which model the same data but using different sets of parameters.
 
 \section{Message Lengths of Normal \& Laplace distributions}
-\citet{wallace-87} derived the code length of the two part message as
+\citet{wallace-87} derived the approximation to the code length of the two part message as
 \begin{align}
 I(\bar{\theta},D) &= I(\bar{\theta}) + I(D|\bar{\theta}) \notag\\
 &\approx \underbrace{\frac{d}{2}\log\kappa_d -\log h(\bar{\theta}) + \frac{1}{2}\log(det\,F(\bar{\theta}))}_{\mathrm{part 1}} + \underbrace{L(\bar{\theta}) + \frac{d}{2}}_{\mathrm{part 2}} \label{eqn:wf_msglen}
@@ -263,10 +273,10 @@ containing $N$ samples, $\epsilon$ be the precision to which each datum is state
 Let $\mathrm{R}_{\mu}$, $\mathrm{R}_{\sigma}$ be the range of $\mu$ and $\log\sigma$ 
 respectively. $\epsilon$, $\mathrm{R}_{\mu}$, $\mathrm{R}_{\sigma}$ are hyperparameters
 which are introduced in \citet{WallaceBook}. The derivation of the MML estimates 
-for a Normal distribution is presented in \citet{WallaceBook}. The MML estimates are:
+for a Normal distribution is presented in \citet{WallaceBook,wallace68}. The MML estimates are:
 \begin{align*}
 \hat{\mu}_{\mathrm{MML}} &= \frac{1}{N} \sum_{n=1}^N x_n \\
-\hat{\sigma}_{\mathrm{MML}} &= \sqrt{\frac{1}{N-1} \sum_{n=1}^N (x_n-\hat{\mu}_{\mathrm{MML}})^2}
+\hat{\sigma}_{\mathrm{MML}}^2 &= \frac{\sum_{n=1}^N (x_n-\hat{\mu}_{\mathrm{MML}})^2}{N-1}
 \end{align*}
 The corresponding minimized message length is given as
 \begin{dmath}
@@ -274,10 +284,10 @@ The corresponding minimized message length is given as
 \end{dmath} 
 
 \subsection{Laplace distribution}
-The novelty of this paper lies in the derivation of the MML estimates of 
-the parameters of the Laplace distribution.
+The contributions of this paper is in the derivation of the MML estimates of 
+the parameters of the Laplace distribution which have not been characterized previously.
 The parameters describing a Laplace distribution are the $\mu$ and $b$. $\mu$ 
-is the mean of the distribution and $b$ is the scale parameter. The probability
+is the \emph{location} parameter of the distribution and $b$ is the {scale} parameter. The probability
 density function is given in \eqref{eqn:laplace_pdf}. To derive these estimates,
 we use the Wallace-Freeman approximation \citep{wallace-87}. This requires:
 \begin{itemize}
@@ -329,6 +339,12 @@ tucked away in \autoref{apd:laplace_fisher}. Using those results, we have
             \end{array} \right) 
 \end{align*}
 \begin{equation} \therefore det(\mathrm{F}(\mu,b)) = \frac{N^2}{b^4} \label{eqn:laplace_fisher} \end{equation}
+As established in \citet{oliver1994mml}, the optimal precision to which the parameters need
+to be stated is given by: $AOPV \propto \frac{1}{\sqrt{det(F(\bar{\theta}))}}$.
+The Normal Fisher is $\frac{2N^2}{\sigma^4}$ \citep{WallaceBook} and the Laplace Fisher 
+as derived above is $\frac{N^2}{b^4}$. There is a marked difference in the optimal AOPVs
+computed in the two cases. For the same value of spread ($\sigma=b$), the uncertainty in
+the parameter values for a Normal is $\sqrt{2}$ times less than that of Laplace.
 
 \subsection*{Priors on the parameters}
 A prior probability on $\mu$ and $b$ is assumed in accordance with the prior assumed
@@ -419,6 +435,32 @@ Normal & 0 & 2 & 0.0722611 & 1.93638 & 6493.89 & 0.127191 & 1.52389 & 6518 \\ \h
 Laplace & 0 & 2 & -0.0455104 & 2.78563 & 6755.68 & 0.0471194 & 1.9376 & 6690.91 \\ \hline
 \end{tabular}
 \end{table}
+
+\begin{figure}[!htb]
+  \centering
+    \subfigure[Original distribution: Normal]
+    {
+      \centering
+        \includegraphics[width=0.45\textwidth]{fig/statistics_normal_n_500_mean_0_scale_2.eps}
+        \label{fig:normal_data_iterations}
+    }
+    \hspace{0.5cm}
+    \subfigure[Original distribution: Laplace]
+    {
+        \centering
+        \includegraphics[width=0.45\textwidth]{fig/statistics_laplace_n_500_mean_0_scale_2.eps}
+        \label{fig:laplace_data_iterations}
+    }
+    \caption{Comaprison of message lengths over many iterations}
+    \label{fig:data_approximation_iterations}
+\end{figure}
+
+\autoref{fig:data_approximation_iterations} compares the message lengths over 100 iterations.
+In \autoref{fig:normal_data_iterations}, the original distribution is Normal and it is observed
+that over all the iterations, the message length for the Normal (red) is consistently less than that
+of the Laplace (blue). In \autoref{fig:laplace_data_iterations}, the original distribution is 
+Laplace and it is observed that over all the iterations, the message length for the Laplace (blue) 
+is consistently less than that of the Normal (red).
 
 \subsection{Superposition of protein structures}
 Given any two vector sets $U = \{u_1,u_2,\ldots,u_m\}$ and $V = \{v_1,v_2,\ldots,v_m\}$

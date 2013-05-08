@@ -213,6 +213,30 @@ void DataGenerator::estimateAndPlotModel(const char *name,
 }
 
 /*!
+ *
+ */
+void DataGenerator::plotStatistics(const char *name, int num_samples,
+                                   int scale_index)
+{
+  string file_name = getFileName(name,num_samples,scale_index);
+  file_name = "statistics_" + file_name;
+  string script_file("results/script.p");
+  Plot graph(script_file);
+  pair<double,double> xrange,yrange;
+
+  vector<string> labels(3,"");
+  labels[0] = "";
+  labels[1] = "Iterations";
+  labels[2] = "Message length (in bits)";
+  graph.label(labels);
+  //xrange = extremum(x);
+  //yrange = extremum(predictions[0]);
+  //graph.setRange(xrange,yrange);
+  graph.sketchStatistics(file_name);
+  
+}
+
+/*!
  *  \brief This function adds noise to the generated fucntion values
  *  \param sigma a double
  */
