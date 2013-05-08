@@ -48,11 +48,11 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
   double mu = normal.mean();
   double sigma = normal.standardDeviation();
   vector<double> x(samples,0);
-  srand(time(NULL));
+  //srand(time(NULL));
   //srand(1000);
   for (int i=0; i<samples; i=i+2) {
-    double u = (double) rand() / RAND_MAX;
-    double v = (double) rand() / RAND_MAX;
+    double u = ((double) rand()) / RAND_MAX;
+    double v = ((double) rand()) / RAND_MAX;
     double sqroot = sqrt(-2 * log(u));
     double arg = 2 * PI * v;
     double r1 = sqroot * cos (arg);
@@ -78,6 +78,12 @@ void NormalDataGenerator::simulate()
         double scale = parameters.scale[j];
         normal = Normal(mean,scale);
         vector<double> list = generateRandom(parameters.samples[i]);
+        string fname = "data_" + boost::lexical_cast<string>(n);
+        ofstream fw(fname.c_str());
+        for (int k=0; k<list.size(); k++) {
+          fw << list[k] << endl;
+        }
+        fw.close();
         estimateAndPlotModel("normal",list,j,n);
       }
     }

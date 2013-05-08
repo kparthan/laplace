@@ -27,7 +27,7 @@
 \jmlryear{2013}
 \jmlrworkshop{ACML 2013}
 
-\title[MML Laplace]{Minimum Message Length Inference of Laplace Distribution}
+\title[MML Laplace]{Minimum Message Length Estimate of Parameters of Laplace Distribution}
 
  % Use \Name{Author Name} to specify the name.
  % If the surname contains spaces, enclose the surname
@@ -75,19 +75,28 @@
 \maketitle
 
 \begin{abstract}
-This paper aims at bringing out the merits of using the Laplace distribution over
-the Normal distribution. The choice of the best distribution is objectively
-made using the minimum message length (MML) principle. The message length for
-transmitting data using a Laplace distribution is derived and its parameters are
-estimated. This method of transmission is compared with that of transmistting the data
-using the Normal distribution. This is explored in the context of superposition
-of protein structures. The optimal superposition of protein structures (described
-using a Normal distribution) minimizing the L2 norm is computed using the 
-Kearsley's method and the superposition minimizing the
-L1 norm (described using a Laplace model) is approximated using Monte Carlo 
-simulation. These two are compared with respect
-to their model complexity and the overall fit to the data using MML. 
+We derive the minimum message length (MML) estimates for location ($\mu$) and 
+scale ($b$) parameters of a Laplace distribution. We formulate the message 
+length expression for encoding data using a Laplace distribution and minimize it
+to get the parameter estimates. We examine its role in using MML to 
+make a selection between Normal and Laplace distributions. This is demonstrated 
+with respect to superposition of two vector sets. The choice of the best 
+distribution is objectively made by encoding the optimal superposition 
+resulting from modelling using Normal and Laplace
+distributions and comparing their respective message lengths.
 \end{abstract}
+
+%This paper aims at bringing out the merits of using the Laplace distribution over
+%made using the minimum message length (MML) principle. The message length for
+%transmitting data using a Laplace distribution is derived and its parameters are
+%estimated. This method of transmission is compared with that of transmistting the data
+%using the Normal distribution. This is explored in the context of superposition
+%of protein structures. The optimal superposition of protein structures (described
+%using a Normal distribution) minimizing the L2 norm is computed using the 
+%Kearsley's method and the superposition minimizing the
+%L1 norm (described using a Laplace model) is approximated using Monte Carlo 
+%simulation. These two are compared with respect
+%to their model complexity and the overall fit to the data using MML. 
 
 \begin{keywords}
 Laplace, Normal, MML, Kearsley, Monte Carlo simulation
@@ -95,32 +104,39 @@ Laplace, Normal, MML, Kearsley, Monte Carlo simulation
 
 \section{Introduction}
 Normal distribution is widely used in modelling a set of data whose true distribution
-is unknown. In many problems, the objective function is formulated as a sum of squares,
-(the L2 norm) and this function is minimized or maximized depending on the application. 
-Normal distribution has a huge impact on the cost function because of the squared nature of 
-the individual terms. If there are outliers in the dataset, the final inference might be 
-skewed to accommodate the outliers in the model description. The Laplace distribution, 
-however, is robust to
+is unknown. In many problems, the objective function is formulated as a sum of squares
+(the L2 norm), and this function is minimized or maximized depending on the application. 
+Normal distribution has a huge impact on the cost function because of the quadratic nature of 
+the contributions of individual terms to the objective function. If there are 
+outliers in the dataset, the final 
+inference might be skewed to accommodate the outliers in the model description. 
+The Laplace distribution, however, is relatively more robust to
 outliers as the objective function involves the sum of the absolute values of the difference 
-of the individual terms (L1 norm).
-The choice of selecting a Laplace over Normal is investigated in this paper. This
-selection is made by formulating the objective function using Minimum Message
-Length (MML). The distribution which results in the best compression of data is chosen
+of the individual terms (L1 norm). The outliers are not penalised as drastically
+when compared with the Normal distribution.
+The use of MML to discriminate between a Laplace and a Normal is explored in this paper. 
+This selection is made by formulating the objective function using minimum message
+length (MML) principle. We use the derived minimum message length expression for the Laplace.
+The minimum message length expression for the Normal has been worked out previously. 
+The message lengths resulting from these two distributions are compared against
+each other. The distribution which results in the best compression of data is chosen
 to be the best model. \\
 
 Normal distribution is expressed in terms of squared difference from the mean $\mu$
 \eqref{eqn:normal_pdf},
 \begin{equation}
-\mathrm{pdf}(x) = \frac{1}{\sqrt{2\pi\sigma}} \mathrm{exp}\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \label{eqn:normal_pdf}
+\mathrm{pdf}(x) = \frac{1}{\sqrt{2\pi}\sigma} \mathrm{exp}\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \label{eqn:normal_pdf}
 \end{equation}
 and hence objective functions based on minimizing the total least squares result in a 
-closed form analytical solution. On the contrary, because of the mathematical
+closed form analytical solution. In contrast, because of the mathematical
 nature of the Laplace \eqref{eqn:laplace_pdf} which is expressed as the absolute 
-difference from the mean, does not offer a closed form solution.
+difference from the mean, there does not exist a closed form solution 
+(for data with more than one dimension).
 \begin{equation}
 \mathrm{pdf}(x) = \frac{1}{2b}\mathrm{exp}\left(-\frac{|x-\mu|}{b}\right) \label{eqn:laplace_pdf}
 \end{equation}
-That being said, we however, believe that it has potential benefits. Laplace distribution
+
+In spite of the lack of an analytical solution, Laplace distribution
 is a model of choice in areas as diverse as signal processing 
 \citep{laplace-signal-processing}, image denoising \citep{image-denoising},
 gene expression studies \citep{Bhowmick01102006}, market risk prediction
@@ -130,24 +146,37 @@ In most of these applications, a mixture model of Laplace distributions is used.
 The main contribution of this work is the derivation of the message length 
 expression and estimation of the MML parameters for the Laplace distribution.
 The general procedure to formulate the message length expression for transmitting
-data using some statistical model is outlined in \citet{wallace-87}. The MML method
-of estimating parameters for a number of distributions has been well established
-\citep{WallaceBook}. This general approach is followed in the derivation of the
-message length expression for the Laplace distribution. \\
+data using some statistical model is outlined in \citet{wallace-87} and is 
+referred to as Strict Message Length (SMML) Inference. This is computationally
+infeasible and is shown to be NP-hard \citep{Farr01012002}. \citet{wallace-87}
+provide an approximate form which is commonly referred to as the 
+\emph{Wallace-Freeman} approximation. The MML method
+of estimating parameters for a number of distributions using this approximation
+has been well established \citep{WallaceBook}. In this paper, we use the 
+Wallace-Freeman approximation
+to derive the the message length expression for the Laplace distribution. \\
 
-We demonstrate its use in two cases. The first scenario involves data being randomly
-generated from an underlying Laplace distribution. This data is then fitted using
-both Normal and Laplace models. We use the derived formulation of MML for modelling
-the data using Laplace distribution. It is observed that the compression in message
-length is better when compared to transmitting it over a Normal distribution. Since
-the original distribution from which the data was generated happens to be Laplace,
-it is reasonable to guess that a Laplace model fits better. In general, if the
-data is generated from an underlying true distribution, modelling that data using
-the same statistical model results in a better fit.
-This is done as a validation check to ensure that the MML formulation for the 
-Laplace case is consistent with this observation. \\
+MML is an information theoretic way of Bayesian inference. The method involves
+encoding the model and its fit to the data. This encoded message needs to be communicated
+between a hypothetical transmitter and a receiver. A model with the smallest message
+length directly relates to a better fit. This provides a mechanism to select the
+best model from a set of models. In this paper, we use this intuition to 
+evaluate the fit when the data is modelled  using a Normal and a Laplace distribution. \\
 
-Further, we demonstrate its use by applying to the problem of optimal superposition.
+We demonstrate the use of Laplace estimates in two cases. 
+The first scenario involves data being randomly
+generated from a Laplace distribution. This data is then fitted using
+both Normal and Laplace models. We use the derived formulation of Laplace MML to
+compute the Laplace fit. This is then compared against the fit using a Normal
+distribution.
+
+We show a practical application of this research on the problem of superposition of 
+vector sets. The objective function for the superposition problem can be formulated
+where the deviations of the corresponding vectors are calculated using the L1 norm 
+or the L2 norm. An optimal superposition would effectively minimize the sum of all
+the deviations. In MML parlance, the optimal superposition would correspond to stating
+the deviations concisely
+correspond to the one which re
 Examples of protein structures are considered
 and they are superposed using Kearsley's transformation. This results in an
 orientation of the proteins which minimizes the total least squares deviations. 
@@ -334,11 +363,13 @@ We demonstrate the use of Laplace estimates in two scenarios.
 \subsection{Data generation and modelling}
 In the first case, data is generated randomly from a distribution (Normal \& Laplace) 
 separately. This data is then modelled using the two distributions.
-It is observed that if the true distribution is a Laplace, then it is better
-modelled by a Laplace. \eqref{eqn:laplace_mml_estimate} is used to determine
-the code length when the data is modelled using the Laplace distribution.
-\eqref{eqn:normal_mml_estimate} is used to encode the data using a Normal
-distribution. \\
+It is observed that if the true distribution is a Laplace/Normal, then the
+compression in message length is better when it is modelled using a Laplace/Normal
+distribution. This is indeed expected and is done as a validation check to ensure that 
+the derived MML formulation for the Laplace is consistent with the observation.
+\eqref{eqn:laplace_mml_estimate} and \eqref{eqn:normal_mml_estimate} are used to determine
+the code length when the data is modelled using the Laplace and Normal distributions
+respectively. \\
 
 As an example, 500 random samples are generated from each of the distributions.
 The mean of the true distribution is taken to be 0 and the spread (standard
