@@ -54,8 +54,22 @@ void Simulation::initialSuperposition()
   //Matrix<double> rot = superimposer.getRotationMatrix();
   //rot.print();
   //cout << superimposer.rmsd() << endl;
-  //fixed->undoLastSelection();
-  //moving->undoLastSelection();
+  ProteinStructure fixed_copy = *fixed;
+  ProteinStructure moving_copy = *moving;
+  fixed_copy.undoLastSelection();
+  moving_copy.undoLastSelection();
+  vector<Atom> atoms1 = fixed_copy.getAtoms();
+  vector<Atom> atoms2 = moving_copy.getAtoms();
+  ofstream f1("fixed.pdb");
+  ofstream f2("moving.pdb");
+  for (int i=0; i<atoms1.size(); i++) {
+    f1 << atoms1[i].formatPDBLine() << endl;
+  }
+  for (int i=0; i<atoms2.size(); i++) {
+    f2 << atoms2[i].formatPDBLine() << endl;
+  }
+  f1.close();
+  f2.close();
 }
 
 /*!
@@ -302,6 +316,14 @@ ProteinStructure Simulation::perturb()
     }
     fw2.close();*/
   //}
+  ProteinStructure copy = moving_copy_persist;
+  copy.undoLastSelection();
+  vector<Atom> atoms = copy.getAtoms();
+  ofstream fw("final.pdb");
+  for (int i=0; i<atoms.size(); i++) {
+    fw << atoms[i].formatPDBLine() << endl;
+  }
+  fw.close();
   return moving_copy_persist;
 }
 
