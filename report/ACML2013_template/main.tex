@@ -65,6 +65,9 @@
   \AND
   \Name{Lloyd Allison} \Email{lloyd.allison@monash.edu}\\
   \addr Faculty of IT, Monash University, Clayton 3800, Australia
+  \AND
+  \Name{Enes Makalic} \Email{emakalic@unimelb.edu.au}\\
+  \addr Centre for MEGA Epidemiology, The University of Melbourne, Carlton 3053, Australia
  }
 
 \editor{Cheng Soon Ong and Tu Bao Ho}
@@ -75,17 +78,21 @@
 \maketitle
 
 \begin{abstract}
-We derive the minimum message length (MML) estimates for location ($\mu$) and 
-scale ($b$) parameters of a Laplace distribution. We formulate the message 
-length expression for encoding data using a Laplace distribution and minimize it
-to get the parameter estimates. We examine its role in using MML to 
-make a selection between Normal and Laplace distributions. This is demonstrated 
-with respect to superposition of two vector sets. The choice of the best 
-distribution is objectively made by encoding the optimal superposition 
-resulting from modelling using Normal and Laplace
-distributions and comparing their respective message lengths.
+The Laplace distribution offers a number of uses in statistical inference and
+modelling on symmetric data with long tails. We report here for the first time
+the derivation of the minimum message length (MML) estimates of location ($\mu$) and 
+scale ($b$) parameters of the Laplace distribution for any observed data. 
+We demonstrate an application of this work to compare and contrast the
+quality of orthogonal superposition of two (spatial) vector sets under 
+$L^1$ and $L^2$ norm.
 \end{abstract}
 
+%We examine its role in using MML to 
+%make a selection between Normal and Laplace distributions. This is demonstrated 
+%with respect to superposition of two vector sets. The choice of the best 
+%distribution is objectively made by encoding the optimal superposition 
+%resulting from modelling using Normal and Laplace
+%distributions and comparing their respective message lengths.
 %This paper aims at bringing out the merits of using the Laplace distribution over
 %made using the minimum message length (MML) principle. The message length for
 %transmitting data using a Laplace distribution is derived and its parameters are
@@ -99,21 +106,27 @@ distributions and comparing their respective message lengths.
 %to their model complexity and the overall fit to the data using MML. 
 
 \begin{keywords}
-Laplace, Normal, MML, Kearsley, Monte Carlo simulation
+Laplace distribution, Normal distribution, MML, Monte Carlo simulation
 \end{keywords}
 
 \section{Introduction}
-Normal distribution is widely used in modelling a set of data whose true distribution
-is unknown. In many problems, the objective function is formulated as a sum of squares
-(the L2 norm), and this function is minimized or maximized depending on the application. 
-Normal distribution has a huge impact on the cost function because of the quadratic nature of 
-the contributions of individual terms to the objective function. If there are 
-outliers in the dataset, the final 
-inference might be skewed to accommodate the outliers in the model description. 
-The Laplace distribution, however, is relatively more robust to
-outliers as the objective function involves the sum of the absolute values of the difference 
-of the individual terms (L1 norm). The outliers are not penalised as drastically
-when compared with the Normal distribution.
+Laplace distribution is a continuous probability density function (pdf) which is dependent on
+the absolute value of the difference between the mean and the data point. Because of
+this characteristic, inference of parameters of this distribution (based on some 
+empirical data) is not severely affected in the presence of outliers. Laplace distribution
+is a model of choice in areas as diverse as signal processing 
+\citep{laplace-signal-processing}, image denoising \citep{image-denoising},
+gene expression studies \citep{Bhowmick01102006}, market risk prediction
+\citep{haas2005modeling}, and machine learning \citep{Cord:2006:FSR:1167556.1167570}.
+In most of these applications, a mixture model of Laplace distributions is used. \\
+
+Normal distribution, on the other hand, is sensitive to outliers because of the quadratic 
+nature of the contributions of individual terms. In the presence 
+of outliers, the inference of parameters is skewed to dampen the effect of their residuals 
+with respect to the model. In many problems, formulating the objective function (that needs 
+to be optimized) as sum of squared deviations (the $L^2$ norm) results in a closed
+form solution.
+
 The use of MML to discriminate between a Laplace and a Normal is explored in this paper. 
 This selection is made by formulating the objective function using minimum message
 length (MML) principle. We use the derived minimum message length expression for the Laplace.
@@ -344,7 +357,8 @@ to be stated is given by: $AOPV \propto \frac{1}{\sqrt{det(F(\bar{\theta}))}}$.
 The Normal Fisher is $\frac{2N^2}{\sigma^4}$ \citep{WallaceBook} and the Laplace Fisher 
 as derived above is $\frac{N^2}{b^4}$. There is a marked difference in the optimal AOPVs
 computed in the two cases. For the same value of spread ($\sigma=b$), the uncertainty in
-the parameter values for a Normal is $\sqrt{2}$ times less than that of Laplace.
+the parameter values for a Laplace is $\sqrt{2}$ times that of Normal, which means
+that the parameters for a Laplace need to be stated less precisely when compared with the Normal.
 
 \subsection*{Priors on the parameters}
 A prior probability on $\mu$ and $b$ is assumed in accordance with the prior assumed
@@ -462,34 +476,25 @@ of the Laplace (blue). In \autoref{fig:laplace_data_iterations}, the original di
 Laplace and it is observed that over all the iterations, the message length for the Laplace (blue) 
 is consistently less than that of the Normal (red).
 
-\subsection{Superposition of protein structures}
+\subsection{Superposition of vector sets}
 Given any two vector sets $U = \{u_1,u_2,\ldots,u_m\}$ and $V = \{v_1,v_2,\ldots,v_m\}$
 where each $u_i$ and $v_i$, $(i \in \{1,2,\ldots,m\})$ is a vector in 3D space, the 
 superpositioning problem refers to finding a suitable transformation on $V$ to
-align it with $U$ such that the sum of squares of the deviations of each corresponding
-vector is minimum. If a transformation on $V$ results in an altered vector set 
+align it with $U$ such that the deviations of each vector in $V$ with its counterpart
+in $U$ is minimum. If a transformation on $V$ results in an altered vector set 
 $V'=\{v_1',v_2',\ldots,v_m'\}$, the objective function corresponding to the
 sum of squares (L2 norm) of all deviations: 
 \begin{equation} 
-  \sum_{i=1}^m \|v_i'-u_i\|^2
-\end{equation} where $\|.\|$ denotes the vector
-norm, needs to be minimized. \citet{kearsley89} provides a solution to this by 
-resolving the transformation into translation and rotation. The centres of mass of the
-two vector sets are translated to the origin and the problem then reduces to finding the
-rotation matrix which minimizes the total least squares. This is done by representing
-the rotation matrix using a quaternion and then solving the resultant eigen value 
-decomposition problem. As such, \citet{kearsley89} offers an analytical way to solve
-the \emph{least squares} superposition problem. One specific application of this is in the
-superposition of two protein structures. \\
-
-If we consider only the sum of absolute deviations (L1 norm), the objective function 
-that needs to be minimized would then be
+  \sum_{i=1}^m \|v_i'-u_i\|^2 \label{eqn:L2_objective_function}
+\end{equation} 
+or the objective function corresponding to the sum of absolute deviations (L1 norm)
 \begin{equation} 
-  \sum_{i=1}^m \|v_i'-u_i\| \label{L1_objective_function}
+  \sum_{i=1}^m \|v_i'-u_i\| \label{eqn:L1_objective_function}
 \end{equation}
+(where $\|.\|$ denotes the vector norm) needs to be minimized. 
 The superposition problem can be formulated in the MML framework as finding the 
 orientation of two proteins such that the deviations of each corresponding point
-are communicated in an effective manner. Superposition based on minimizing total least
+are encoded in an effective manner. Superposition based on minimizing total least
 squares correspond to stating the deviations using a Normal distribution. 
 Superposition based on minimizing the absolute value of the deviations correspond
 to transmitting the deviations using a Laplace distribution. \citet{keynes-laplace} 
@@ -497,27 +502,56 @@ showed that the Laplace distribution minimized the absolute deviation from the m
 (which is also corroborated by the MML estimate of Laplace parameters 
 \eqref{eqn:laplace_estimate}) and is, hence, pertinent for our current discussion. \\
 
-Minimizing \eqref{L1_objective_function} does not yield a closed form solution. As such,
-one needs to adopt approximate methods to find the best superposition. The one used in
-this paper is a version that uses Monte Carlo simulation. It is described below:
+\citet{kearsley89} provides a solution to \eqref{eqn:L2_objective_function} by 
+resolving the transformation into translation and rotation. The centres of mass of the
+two vector sets are translated to the origin and the problem then reduces to finding the
+rotation matrix which minimizes the total least squares. This involves respresenting
+the rotation matrix using a quaternion and then solving the resultant eigen value 
+decomposition problem. As such, \citet{kearsley89} offers an analytical way to solve
+the \emph{least squares} superposition problem. \\
+ 
+Minimizing \eqref{eqn:L1_objective_function}, however, does not yield a closed form solution. 
+As such, one needs to adopt approximate methods to find the best superposition corresponding
+to the L1 norm. The one used in this paper is a version that uses Monte Carlo simulation. 
+It is described below:
 \begin{enumerate}
 \item Apply Kearsley's transformation and find the superposition that corresponds
 to least sum of squares of the deviations. In this state, the value of the 
-objective function \eqref{L1_objective_function} is computed. 
+objective function \eqref{eqn:L1_objective_function} is computed. 
 \item From this orientation, the protein is perturbed randomly. If the new orientation
-results in a better value of \eqref{L1_objective_function}, the new orientation is
+results in a better value of the L1 norm \eqref{eqn:L1_objective_function}, the new orientation is
 accepted. If however, the value of the objective function is less than the previous
-value, the new orientation is accepted with a small probability.
+value, the new orientation is accepted with a minute probability.
 \item This is repeated for many iterations. The process is expected to converge to
 the global minimum. As such, this would correspond to the optimal
 superposition which minimizes the sum of absolute deviations.
 \end{enumerate}
 
-\subsection*{Results}
-In our experiment, the initial least squares superposition using Kearsley's method
-is done using SUPER \citep{super}.
+The two vector sets are first superposed using the Kearsley's method and the message
+length ($I_{N}$) computed through MML inference using a Normal distribution. 
+Monte Carlo simulation is performed (as discussed above) from this stage and
+the final orientation is obtained. At this point, the message length ($I_L$) is
+computed through MML inference using a Laplace distribution. Two cases arise:-
+\begin{itemize}
+\item If $I_L < I_N$, then there exists a superposition which is optimal than the
+one resulting from minimizing the sum of squared deviations \eqref{eqn:L2_objective_function}.
+\item If $I_N < I_L$, then the superposition obtained by minimizing
+\eqref{eqn:L2_objective_function} is better. Since the minimal L1 superposition
+is obtained using a Monte Carlo simulation (which is terminated after a certain number
+of iterations), it could also be possible that the optimal solution wasn't found.
+\end{itemize}
 
-\texttt{***TODO***}
+The point of this exercise is to show that not all vector sets have their
+optimal superpositions dictated by minimizing sum of squared deviations. It also drives
+home the use of MML estimators in determining the kind of superposition to be
+considered. 
+
+\subsection*{Results}
+We apply the problem of superposition to protein structures. The vector sets would
+correspond to the three dimensional coordinates of the $\alpha$-carbon atoms of 
+amino acid residues constituting the proteins' backbone. In our experiment, the 
+initial least squares superposition using Kearsley's method is done using SUPER \citep{super}.
+
 
 \acks{Acknowledgements should go at the end, before appendices and references.}
 
