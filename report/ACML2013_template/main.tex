@@ -123,38 +123,16 @@ In most of these applications, a mixture model of Laplace distributions is used.
 Normal distribution, on the other hand, is sensitive to outliers because of the quadratic 
 nature of the contributions of individual terms. In the presence 
 of outliers, the inference of parameters is skewed to dampen the effect of their residuals 
-with respect to the model. In many problems, formulating the objective function (that needs 
+with respect to the model. In many problems, formulating an objective function (that needs 
 to be optimized) as sum of squared deviations (the $L^2$ norm) results in a closed
-form solution.
+form solution. Its $L^1$ equivalent, however, does not have an analytical solution
+(for data with more than one dimension). \\
 
-The use of MML to discriminate between a Laplace and a Normal is explored in this paper. 
-This selection is made by formulating the objective function using minimum message
-length (MML) principle. We use the derived minimum message length expression for the Laplace.
-The minimum message length expression for the Normal has been worked out previously. 
-The message lengths resulting from these two distributions are compared against
-each other. The distribution which results in the best compression of data is chosen
-to be the best model. \\
-
-Normal distribution is expressed in terms of squared difference from the mean $\mu$
-\eqref{eqn:normal_pdf},
-\begin{equation}
-\mathrm{pdf}(x) = \frac{1}{\sqrt{2\pi}\sigma} \mathrm{exp}\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \label{eqn:normal_pdf}
-\end{equation}
-and hence objective functions based on minimizing the total least squares result in a 
-closed form analytical solution. In contrast, because of the mathematical
-nature of the Laplace \eqref{eqn:laplace_pdf} which is expressed as the absolute 
-difference from the mean, there does not exist a closed form solution 
-(for data with more than one dimension).
-\begin{equation}
-\mathrm{pdf}(x) = \frac{1}{2b}\mathrm{exp}\left(-\frac{|x-\mu|}{b}\right) \label{eqn:laplace_pdf}
-\end{equation}
-
-In spite of the lack of an analytical solution, Laplace distribution
-is a model of choice in areas as diverse as signal processing 
-\citep{laplace-signal-processing}, image denoising \citep{image-denoising},
-gene expression studies \citep{Bhowmick01102006}, market risk prediction
-\citep{haas2005modeling}, and machine learning \citep{Cord:2006:FSR:1167556.1167570}.
-In most of these applications, a mixture model of Laplace distributions is used. \\
+We show this in the context of superposition of vector sets and use Monte Carlo simulation
+to optimize the objective function when it is formulated using $L^1$ norm. We compare
+the superpositions resulting from using the two versions of objective functions
+using the minimum message length (MML) criterion. MML is used to adjudicate which is 
+better on individual test cases. \\
 
 The main contribution of this work is the derivation of the message length 
 expression and estimation of the MML parameters for the Laplace distribution.
@@ -166,17 +144,34 @@ provide an approximate form which is commonly referred to as the
 \emph{Wallace-Freeman} approximation. The MML method
 of estimating parameters for a number of distributions using this approximation
 has been well established \citep{WallaceBook}. In this paper, we use the 
-Wallace-Freeman approximation
+Wallace-Freeman's quadratic approximation
 to derive the the message length expression for the Laplace distribution. \\
 
-MML is an information theoretic way of Bayesian inference. The method involves
-encoding the model and its fit to the data. This encoded message needs to be communicated
-between a hypothetical transmitter and a receiver. A model with the smallest message
-length directly relates to a better fit. This provides a mechanism to select the
-best model from a set of models. In this paper, we use this intuition to 
+This selection is made by formulating the objective function using minimum message
+length (MML) principle. We use the derived minimum message length expression for the Laplace.
+The minimum message length expression for the Normal has been worked out previously. 
+The message lengths resulting from these two distributions are compared against
+each other. The distribution which results in the best compression of data is chosen
+to be the best model. \\
+
+\eqref{eqn:normal_pdf},
+\begin{equation}
+\mathrm{pdf}(x) = \frac{1}{\sqrt{2\pi}\sigma} \mathrm{exp}\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) \label{eqn:normal_pdf}
+\end{equation}
+\begin{equation}
+\mathrm{pdf}(x) = \frac{1}{2b}\mathrm{exp}\left(-\frac{|x-\mu|}{b}\right) \label{eqn:laplace_pdf}
+\end{equation}
+
+MML is an information theoretic way of Bayesian inference \citep{wallace68}. MML is best
+understood through a communication process between an imaginary pair of transmitter
+and receiver connected over a Shannon channel. The method involves
+encoding the model and its fit to the data. A model that results in the smallest total message
+length is inferred as the most suitable under this criterion. Indeed the message length
+paradigm provides an objective means to differentiate between competing models
+and select the best one. In this paper, we use this intuition to 
 evaluate the overall fit when the data is modelled  using a Normal and a Laplace distribution. \\
 
-We demonstrate the use of Laplace estimates in two cases. 
+The results demonstrate the use of Laplace estimates in two cases. 
 The first scenario involves data being randomly
 generated from a Laplace distribution. This data is then fitted using
 both Normal and Laplace models. We use the derived formulation of Laplace MML to
