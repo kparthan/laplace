@@ -176,7 +176,9 @@ void DataGenerator::plotPredictions(string &data_file)
   graph.label(labels);
   //xrange = extremum(x);
   //yrange = extremum(predictions[0]);
-  //graph.setRange(xrange,yrange);
+  xrange = pair<double,double>(-10,10);
+  yrange = pair<double,double>(0,0.35);
+  graph.setRange(xrange,yrange);
   graph.sketch(data_file,predictions);
 }
 
@@ -231,7 +233,9 @@ void DataGenerator::plotStatistics(const char *name, int num_samples,
   graph.label(labels);
   //xrange = extremum(x);
   //yrange = extremum(predictions[0]);
-  //graph.setRange(xrange,yrange);
+  xrange = pair<double,double>(1,101);
+  yrange = pair<double,double>(6400,6900);
+  graph.setRange(xrange,yrange);
   graph.sketchStatistics(file_name);
   
 }

@@ -2,8 +2,8 @@ import sys, codecs, os, re
 if sys.stdout.encoding is None:
         sys.stdout = codecs.open("/dev/stdout", "w", 'utf-8')
 
-fr = open('results_general','r')
-fw = open('positive_results_general','w')
+fr = open('results_general_2','r')
+fw = open('positive_results_general_2','w')
 line = fr.readline();
 line_count = 1
 relevant = 0

@@ -28,7 +28,7 @@
 #define DEFAULT_ESTIMATE_DISTRIBUTION "laplace"
 
 #define AOM 0.001
-#define GAP 1.0
+#define GAP 0
 #define PI boost::math::constants::pi<double>()
 #define ZERO std::numeric_limits<double>::epsilon()
 

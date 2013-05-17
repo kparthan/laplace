@@ -45,7 +45,7 @@ void Simulation::initialSuperposition()
   if (print_status == PRINT_DETAIL) {
     cout << "RMSD: " << superimposer.rmsd() << endl;
   }
-  ofstream results("results",ios::app);
+  ofstream results("results_general_2",ios::app);
   results << setw(10) << setprecision(6) << superimposer.rmsd() << "\t";
   cout << superimposer.getRotationAngle() * 180 / PI << endl;
   rotation_axis = superimposer.getRotationAxis();
@@ -293,7 +293,7 @@ ProteinStructure Simulation::perturb()
     final_L1_deviation = computeL1Deviation(moving_copy_persist);
     cout << "Final L1 distance after perturbation: " 
          << final_L1_deviation / coordinates.size() << endl;
-    ofstream results("results",ios::app);
+    ofstream results("results_general_2",ios::app);
     results << setw(10) << setprecision(6) 
             << initial_L1_deviation / coordinates.size() << "\t";
     results << setw(10) << setprecision(6) 

@@ -1,0 +1,310 @@
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	    1.8223	   1130.44	   1098.52	   1092.15
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.82577	   1134.82	   1102.03	   1097.39
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.86189	   1130.44	   1098.52	   1095.03
+2IC7.pdb 3IGJ.pdb	   1.83436	   1.91095	   1.80889	   1130.44	   1098.52	   1091.16
+2IC7.pdb 3IGJ.pdb	   1.83436	   1.91095	   1.83716	   1134.82	   1102.03	   1098.37
+2IC7.pdb 3IGJ.pdb	   1.83436	2IC7.pdb 3IGJ.pdb	   1.83436	   1.91095	   1.83438	   1134.82	   1102.03	   1097.75
+2IC7.pdb 3IGJ.pdb	   1.83436	   1.91095	   1.81351	   1134.82	   1102.03	   1096.43
+2IC7.pdb 3CJ8.pdb	2IC7.pdb 3CJ8.pdb	2IC7.pdb 3CJ8.pdb	test/2IC7_test.pdb test/extracted_pdb_files/3CJ8_B_78-108.pdb	test/2IC7_test.pdb test/extracted_pdb_files/3CJ8_B_78-108.pdb	test/2IC7_test.pdb test/extracted_pdb_files/3CJ8_B_78-108.pdb	   4.14825	   4.68351	    4.4467	   1243.13	   1257.12	   1221.81
+2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	   4.39074	   1243.13	   1257.12	   1223.17
+2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	   4.37793	   1243.13	   1257.12	   1224.84
+2IC7.pdb 3CJ8.pdb	2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	   4.44138	   1243.13	   1257.12	   1224.96
+2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	   4.42349	   1243.13	   1257.12	   1221.62
+2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	   4.48952	   1243.13	   1257.12	   1227.53
+2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	   4.30935	   1243.13	   1257.12	   1211.56
+2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	   4.31348	   1243.13	   1257.12	   1211.69
+2IC7.pdb 3CJ8.pdb	   4.14825	   4.68351	    4.5201	   1243.13	   1257.12	   1223.22
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80454	   1134.82	   1102.03	   1096.09
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80492	   1134.82	   1102.03	   1096.15
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.81083	   1134.82	   1102.03	   1096.55
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80498	   1134.82	   1102.03	    1096.1
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.82796	   1134.82	   1102.03	   1097.78
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.81917	   1134.82	   1102.03	   1097.36
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80799	   1134.82	   1102.03	   1096.32
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	    1.8102	   1134.82	   1102.03	   1096.63
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80465	   1134.82	   1102.03	   1096.03
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	    1.8047	   1134.82	   1102.03	   1096.11
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80784	   1134.82	   1102.03	   1096.31
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80499	   1134.82	   1102.03	   1096.27
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80502	   1134.82	   1102.03	   1096.08
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.80507	   1134.82	   1102.03	   1096.12
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	    1.8075	   1134.82	   1102.03	   1096.39
+examples/2IC7.pdb examples/3CJ8.pdb	   4.14825	   4.68351	   4.30807	   1243.13	   1257.12	   1211.59
+examples/2IC7.pdb examples/3CJ8.pdb	   4.14825	   4.68351	   4.30724	   1243.13	   1257.12	   1211.59
+examples/2IC7.pdb examples/3IG7.pdb	examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.81387	   1134.82	   1102.03	   1096.88
+examples/2IC7.pdb examples/3CJ8.pdb	   4.14825	   4.68351	    4.3098	   1243.13	   1257.12	   1211.61
+examples/2IC7.pdb examples/3IGJ.pdb	   1.83436	   1.91095	   1.81079	   1134.82	   1102.03	   1096.78
+examples/3IGJ.pdb examples/2IC7.pdb	   1.83436	   1.96056	   1.76127	   1134.82	   1187.14	   1103.37
+examples/3IGJ.pdb examples/2IC7.pdb	   1.83436	   1.96056	   1.76045	   1134.82	   1187.14	   1103.72
+examples/3CJ8.pdb examples/2IC7.pdb	   4.14825	   5.13403	   4.95134	   1243.13	   1276.06	    1256.7
+examples/3CJ8.pdb examples/2IC7.pdb	   4.14825	   5.13403	   4.95127	   1243.13	   1276.06	   1256.82
+examples/3CJ8.pdb examples/2IC7.pdb	   4.14825	   5.13403	   4.95128	   1243.13	   1276.06	   1256.46
+examples/3CJ8.pdb examples/2IC7.pdb	   4.14825	   5.13403	   4.98411	   1243.13	   1276.06	   1263.72
+examples/3CJ8.pdb examples/2IC7.pdb	   4.14825	   5.13403	   4.95824	   1243.13	   1276.06	   1257.47
+examples/3CJ8.pdb examples/2IC7.pdb	   4.14825	   5.13403	   4.95432	   1239.93	   1231.12	   1226.34
+examples/3CJ8.pdb examples/2IC7.pdb	   4.14825	   5.13403	   4.95461	   1243.13	   1276.06	   1257.57
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44381	   1153.54	   1208.23	   1187.66
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44262	   1153.54	   1208.23	   1192.66
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44375	   1153.54	   1208.23	    1192.8
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.48617	   1153.54	   1208.23	   1209.66
+examples/2IC7.pdb examples/4G87.pdb	   2.11218	   2.55561	   2.52284	   1153.54	   1165.38	   1162.65
+examples/2IC7.pdb examples/4G87.pdb	   2.11218	   2.55561	    2.5126	   1153.54	   1165.38	   1163.07
+examples/2IC7.pdb examples/4G87.pdb	   2.11218	   2.55561	   2.46832	   1153.54	   1165.38	   1141.36
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44355	   1153.54	   1208.23	   1193.86
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.46089	   1153.54	   1208.23	    1192.1
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44726	   1153.54	   1208.23	   1195.13
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	    2.4468	   1153.54	   1208.23	   1192.48
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44324	   1153.54	   1208.23	   1190.46
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44322	   1153.54	   1208.23	   1191.39
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.45896	   1153.54	   1208.23	   1193.98
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44353	   1153.54	   1208.23	   1190.38
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	   2.44275	   1153.54	   1208.23	   1189.96
+examples/4G87.pdb examples/2IC7.pdb	   2.11218	   2.56977	    2.4435	   1153.54	   1208.23	   1189.66
+examples/2IC7.pdb examples/4G87.pdb	   2.11218	   2.55561	   2.45492	   1153.54	   1165.38	   1144.58
+examples/2IC7.pdb examples/4G87.pdb	   2.11218	   2.55561	   2.45482	   1153.54	   1165.38	   1143.38
+examples/2IC7.pdb examples/4G87.pdb	   2.11218	   2.55561	   2.45487	   1153.54	   1165.38	   1145.22
+test/2IC7_test.pdb test/extracted_pdb_files/3R8Y_A_105-135.pdb	  0.479399	  0.673272	  0.664829	   950.397	   958.554	   956.861
+test/2IC7_test.pdb test/extracted_pdb_files/3R8Y_A_105-135.pdb	  0.479399	  0.673272	  0.666078	   956.711	   1063.82	   1059.25
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.87938	   1134.82	   1102.03	   1100.13
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	    1.8747	   1134.82	   1102.03	   1100.06
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.88151	    1090.7	   1090.87	   1091.75
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.88225	   1134.82	   1102.03	   1100.53
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.87393	   1134.82	   1102.03	   1100.15
+test/extracted_pdb_files/3IGJ_A_139-169.pdb test/2IC7_test.pdb	   1.83436	   1.96056	   1.88597	   1134.82	   1187.14	   1166.54
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.87855	   1134.82	   1102.03	   1100.25
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.88231	   1134.82	   1102.03	   1100.54
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.87673	   1134.82	   1102.03	   1100.43
+test/extracted_pdb_files/3IGJ_A_139-169.pdb test/2IC7_test.pdb	   1.83436	   1.96056	   1.88626	   1134.82	   1187.14	   1166.24
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.87182	   1134.82	   1102.03	   1100.28
+test/2IC7_test.pdb test/extracted_pdb_files/4G87_A_291-321.pdb	   2.11218	   2.55561	   2.46489	   1153.54	   1165.38	   1138.55
+test/2IC7_test.pdb test/extracted_pdb_files/4G87_A_291-321.pdb	   2.11218	   2.55561	   2.46574	   1153.54	   1165.38	    1138.6
+test/2IC7_test.pdb test/extracted_pdb_files/4G87_A_291-321.pdb	   2.11218	   2.55561	   2.46679	   1153.54	   1165.38	   1138.76
+test/extracted_pdb_files/4G87_A_291-321.pdb test/2IC7_test.pdb	   2.11218	   2.56977	   2.48053	   1153.54	   1208.23	   1185.41
+test/2IC7_test.pdb test/extracted_pdb_files/4G87_A_291-321.pdb	   2.11218	   2.55561	   2.46449	   1153.54	   1165.38	   1138.57
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.88332	   1134.82	   1102.03	   1100.97
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.88004	   1134.82	   1102.03	   1100.53
+test/2IC7_test.pdb test/extracted_pdb_files/3IGJ_A_139-169.pdb	   1.83436	   1.91095	   1.88034	   1134.82	   1102.03	   1100.53
+test/2IC7_test.pdb test/extracted_pdb_files/3D8V_A_371-402.pdb	   4.89789	   6.07961	   6.05986	   1265.17	    1257.2	   1256.76
+test/2IC7_test.pdb test/extracted_pdb_files/1MRL_B_109-139.pdb	   4.64195	   4.82116	   4.70567	   1258.05	   1243.97	   1212.05
+test/2IC7_test.pdb test/extracted_pdb_files/1MRL_B_109-139.pdb	   4.64195	   4.82116	   4.69545	   1258.05	   1243.97	   1212.17
+test/2IC7_test.pdb test/extracted_pdb_files/4G87_A_291-321.pdb	   2.11218	   2.55561	   2.46565	   1153.54	   1165.38	   1138.59
+test/2IC7_test.pdb test/extracted_pdb_files/1WXR_A_878-908.pdb	   4.88277	    7.0086	   6.99919	   1264.76	   1320.84	   1321.16
+test/2IC7_test.pdb test/extracted_pdb_files/3R8Y_A_80-110.pdb	   4.95939	   6.36679	   6.34673	   1266.83	   1282.99	   1281.48
+test/2IC7_test.pdb test/extracted_pdb_files/3R8Y_A_105-135.pdb	  0.479399	  0.673272	  0.664807	   956.711	   1063.82	   1060.34
+test/2IC7_test.pdb test/extracted_pdb_files/3R8Y_A_105-135.pdb	  0.479399	  0.673272	  0.664895	   956.711	   1063.82	   1060.46
+test/2IC7_test.pdb test/extracted_pdb_files/3OTM_A_116-146.pdb	   3.76784	   5.24738	   5.14131	   1230.36	   1360.06	   1354.51
+test/2IC7_test.pdb test/extracted_pdb_files/3OTM_A_109-139.pdb	   2.73489	   3.82654	    3.8061	   1187.83	   1216.82	   1215.12
+test/2IC7_test.pdb test/extracted_pdb_files/3OTM_A_109-139.pdb	   2.73489	   3.82654	   3.80687	   1187.83	   1216.82	    1216.3
+test/2IC7_test.pdb test/extracted_pdb_files/3OTM_A_109-139.pdb	   2.73489	   3.82654	   3.80552	   1187.83	   1216.82	   1216.19
+test/2IC7_test.pdb test/extracted_pdb_files/3R2W_B_435-465.pdb	   3.43732	     4.637	   4.59297	   1218.17	   1228.74	   1223.01
+test/2IC7_test.pdb test/extracted_pdb_files/3R2W_B_435-465.pdb	   3.43732	     4.637	   4.59334	   1218.17	   1228.74	   1223.13
+test/2IC7_test.pdb test/extracted_pdb_files/3R2W_B_435-465.pdb	   3.43732	     4.637	   4.59271	   1218.17	   1228.74	   1222.79
+test/query.pdb test/extracted_pdb_files/3GBJ_C_289-329.pdb	test/query.pdb test/extracted_pdb_files/4EDJ_A_17-45.pdb	   1134.54	   1253.29	    1248.6
+test/query.pdb test/extracted_pdb_files/4EDJ_A_18-46.pdb	   1080.25	   1132.76	   1109.45
+test/query.pdb test/extracted_pdb_files/4EDJ_A_113-141.pdb	   1141.72	   1227.13	   1227.18
+test/query.pdb test/extracted_pdb_files/4EDJ_A_114-142.pdb	   1094.53	   1109.62	   1098.97
+test/query.pdb test/extracted_pdb_files/4EDJ_B_17-45.pdb	   1133.08	   1238.94	   1241.44
+test/query.pdb test/extracted_pdb_files/4EDJ_B_18-46.pdb	   1076.81	   1177.17	   1180.72
+test/query.pdb test/extracted_pdb_files/4EDJ_B_113-141.pdb	   1141.32	   1230.48	   1231.88
+test/query.pdb test/extracted_pdb_files/4EDJ_B_114-142.pdb	   1096.29	      1190	   1193.65
+test/query.pdb test/extracted_pdb_files/2EDV_A_32-60.pdb	   1148.41	   1144.09	   1145.73
+test/query.pdb test/extracted_pdb_files/2EDV_A_33-61.pdb	   1143.66	   1166.76	   1165.93
+test/query.pdb test/extracted_pdb_files/2EDP_A_37-65.pdb	   1150.78	   1178.43	   1179.28
+test/query.pdb test/extracted_pdb_files/2EDP_A_38-66.pdb	   972.093	   983.845	    986.99
+test/query.pdb test/extracted_pdb_files/2EDP_A_39-67.pdb	   1140.53	   1172.05	   1171.47
+test/query.pdb test/extracted_pdb_files/2EDZ_A_40-68.pdb	   1110.75	   1096.35	   1094.32
+test/query.pdb test/extracted_pdb_files/2EDZ_A_41-69.pdb	   1122.47	   1156.39	   1157.66
+test/query.pdb test/extracted_pdb_files/3NFK_A_543-571.pdb	   1106.12	   1107.79	   1107.43
+test/query.pdb test/extracted_pdb_files/3NFK_A_544-572.pdb	   1101.92	   1119.31	   1116.86
+test/query.pdb test/extracted_pdb_files/3NFK_B_543-571.pdb	   1108.96	   1214.53	   1213.19
+test/query.pdb test/extracted_pdb_files/3NFK_B_544-572.pdb	   1099.98	   1120.65	    1118.6
+test/query.pdb test/extracted_pdb_files/3NFL_A_543-571.pdb	   1106.56	   1217.55	    1221.6
+test/query.pdb test/extracted_pdb_files/3NFL_A_544-572.pdb	   1100.43	   1229.95	   1232.56
+test/query.pdb test/extracted_pdb_files/3NFL_B_543-571.pdb	   1108.51	    1150.2	   1145.76
+test/query.pdb test/extracted_pdb_files/3NFL_B_544-572.pdb	   1097.55	   1119.41	   1124.23
+test/query.pdb test/extracted_pdb_files/3NFL_C_543-571.pdb	test/query.pdb test/extracted_pdb_files/3NFL_C_544-572.pdb	test/query.pdb test/extracted_pdb_files/3NFL_D_543-571.pdb	test/query.pdb test/extracted_pdb_files/3NFL_D_544-572.pdb	test/query.pdb test/extracted_pdb_files/2ZII_A_131-159.pdb	   1157.62	   1282.65	   1269.86
+test/query.pdb test/extracted_pdb_files/2ZII_B_131-159.pdb	   1157.91	   1185.28	   1186.79
+test/query.pdb test/extracted_pdb_files/2PKT_A_28-56.pdb	   1107.91	   1175.81	   1147.24
+test/query.pdb test/extracted_pdb_files/2PKT_A_29-57.pdb	   1118.64	   1126.76	   1125.46
+test/query.pdb test/extracted_pdb_files/2PKU_A_47-75.pdb	   1149.04	   1234.81	   1232.69
+test/query.pdb test/extracted_pdb_files/2PKU_A_48-76.pdb	   976.838	   987.438	   990.262
+test/query.pdb test/extracted_pdb_files/2PKU_A_49-77.pdb	   1147.18	   1169.59	   1169.38
+test/query.pdb test/extracted_pdb_files/1SVC_P_163-191.pdb	   1158.53	   1165.28	   1165.06
+test/query.pdb test/extracted_pdb_files/2F2H_A_419-447.pdb	   1157.65	   1251.86	   1250.89
+test/query.pdb test/extracted_pdb_files/2F2H_B_419-447.pdb	   1157.91	   1275.98	   1277.02
+test/query.pdb test/extracted_pdb_files/2F2H_C_419-447.pdb	test/query.pdb test/extracted_pdb_files/2F2H_D_419-447.pdb	test/query.pdb test/extracted_pdb_files/2F2H_E_419-447.pdb	test/query.pdb test/extracted_pdb_files/2F2H_F_419-447.pdb	test/query.pdb test/extracted_pdb_files/3GSL_A_94-122.pdb	   1144.09	   1192.05	   1190.99
+test/query.pdb test/extracted_pdb_files/3GSL_A_95-123.pdb	   969.667	   982.049	   972.103
+test/query.pdb test/extracted_pdb_files/3GSL_A_96-124.pdb	   1150.97	   1186.37	   1185.69
+test/query.pdb test/extracted_pdb_files/3GSL_A_189-217.pdb	   1144.96	   1168.51	   1162.67
+test/query.pdb test/extracted_pdb_files/3GSL_A_190-218.pdb	   968.627	   989.998	   984.776
+test/query.pdb test/extracted_pdb_files/3GSL_A_191-219.pdb	    1149.8	    1192.3	    1190.9
+test/query.pdb test/extracted_pdb_files/3GSL_B_94-122.pdb	   1144.35	   1218.72	   1212.69
+test/query.pdb test/extracted_pdb_files/3GSL_B_95-123.pdb	   974.418	   982.144	   981.576
+test/query.pdb test/extracted_pdb_files/3GSL_B_96-124.pdb	   1150.59	   1175.31	   1175.35
+test/query.pdb test/extracted_pdb_files/3GSL_B_189-217.pdb	   1144.06	   1159.44	    1159.5
+test/query.pdb test/extracted_pdb_files/3GSL_B_190-218.pdb	   957.786	   981.888	   979.546
+test/query.pdb test/extracted_pdb_files/3GSL_B_191-219.pdb	   1148.29	   1200.17	   1199.02
+test/query.pdb test/extracted_pdb_files/3OTP_A_288-316.pdb	   1109.48	   1245.88	    1245.5
+test/query.pdb test/extracted_pdb_files/3OTP_A_289-317.pdb	   1114.45	   1157.47	   1151.52
+test/query.pdb test/extracted_pdb_files/3OTP_A_385-413.pdb	   1132.87	   1232.33	   1226.14
+test/query.pdb test/extracted_pdb_files/3OTP_A_386-414.pdb	   1134.53	   1150.59	   1150.69
+test/query.pdb test/extracted_pdb_files/3OTP_B_288-316.pdb	   1109.61	   1187.96	   1187.13
+test/query.pdb test/extracted_pdb_files/3OTP_B_289-317.pdb	   1114.18	   1122.53	   1122.08
+test/query.pdb test/extracted_pdb_files/3OTP_B_385-413.pdb	    1141.6	   1242.71	   1248.38
+test/query.pdb test/extracted_pdb_files/3OTP_B_386-414.pdb	   1141.49	   1204.07	   1203.92
+test/query.pdb test/extracted_pdb_files/3OTP_C_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_C_289-317.pdb	test/query.pdb test/extracted_pdb_files/3OTP_C_385-413.pdb	test/query.pdb test/extracted_pdb_files/3OTP_C_386-414.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_289-317.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_385-413.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_386-414.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_289-317.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_385-413.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_386-414.pdb	test/query.pdb test/extracted_pdb_files/3OTP_F_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_F_289-317.pdb	test/query.pdb test/extracted_pdb_files/3EZT_A_81-116.pdb	   1155.27	   1244.53	   1252.53
+test/query.pdb test/extracted_pdb_files/3EZT_B_81-116.pdb	   1155.33	   1241.02	    1239.1
+test/query.pdb test/extracted_pdb_files/3MJQ_A_20-50.pdb	test/query.pdb test/extracted_pdb_files/3MJQ_B_20-50.pdb	test/query.pdb test/extracted_pdb_files/1BWD_A_28-56.pdb	   1156.57	   1162.56	   1162.24
+test/query.pdb test/extracted_pdb_files/1BWD_B_28-56.pdb	   1157.11	   1200.89	   1200.54
+test/query.pdb test/extracted_pdb_files/3NHQ_G_37-65.pdb	test/query.pdb test/extracted_pdb_files/4BBR_E_174-202.pdb	test/query.pdb test/extracted_pdb_files/4BBS_E_174-202.pdb	test/query.pdb test/extracted_pdb_files/2EEJ_A_33-61.pdb	   1116.27	   1226.63	   1227.58
+test/query.pdb test/extracted_pdb_files/2EEJ_A_34-62.pdb	   1124.79	    1184.8	    1183.5
+test/query.pdb test/extracted_pdb_files/2EEH_A_38-66.pdb	   1115.68	   1289.87	   1294.51
+test/query.pdb test/extracted_pdb_files/2EEH_A_39-67.pdb	   1109.73	   1165.67	   1166.54
+test/query.pdb test/extracted_pdb_files/2EEG_A_34-62.pdb	   1109.63	   1139.94	   1114.94
+test/query.pdb test/extracted_pdb_files/2EEG_A_35-63.pdb	   1109.85	   1110.64	   1110.29
+test/query.pdb test/extracted_pdb_files/1EE8_A_22-50.pdb	    1155.3	   1224.81	   1230.29
+test/query.pdb test/extracted_pdb_files/1EE8_B_22-50.pdb	   1156.28	   1234.58	   1234.06
+test/query.pdb test/extracted_pdb_files/2EEI_A_34-62.pdb	   1117.25	   1132.09	   1133.04
+test/query.pdb test/extracted_pdb_files/2EEI_A_35-63.pdb	   1113.74	   1120.03	   1121.33
+test/query.pdb test/extracted_pdb_files/3EEA_A_87-115.pdb	   1156.24	   1255.78	    1257.1
+test/query.pdb test/extracted_pdb_files/3EEA_B_87-115.pdb	   1157.64	    1166.3	   1165.41
+test/query.pdb test/extracted_pdb_files/3EI4_B_352-380.pdb	   1146.65	   1156.72	   1157.06
+test/query.pdb test/extracted_pdb_files/3EI4_B_353-381.pdb	   1154.31	   1153.56	   1153.44
+test/query.pdb test/extracted_pdb_files/3EI4_D_352-380.pdb	test/query.pdb test/extracted_pdb_files/3EI4_D_353-381.pdb	test/query.pdb test/extracted_pdb_files/3EI4_F_352-380.pdb	test/query.pdb test/extracted_pdb_files/3EI4_F_353-381.pdb	test/query.pdb test/extracted_pdb_files/2DD5_A_44-72.pdb	   1155.77	   1177.37	   1176.22
+test/query.pdb test/extracted_pdb_files/2DD5_D_44-72.pdb	test/query.pdb test/extracted_pdb_files/2DD5_G_44-72.pdb	test/query.pdb test/extracted_pdb_files/2DD5_J_44-72.pdb	test/query.pdb test/extracted_pdb_files/1AHJ_B_130-158.pdb	    1154.9	   1187.79	   1190.27
+test/query.pdb test/extracted_pdb_files/1AHJ_D_130-158.pdb	test/query.pdb test/extracted_pdb_files/1AHJ_F_130-158.pdb	test/query.pdb test/extracted_pdb_files/1AHJ_H_130-158.pdb	test/query.pdb test/extracted_pdb_files/2AHJ_B_130-158.pdb	   1152.71	   1156.27	   1156.36
+test/query.pdb test/extracted_pdb_files/2AHJ_D_130-158.pdb	test/query.pdb test/extracted_pdb_files/2DD4_A_44-72.pdb	test/query.pdb test/extracted_pdb_files/3GBJ_C_289-329.pdb	test/query.pdb test/extracted_pdb_files/4EDJ_A_17-45.pdb	   1134.54	   1253.29	    1248.9
+test/query.pdb test/extracted_pdb_files/4EDJ_A_18-46.pdb	   1080.25	   1132.76	   1108.91
+test/query.pdb test/extracted_pdb_files/4EDJ_A_113-141.pdb	   1141.72	   1227.13	   1226.97
+test/query.pdb test/extracted_pdb_files/4EDJ_A_114-142.pdb	   1094.53	   1109.62	   1099.14
+test/query.pdb test/extracted_pdb_files/4EDJ_B_17-45.pdb	   1133.08	   1238.94	   1241.67
+test/query.pdb test/extracted_pdb_files/4EDJ_B_18-46.pdb	   1076.81	   1177.17	   1181.14
+test/query.pdb test/extracted_pdb_files/4EDJ_B_113-141.pdb	   1141.32	   1230.48	   1231.74
+test/query.pdb test/extracted_pdb_files/4EDJ_B_114-142.pdb	   1096.29	      1190	   1193.68
+test/query.pdb test/extracted_pdb_files/2EDV_A_32-60.pdb	   1148.41	   1144.09	   1146.13
+test/query.pdb test/extracted_pdb_files/2EDV_A_33-61.pdb	   1143.66	   1166.76	    1165.8
+test/query.pdb test/extracted_pdb_files/2EDP_A_37-65.pdb	   1150.78	   1178.43	   1179.22
+test/query.pdb test/extracted_pdb_files/2EDP_A_38-66.pdb	   972.093	   983.845	   987.258
+test/query.pdb test/extracted_pdb_files/2EDP_A_39-67.pdb	   1140.53	   1172.05	   1171.45
+test/query.pdb test/extracted_pdb_files/2EDZ_A_40-68.pdb	   1110.75	   1096.35	   1094.31
+test/query.pdb test/extracted_pdb_files/2EDZ_A_41-69.pdb	   1122.47	   1156.39	   1157.92
+test/query.pdb test/extracted_pdb_files/3NFK_A_543-571.pdb	   1106.12	   1107.79	   1107.24
+test/query.pdb test/extracted_pdb_files/3NFK_A_544-572.pdb	   1101.92	   1119.31	   1116.67
+test/query.pdb test/extracted_pdb_files/3NFK_B_543-571.pdb	   1108.96	   1214.53	   1213.16
+test/query.pdb test/extracted_pdb_files/3NFK_B_544-572.pdb	   1099.98	   1120.65	   1119.57
+test/query.pdb test/extracted_pdb_files/3NFL_A_543-571.pdb	   1106.56	   1217.55	    1221.7
+test/query.pdb test/extracted_pdb_files/3NFL_A_544-572.pdb	   1100.43	   1229.95	   1232.04
+test/query.pdb test/extracted_pdb_files/3NFL_B_543-571.pdb	   1108.51	    1150.2	   1145.83
+test/query.pdb test/extracted_pdb_files/3NFL_B_544-572.pdb	   1097.55	   1119.41	   1123.99
+test/query.pdb test/extracted_pdb_files/3NFL_C_543-571.pdb	test/query.pdb test/extracted_pdb_files/3NFL_C_544-572.pdb	test/query.pdb test/extracted_pdb_files/3NFL_D_543-571.pdb	test/query.pdb test/extracted_pdb_files/3NFL_D_544-572.pdb	test/query.pdb test/extracted_pdb_files/2ZII_A_131-159.pdb	   1157.62	   1282.65	   1269.72
+test/query.pdb test/extracted_pdb_files/2ZII_B_131-159.pdb	   1157.91	   1185.28	   1186.97
+test/query.pdb test/extracted_pdb_files/2PKT_A_28-56.pdb	   1107.91	   1175.81	   1147.55
+test/query.pdb test/extracted_pdb_files/2PKT_A_29-57.pdb	   1118.64	   1126.76	   1124.97
+test/query.pdb test/extracted_pdb_files/2PKU_A_47-75.pdb	   1149.04	   1234.81	   1232.61
+test/query.pdb test/extracted_pdb_files/2PKU_A_48-76.pdb	   976.838	   987.438	   989.898
+test/query.pdb test/extracted_pdb_files/2PKU_A_49-77.pdb	   1147.18	   1169.59	   1169.32
+test/query.pdb test/extracted_pdb_files/1SVC_P_163-191.pdb	   1158.53	   1165.28	   1165.06
+test/query.pdb test/extracted_pdb_files/2F2H_A_419-447.pdb	   1157.65	   1251.86	   1251.02
+test/query.pdb test/extracted_pdb_files/2F2H_B_419-447.pdb	   1157.91	   1275.98	   1276.83
+test/query.pdb test/extracted_pdb_files/2F2H_C_419-447.pdb	test/query.pdb test/extracted_pdb_files/2F2H_D_419-447.pdb	test/query.pdb test/extracted_pdb_files/2F2H_E_419-447.pdb	test/query.pdb test/extracted_pdb_files/2F2H_F_419-447.pdb	test/query.pdb test/extracted_pdb_files/3GSL_A_94-122.pdb	   1144.09	   1192.05	   1190.93
+test/query.pdb test/extracted_pdb_files/3GSL_A_95-123.pdb	   969.667	   982.049	    972.75
+test/query.pdb test/extracted_pdb_files/3GSL_A_96-124.pdb	   1150.97	   1186.37	   1185.55
+test/query.pdb test/extracted_pdb_files/3GSL_A_189-217.pdb	   1144.96	   1168.51	   1162.52
+test/query.pdb test/extracted_pdb_files/3GSL_A_190-218.pdb	   968.627	   989.998	   987.203
+test/query.pdb test/extracted_pdb_files/3GSL_A_191-219.pdb	    1149.8	    1192.3	   1190.84
+test/query.pdb test/extracted_pdb_files/3GSL_B_94-122.pdb	   1144.35	   1218.72	   1211.66
+test/query.pdb test/extracted_pdb_files/3GSL_B_95-123.pdb	   974.418	   982.144	   980.958
+test/query.pdb test/extracted_pdb_files/3GSL_B_96-124.pdb	   1150.59	   1175.31	   1175.37
+test/query.pdb test/extracted_pdb_files/3GSL_B_189-217.pdb	   1144.06	   1159.44	   1159.69
+test/query.pdb test/extracted_pdb_files/3GSL_B_190-218.pdb	   957.786	   981.888	   979.649
+test/query.pdb test/extracted_pdb_files/3GSL_B_191-219.pdb	   1148.29	   1200.17	   1199.22
+test/query.pdb test/extracted_pdb_files/3OTP_A_288-316.pdb	   1109.48	   1245.88	   1246.07
+test/query.pdb test/extracted_pdb_files/3OTP_A_289-317.pdb	   1114.45	   1157.47	   1151.04
+test/query.pdb test/extracted_pdb_files/3OTP_A_385-413.pdb	   1132.87	   1232.33	   1226.05
+test/query.pdb test/extracted_pdb_files/3OTP_A_386-414.pdb	   1134.53	   1150.59	   1150.93
+test/query.pdb test/extracted_pdb_files/3OTP_B_288-316.pdb	   1109.61	   1187.96	   1187.23
+test/query.pdb test/extracted_pdb_files/3OTP_B_289-317.pdb	   1114.18	   1122.53	   1122.54
+test/query.pdb test/extracted_pdb_files/3OTP_B_385-413.pdb	    1141.6	   1242.71	   1248.31
+test/query.pdb test/extracted_pdb_files/3OTP_B_386-414.pdb	   1141.49	   1204.07	   1203.52
+test/query.pdb test/extracted_pdb_files/3OTP_C_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_C_289-317.pdb	test/query.pdb test/extracted_pdb_files/3OTP_C_385-413.pdb	test/query.pdb test/extracted_pdb_files/3OTP_C_386-414.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_289-317.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_385-413.pdb	test/query.pdb test/extracted_pdb_files/3OTP_D_386-414.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_289-317.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_385-413.pdb	test/query.pdb test/extracted_pdb_files/3OTP_E_386-414.pdb	test/query.pdb test/extracted_pdb_files/3OTP_F_288-316.pdb	test/query.pdb test/extracted_pdb_files/3OTP_F_289-317.pdb	test/query.pdb test/extracted_pdb_files/3EZT_A_81-116.pdb	   1155.27	   1244.53	   1252.81
+test/query.pdb test/extracted_pdb_files/3EZT_B_81-116.pdb	   1155.33	   1241.02	    1239.4
+test/query.pdb test/extracted_pdb_files/3MJQ_A_20-50.pdb	test/query.pdb test/extracted_pdb_files/3MJQ_B_20-50.pdb	test/query.pdb test/extracted_pdb_files/1BWD_A_28-56.pdb	   1156.57	   1162.56	   1162.29
+test/query.pdb test/extracted_pdb_files/1BWD_B_28-56.pdb	   1157.11	   1200.89	   1200.68
+test/query.pdb test/extracted_pdb_files/3NHQ_G_37-65.pdb	test/query.pdb test/extracted_pdb_files/4BBR_E_174-202.pdb	test/query.pdb test/extracted_pdb_files/4BBS_E_174-202.pdb	test/query.pdb test/extracted_pdb_files/2EEJ_A_33-61.pdb	   1116.27	   1226.63	   1226.81
+test/query.pdb test/extracted_pdb_files/2EEJ_A_34-62.pdb	   1124.79	    1184.8	    1183.4
+test/query.pdb test/extracted_pdb_files/2EEH_A_38-66.pdb	   1115.68	   1289.87	   1294.04
+test/query.pdb test/extracted_pdb_files/2EEH_A_39-67.pdb	   1109.73	   1165.67	   1165.77
+test/query.pdb test/extracted_pdb_files/2EEG_A_34-62.pdb	   1109.63	   1139.94	    1114.6
+test/query.pdb test/extracted_pdb_files/2EEG_A_35-63.pdb	   1109.85	   1110.64	   1110.29
+test/query.pdb test/extracted_pdb_files/1EE8_A_22-50.pdb	    1155.3	   1224.81	   1230.26
+test/query.pdb test/extracted_pdb_files/1EE8_B_22-50.pdb	   1156.28	   1234.58	   1234.42
+test/query.pdb test/extracted_pdb_files/2EEI_A_34-62.pdb	   1117.25	   1132.09	   1132.86
+test/query.pdb test/extracted_pdb_files/2EEI_A_35-63.pdb	   1113.74	   1120.03	   1121.24
+test/query.pdb test/extracted_pdb_files/3EEA_A_87-115.pdb	   1156.24	   1255.78	   1257.38
+test/query.pdb test/extracted_pdb_files/3EEA_B_87-115.pdb	   1157.64	    1166.3	   1165.53
+test/query.pdb test/extracted_pdb_files/3EI4_B_352-380.pdb	   1146.65	   1156.72	   1157.06
+test/query.pdb test/extracted_pdb_files/3EI4_B_353-381.pdb	   1154.31	   1153.56	   1153.46
+test/query.pdb test/extracted_pdb_files/3EI4_D_352-380.pdb	test/query.pdb test/extracted_pdb_files/3EI4_D_353-381.pdb	test/query.pdb test/extracted_pdb_files/3EI4_F_352-380.pdb	test/query.pdb test/extracted_pdb_files/3EI4_F_353-381.pdb	test/query.pdb test/extracted_pdb_files/2DD5_A_44-72.pdb	   1155.77	   1177.37	   1176.44
+test/query.pdb test/extracted_pdb_files/2DD5_D_44-72.pdb	test/query.pdb test/extracted_pdb_files/2DD5_G_44-72.pdb	test/query.pdb test/extracted_pdb_files/2DD5_J_44-72.pdb	test/query.pdb test/extracted_pdb_files/1AHJ_B_130-158.pdb	    1154.9	   1187.79	   1190.84
+test/query.pdb test/extracted_pdb_files/1AHJ_D_130-158.pdb	test/query.pdb test/extracted_pdb_files/1AHJ_F_130-158.pdb	test/query.pdb test/extracted_pdb_files/1AHJ_H_130-158.pdb	test/query.pdb test/extracted_pdb_files/2AHJ_B_130-158.pdb	   1152.71	   1156.27	   1156.34
+test/query.pdb test/extracted_pdb_files/2AHJ_D_130-158.pdb	test/query.pdb test/extracted_pdb_files/2DD4_A_44-72.pdb	    1155.4	      1192	   1214.33
+test/query.pdb test/extracted_pdb_files/2DD4_D_44-72.pdb	test/query.pdb test/extracted_pdb_files/2DD4_G_44-72.pdb	test/query.pdb test/extracted_pdb_files/2DD4_J_44-72.pdb	test/query.pdb test/extracted_pdb_files/2JOA_A_412-440.pdb	   1108.11	   1212.24	   1209.52
+test/query.pdb test/extracted_pdb_files/2JOA_A_413-441.pdb	   1110.17	   1108.05	   1107.22
+test/query.pdb test/extracted_pdb_files/1FDO_A_605-633.pdb	   1157.37	   1168.21	   1167.51
+test/query.pdb test/extracted_pdb_files/4FD5_A_27-55.pdb	   1144.58	   1155.11	   1154.96
+test/query.pdb test/extracted_pdb_files/1FDI_A_605-633.pdb	   1158.39	    1167.7	   1167.41
+test/query.pdb test/extracted_pdb_files/4FD6_A_27-55.pdb	   1143.52	   1146.17	   1145.35
+test/query.pdb test/extracted_pdb_files/1TD9_A_242-270.pdb	   1153.73	   1210.04	   1213.98
+test/query.pdb test/extracted_pdb_files/1TD9_B_242-270.pdb	   1153.87	   1206.97	   1206.16
+test/query.pdb test/extracted_pdb_files/1TD9_C_242-270.pdb	test/query.pdb test/extracted_pdb_files/1TD9_D_242-270.pdb	test/query.pdb test/extracted_pdb_files/1TD9_E_242-270.pdb	test/query.pdb test/extracted_pdb_files/1TD9_F_242-270.pdb	test/query.pdb test/extracted_pdb_files/1KEF_A_33-61.pdb	   1148.04	   1241.52	   1243.14
+test/query.pdb test/extracted_pdb_files/1KEF_A_34-62.pdb	   1046.42	   1050.58	   1050.11
+test/query.pdb test/extracted_pdb_files/1KEF_A_35-63.pdb	    1157.3	   1179.78	   1190.88
+test/query.pdb test/extracted_pdb_files/4HJ8_A_45-73.pdb	   1156.83	   1167.07	   1167.57
+test/query.pdb test/extracted_pdb_files/2P3W_A_386-414.pdb	   1107.14	   1261.01	   1269.12
+test/query.pdb test/extracted_pdb_files/2P3W_A_387-415.pdb	   1115.13	   1164.86	   1167.17
+test/query.pdb test/extracted_pdb_files/2P3W_B_386-414.pdb	   1109.15	   1262.67	   1254.62
+test/query.pdb test/extracted_pdb_files/2P3W_B_387-415.pdb	   1115.04	   1157.45	   1156.48
+test/query.pdb test/extracted_pdb_files/3J1N_E_174-202.pdb	test/query.pdb test/extracted_pdb_files/3J16_A_85-113.pdb	   1150.65	   1145.81	   1145.74
+test/query.pdb test/extracted_pdb_files/2UZC_A_28-56.pdb	   1106.05	   1214.65	   1216.81
+test/query.pdb test/extracted_pdb_files/2UZC_A_29-57.pdb	    1113.2	   1118.56	   1119.24
+test/query.pdb test/extracted_pdb_files/2UZC_B_28-56.pdb	   1104.79	   1232.05	   1239.46
+test/query.pdb test/extracted_pdb_files/2UZC_B_29-57.pdb	   1110.02	   1113.71	   1111.45
+test/query.pdb test/extracted_pdb_files/2UZC_C_28-56.pdb	test/query.pdb test/extracted_pdb_files/2UZC_C_29-57.pdb	test/query.pdb test/extracted_pdb_files/2UZC_D_28-56.pdb	test/query.pdb test/extracted_pdb_files/2UZC_D_29-57.pdb	test/query.pdb test/extracted_pdb_files/2UZC_E_28-56.pdb	test/query.pdb test/extracted_pdb_files/2UZC_E_29-57.pdb	test/query.pdb test/extracted_pdb_files/1EU1_A_666-694.pdb	   1152.51	   1156.81	   1156.88
+test/query.pdb test/extracted_pdb_files/2RCZ_A_206-234.pdb	   1151.51	   1179.76	   1181.98
+test/query.pdb test/extracted_pdb_files/2RCZ_A_207-235.pdb	   982.193	   1014.67	   1011.78
+test/query.pdb test/extracted_pdb_files/2RCZ_A_208-236.pdb	   1145.07	   1217.13	   1220.85
+test/query.pdb test/extracted_pdb_files/2RCZ_B_206-234.pdb	   1148.12	   1202.91	   1193.94
+test/query.pdb test/extracted_pdb_files/2RCZ_B_207-235.pdb	   960.318	   965.071	   961.415
+test/query.pdb test/extracted_pdb_files/2RCZ_B_208-236.pdb	   1147.26	   1162.66	    1162.8
+test/query.pdb test/extracted_pdb_files/1IHJ_A_48-76.pdb	   1145.37	   1161.55	   1161.63
+test/query.pdb test/extracted_pdb_files/1IHJ_A_49-77.pdb	   958.742	    973.74	   969.213
+test/query.pdb test/extracted_pdb_files/1IHJ_A_50-78.pdb	   1147.99	   1191.89	   1190.24
+test/query.pdb test/extracted_pdb_files/1IHJ_B_48-76.pdb	   1145.44	   1161.39	   1161.83
+test/query.pdb test/extracted_pdb_files/1IHJ_B_49-77.pdb	   959.267	   975.027	   975.582
+test/query.pdb test/extracted_pdb_files/1IHJ_B_50-78.pdb	   1148.04	   1192.87	   1194.06
+test/query.pdb test/extracted_pdb_files/1G8K_A_725-753.pdb	   1158.52	   1163.79	    1163.7
+test/query.pdb test/extracted_pdb_files/3CH8_A_25-53.pdb	   1142.98	   1160.07	   1144.68
+test/query.pdb test/extracted_pdb_files/3CH8_A_26-54.pdb	   1140.55	   1147.98	   1148.18
+test/query.pdb test/extracted_pdb_files/1LXM_A_533-561.pdb	   1158.12	   1176.52	   1174.56
+test/query.pdb test/extracted_pdb_files/3MH4_A_288-316.pdb	   1102.97	   1272.19	   1271.86
+test/query.pdb test/extracted_pdb_files/3MH4_A_289-317.pdb	   1129.98	   1165.79	   1163.11
+test/query.pdb test/extracted_pdb_files/3MH4_B_288-316.pdb	    1109.3	    1109.7	   1112.79
+test/query.pdb test/extracted_pdb_files/3MH4_B_289-317.pdb	   1116.75	   1128.15	    1127.8
+test/query.pdb test/extracted_pdb_files/3MH4_B_385-413.pdb	      1132	   1221.79	   1204.86
+test/query.pdb test/extracted_pdb_files/3MH4_B_386-414.pdb	   1134.37	   1142.28	   1142.82
+test/query.pdb test/extracted_pdb_files/3MH6_A_288-316.pdb	   1110.13	   1280.76	   1281.85
+test/query.pdb test/extracted_pdb_files/3MH6_A_289-317.pdb	   1116.18	   1147.18	   1145.37
+test/query.pdb test/extracted_pdb_files/3MH6_A_385-413.pdb	   1141.41	   1301.28	   1302.18
+test/query.pdb test/extracted_pdb_files/3MH6_A_386-414.pdb	   1139.17	    1224.6	   1215.12
+test/query.pdb test/extracted_pdb_files/3M3Y_E_174-202.pdb	test/query.pdb test/extracted_pdb_files/2DKV_A_259-287.pdb	   1155.72	    1225.4	   1226.82
+test/query.pdb test/extracted_pdb_files/2DKR_A_32-60.pdb	    1150.6	   1232.23	    1228.4
+test/query.pdb test/extracted_pdb_files/2DKR_A_33-61.pdb	   995.797	   1037.03	   1042.86
+test/query.pdb test/extracted_pdb_files/2DKR_A_34-62.pdb	   1149.36	   1174.18	   1175.02
+test/query.pdb test/extracted_pdb_files/3TSZ_A_445-473.pdb	    1107.7	   1105.37	   1104.76
+test/query.pdb test/extracted_pdb_files/3TSZ_A_446-474.pdb	   1112.99	   1116.92	   1116.23
+test/query.pdb test/extracted_pdb_files/2KBS_A_37-65.pdb	   1104.18	   1122.77	   1121.74
+test/query.pdb test/extracted_pdb_files/2KBS_A_38-66.pdb	   1128.77	   1146.51	   1148.11
+test/query.pdb test/extracted_pdb_files/3TS3_D_543-571.pdb	test/query.pdb test/extracted_pdb_files/3TSW_A_445-473.pdb	   1105.65	   1225.78	    1230.1
+test/query.pdb test/extracted_pdb_files/3TSW_A_446-474.pdb	   1117.51	   1217.67	   1219.63
+test/query.pdb test/extracted_pdb_files/3TSW_B_445-473.pdb	   1106.87	    1150.5	   1123.76
+test/query.pdb test/extracted_pdb_files/3TSW_B_446-474.pdb	

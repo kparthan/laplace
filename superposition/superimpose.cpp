@@ -8,7 +8,7 @@ int main(int argc, char **argv)
   clock_t c_start = clock();
   auto t_start = high_resolution_clock::now();
 
-  ofstream results("results",ios::app);
+  ofstream results("results_general_2",ios::app);
   results << parameters.pdb_files[0] << " " << parameters.pdb_files[1] << "\t"; 
   results.close();
 
@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   m2 = simulation.computeMessageLength(protein);
   m3 = simulation.computeMessageLength(final);
 
-  ofstream results1("results",ios::app);
+  ofstream results1("results_general_2",ios::app);
   results1 << setw(10) << setprecision(6) << m1 << "\t";
   results1 << setw(10) << setprecision(6) << m2 << "\t";
   results1 << setw(10) << setprecision(6) << m3 << endl;
