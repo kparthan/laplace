@@ -48,7 +48,7 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
   double mu = normal.mean();
   double sigma = normal.standardDeviation();
   vector<double> x(samples,0);
-  //srand(time(NULL));
+  srand(time(NULL));
   //srand(1000);
   for (int i=0; i<samples; i=i+2) {
     double u = ((double) rand()) / RAND_MAX;

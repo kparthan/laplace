@@ -22,8 +22,6 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
        ("mean",value<double>(&parameters.mean),"mean of the distribution")
        ("scale",value<vector<double>>(&parameters.scale)->multitoken(),
                                                         "the scale values")
-       //("noise",value<vector<double>>(&parameters.noise_sigma)->multitoken(),
-       //                     "values of standard deviation of Gaussian noise")
        ("generate",value<string>(&parameters.distribution),
                                     "distribution used to generate the data")
        ("estimate",value<string>(&parameters.estimate),
@@ -74,18 +72,6 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     cout << "Default number of iterations: " << DEFAULT_ITERATIONS << endl;
   }
    
-  /*if (vm.count("noise")) {
-    cout << "Standard deviation of Gaussian noise: ";
-    for (int i=0; i<parameters.scale.size(); i++) {
-      cout << parameters.noise_sigma[i] << " ";
-    }
-    cout << endl;
-  } else {
-    parameters.noise_sigma = vector<double>(1,DEFAULT_NOISE_SIGMA);
-    cout << "Using default value of standard deviation of Gaussian noise: "
-         << DEFAULT_NOISE_SIGMA << endl;
-  }*/
-
   if (vm.count("generate")) {
     cout << "Distribution from which data is generated: " 
          << parameters.distribution << endl;
@@ -115,11 +101,6 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     cout << parameters.scale[i] << " ";
   }
   cout << endl;
-  /*cout << "noise sigma: ";
-  for (int i=0; i<parameters.noise_sigma.size(); i++) {
-    cout << parameters.noise_sigma[i] << " ";
-  }
-  cout << endl;*/
   cout << "Distribution: " << parameters.distribution << endl;
   //cout << "Estimate: " << parameters.estimate << endl;
   return parameters;

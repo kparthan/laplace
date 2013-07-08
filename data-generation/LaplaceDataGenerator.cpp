@@ -40,7 +40,7 @@ vector<double> LaplaceDataGenerator::generateRandom(int samples)
   double mu = laplace.mean();
   double b = laplace.scaleParameter();
   vector<double> x(samples,0);
-  //srand(time(NULL));
+  srand(time(NULL));
   //srand(1000);
   for (int i=0; i<samples; i++) {
     double random = (double)rand() / RAND_MAX;
