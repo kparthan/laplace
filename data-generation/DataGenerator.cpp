@@ -108,34 +108,52 @@ string DataGenerator::getFileName(const char *name, int num_samples,
   file += "_mean_" + boost::lexical_cast<string>(mean);
   double scale = parameters.scale[scale_index];
   file += "_scale_" + boost::lexical_cast<string>(scale);
-  /*double noise_sigma = parameters.noise_sigma[noise_index];
-  string s = convertToString(noise_sigma); 
-  file += "_noise_" + s;*/
-  cout << file << endl;
+  //cout << file << endl;
   return file;
 }
 
 /*!
  *  \brief This function outputs the data to a file.
  *  \param file_name a reference to a string 
+ *  \param num_samples an integer
+ *  \param scale_index an integer 
  *  \param estimates a reference to a struct MML_Estimates
  */
-void DataGenerator::updateResults(string &file_name,
-                                  struct MML_Estimates &estimates)
+void DataGenerator::updateResults(string &file_name, int num_samples,
+                              int scale_index, struct MML_Estimates &estimates)
 {
   string file = "results/data/statistics_" + file_name; 
   ofstream fp(file.c_str(),ios::app);
-  /*fp << setw(10) << num_samples << "\t";
-  fp << setw(5) << setprecision(3) << parameters.mean << "\t";
+  fp << setw(10) << num_samples << "\t";
+  /*fp << setw(5) << setprecision(3) << parameters.mean << "\t";
   fp << setw(5) << setprecision(3) << parameters.scale[scale_index] << "\t";
-  //fp << setw(5) << setprecision(3) << parameters.noise_sigma[noise_index] << "\t";
   fp << setw(10) << parameters.distribution << "\t";*/
   fp << setw(10) << setprecision(3) << estimates.normal_mean << "\t";
   fp << setw(10) << setprecision(3) << estimates.normal_sigma << "\t";
   fp << fixed << setw(10) << setprecision(3) << estimates.normal_mml << "\t";
   fp << setw(10) << setprecision(3) << estimates.laplace_mean << "\t";
   fp << setw(10) << setprecision(3) << estimates.laplace_scale << "\t";
-  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_mml << endl;
+  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_mml << "\t";
+  if (estimates.normal_mml < estimates.laplace_mml) {
+    fp << setw(10) << "Normal";
+  } else if (estimates.normal_mml > estimates.laplace_mml) {
+    fp << setw(10) << "Laplace";
+  } else {
+    fp << setw(10) << "Draw";
+  }
+  // error = estimate - true
+  // calculate error in estimating mean
+  // error for normal
+  double normal_mean_error = estimates.normal_mean - parameters.mean; 
+  double laplace_mean_error = estimates.laplace_mean - parameters.mean; 
+  fp << setw(10) << setprecision(3) << normal_mean_error << "\t";
+  fp << fixed << setw(10) << setprecision(3) << laplace_mean_error << "\t";
+  // calculate error in estimating scale 
+  double normal_scale_error = estimates.normal_sigma - parameters.scale[scale_index]; 
+  double laplace_scale_error = estimates.laplace_scale - parameters.scale[scale_index]; 
+  fp << setw(10) << setprecision(3) << normal_scale_error << "\t";
+  fp << fixed << setw(10) << setprecision(3) << laplace_scale_error << "\t";
+  fp << endl;
   fp.close();
 }
 
@@ -174,10 +192,10 @@ void DataGenerator::plotPredictions(string &data_file)
   labels[1] = "x";
   labels[2] = "probability density";
   graph.label(labels);
-  //xrange = extremum(x);
+  xrange = extremum(x);
   //yrange = extremum(predictions[0]);
-  xrange = pair<double,double>(-10,10);
-  yrange = pair<double,double>(0,0.35);
+  //xrange = pair<double,double>(-10,10);
+  yrange = pair<double,double>(0,0.8);
   graph.setRange(xrange,yrange);
   graph.sketch(data_file,predictions);
 }
@@ -188,10 +206,11 @@ void DataGenerator::plotPredictions(string &data_file)
  *  \param list a reference to a vector<double>
  *  \param scale_index an integer 
  *  \param iteration an integer
+ *  \return the distribution which wins (the best compression)
  */
-void DataGenerator::estimateAndPlotModel(const char *name,
-                                         vector<double> &list, 
-                                         int scale_index, int iteration)
+int DataGenerator::estimateAndPlotModel(const char *name,
+                                        vector<double> &list, 
+                                        int scale_index, int iteration)
 {
   x = sort(list);
   fx = computeFunctionValues(x);
@@ -202,20 +221,25 @@ void DataGenerator::estimateAndPlotModel(const char *name,
   if (parameters.iterations == 1) {
     writeToFile(file_name,x,fx,predictions);
     plotPredictions(file_name);
+  } else {
+    updateResults(file_name,list.size(),scale_index,estimates);
   }
 
-  /*addNoise(parameters.noise_sigma[noise_index]);
-  fx_noise = computeFunctionValues(x_noise);
-  struct MML_Estimates estimates_noise = mmlEstimate(x_noise);
-  predictions_noise = predict(x_noise,estimates_noise);
-  writeToFile(file_name,x_noise,fx_noise,predictions_noise);
-  plotPredictions(file_name);*/
-
-  updateResults(file_name,estimates);
+  if (estimates.normal_mml < estimates.laplace_mml) {
+    return 0; // normal wins
+  } else if (estimates.normal_mml > estimates.laplace_mml) {
+    return 1; // laplace wins
+  } else {
+    return 2; // draw
+  }
 }
 
 /*!
- *
+ *  \brief This function is used to plot the message lengths for both
+ *  distributions over several iterations.
+ *  \param name a pointer to a const char
+ *  \param num_samples an integer
+ *  \param scale_index an integer
  */
 void DataGenerator::plotStatistics(const char *name, int num_samples,
                                    int scale_index)
@@ -233,26 +257,11 @@ void DataGenerator::plotStatistics(const char *name, int num_samples,
   graph.label(labels);
   //xrange = extremum(x);
   //yrange = extremum(predictions[0]);
-  xrange = pair<double,double>(1,101);
-  yrange = pair<double,double>(6400,6900);
-  graph.setRange(xrange,yrange);
+  //xrange = pair<double,double>(1,101);
+  //yrange = pair<double,double>(6400,6900);
+  //graph.setRange(xrange,yrange);
   graph.sketchStatistics(file_name);
-  
 }
-
-/*!
- *  \brief This function adds noise to the generated fucntion values
- *  \param sigma a double
- */
-/*void DataGenerator::addNoise(double sigma)
-{
-  x_noise = vector<double>(x);
-  NormalDataGenerator noise_generator(0,sigma);
-  vector<double> noise = noise_generator.generateRandom(x.size());
-  for(int i=0; i<x.size(); i++) {
-    x_noise[i] += noise[i];
-  }
-}*/
 
 /*!
  *  \brief This function predicts the distribution with respect to the
@@ -292,26 +301,26 @@ struct MML_Estimates DataGenerator::mmlEstimate(vector<double> &x)
   struct MML_Estimates estimates;
 
   // Normal estimates
-  cout << "*** NORMAL ***" << endl;
+  //cout << "*** NORMAL ***" << endl;
   pair<double,double> normalEstimates = message.getNormalEstimates();
   estimates.normal_mean = normalEstimates.first;
   estimates.normal_sigma = normalEstimates.second;
   estimates.normal_mml = message.encodeUsingNormalModel();
-  cout << "\tMean: " << estimates.normal_mean << endl;
+  /*cout << "\tMean: " << estimates.normal_mean << endl;
   cout << "\tSigma: " << estimates.normal_sigma << endl;
   cout << "\tMessage length: " << estimates.normal_mml << endl;
+  cout << endl;*/
 
-  cout << endl;
   // Laplace estimates
-  cout << "*** LAPLACE ***" << endl;
+  //cout << "*** LAPLACE ***" << endl;
   pair<double,double> laplaceEstimates = message.getLaplaceEstimates();
   estimates.laplace_mean = laplaceEstimates.first;
   estimates.laplace_scale = laplaceEstimates.second;
   estimates.laplace_mml = message.encodeUsingLaplaceModel();
-  cout << "\tMean: " << estimates.laplace_mean << endl;
+  /*cout << "\tMean: " << estimates.laplace_mean << endl;
   cout << "\tScale: " << estimates.laplace_scale << endl;
   cout << "\tMessage length: " << estimates.laplace_mml << endl;
-  cout << endl;
+  cout << endl;*/
 
   return estimates;
 }

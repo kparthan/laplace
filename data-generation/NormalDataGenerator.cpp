@@ -48,8 +48,9 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
   double mu = normal.mean();
   double sigma = normal.standardDeviation();
   vector<double> x(samples,0);
-  srand(time(NULL));
-  //srand(1000);
+  struct timespec now;
+  clock_gettime(CLOCK_MONOTONIC, &now);
+  srand(now.tv_nsec);
   for (int i=0; i<samples; i=i+2) {
     double u = ((double) rand()) / RAND_MAX;
     double v = ((double) rand()) / RAND_MAX;
@@ -74,19 +75,17 @@ void NormalDataGenerator::simulate()
   for (int i=0; i<parameters.samples.size(); i++) {
     for (int j=0; j<parameters.scale.size(); j++) {
       vector<double> list;
+      int outcomes[3] = {0};
       for (int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
         normal = Normal(mean,scale);
         list = generateRandom(parameters.samples[i]);
-        /*string fname = "data_" + boost::lexical_cast<string>(n);
-        ofstream fw(fname.c_str());
-        for (int k=0; k<list.size(); k++) {
-          fw << list[k] << endl;
-        }
-        fw.close();*/
-        estimateAndPlotModel("normal",list,j,n);
+        int result = estimateAndPlotModel("normal",list,j,n);
+        outcomes[result]++;
       }
+      cout << "N:L:D = " << outcomes[0] << ":";
+      cout << outcomes[1] << ":" << outcomes[2] << endl;
       if (parameters.iterations > 1) {
         plotStatistics("normal",list.size(),j);
       }

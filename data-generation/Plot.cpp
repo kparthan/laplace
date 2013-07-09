@@ -111,9 +111,9 @@ void Plot::sketchStatistics(string &data_file)
   script.open(script_file.c_str(),ios::app);
   script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
 	script << "set multiplot" << endl;
-  script << "plot \"results/data/" << data_file << "\" using (column(0)):3 title "
+  script << "plot \"results/data/" << data_file << "\" using (column(0)):4 title "
          << "'normal message length' with lines lc rgb \"red\", \\" << endl;
-  script << "\"results/data/" << data_file << "\" using (column(0)):6 title "
+  script << "\"results/data/" << data_file << "\" using (column(0)):7 title "
          << "'laplace message length' with lines lc rgb \"blue\"" << endl;
 	script.close();
 

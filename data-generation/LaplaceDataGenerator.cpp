@@ -40,8 +40,9 @@ vector<double> LaplaceDataGenerator::generateRandom(int samples)
   double mu = laplace.mean();
   double b = laplace.scaleParameter();
   vector<double> x(samples,0);
-  srand(time(NULL));
-  //srand(1000);
+  struct timespec now;
+  clock_gettime(CLOCK_MONOTONIC, &now);
+  srand(now.tv_nsec);
   for (int i=0; i<samples; i++) {
     double random = (double)rand() / RAND_MAX;
     random -= 0.5;
@@ -59,13 +60,17 @@ void LaplaceDataGenerator::simulate()
   for (int i=0; i<parameters.samples.size(); i++) {
     for (int j=0; j<parameters.scale.size(); j++) {
       vector<double> list;  
+      int outcomes[3] = {0};
       for(int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
         laplace = Laplace(mean,scale);
         list = generateRandom(parameters.samples[i]);
-        estimateAndPlotModel("laplace",list,j,n);
+        int result = estimateAndPlotModel("laplace",list,j,n);
+        outcomes[result]++;
       }
+      cout << "N:L:D = " << outcomes[0] << ":";
+      cout << outcomes[1] << ":" << outcomes[2] << endl;
       if (parameters.iterations > 1) {
         plotStatistics("laplace",list.size(),j);
       }

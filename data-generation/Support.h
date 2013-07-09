@@ -5,6 +5,7 @@
 
 struct Parameters
 {
+  int print;
   vector<int> samples;
   double mean;
   vector<double> scale;

@@ -17,6 +17,7 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   options_description desc("Allowed options");
   desc.add_options()
        ("help","produce help message")
+       ("verbose","print detailed output")
        ("samples",value<vector<int>>(&parameters.samples)->multitoken(),
                                     "number of points to be generated")
        ("mean",value<double>(&parameters.mean),"mean of the distribution")
@@ -34,6 +35,12 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
 
   if (argc == 1 || vm.count("help")) {
     Usage(argv[0],desc);
+  }
+
+  if (vm.count("verbose")) {
+    parameters.print = SET;
+  } else {
+    parameters.print = UNSET;
   }
   
   if (vm.count("samples")) {
