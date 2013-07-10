@@ -30,6 +30,7 @@
 #define AOM 0.001
 #define SET 1
 #define UNSET 0
+#define GAP 1
 
 #define PI boost::math::constants::pi<double>()
 #define ZERO std::numeric_limits<double>::epsilon()

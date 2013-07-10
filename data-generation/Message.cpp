@@ -30,14 +30,17 @@ void Message::estimateParameters()
  */
 void Message::estimateNormalParameters()
 {
+  normalEstimates = vector<double>(3,0);
   double mean = computeMean(data); 
-  normalEstimates.first = mean;
+  normalEstimates[0] = mean;
   double sum = 0;
   for (int i=0; i<data.size(); i++) {
     sum += (data[i] - mean) * (data[i] - mean);
   }
-  double sigma_square = sum / (double)(data.size()-1);
-  normalEstimates.second = sqrt(sigma_square);
+  double sigma_square = sum / (double)(data.size());
+  normalEstimates[1] = sqrt(sigma_square);  // ML estimate of sigma
+  sigma_square = sum / (double)(data.size()-1);
+  normalEstimates[2] = sqrt(sigma_square);  // MML estimate of sigma
 }
 
 /*!
@@ -46,20 +49,22 @@ void Message::estimateNormalParameters()
  */
 void Message::estimateLaplaceParameters()
 {
+  laplaceEstimates = vector<double>(3,0);
   double median = computeMedian(data);
-  laplaceEstimates.first = median;
+  laplaceEstimates[0] = median;
   double sum = 0;
   for (int i=0; i<data.size(); i++) {
     sum += fabs(data[i]-median);
   }
-  laplaceEstimates.second = sum / (double)(data.size()-1);
+  laplaceEstimates[1] = sum / (double)(data.size());  // ML estimate of b
+  laplaceEstimates[2] = sum / (double)(data.size()-1); // MML estimate of b
 }
 
 /*!
  *  \brief This function returns the Normal estimates of the parameters
  *  \return the Normal estimates
  */
-pair<double,double> Message::getNormalEstimates()
+vector<double> Message::getNormalEstimates()
 {
   return normalEstimates;
 }
@@ -68,7 +73,7 @@ pair<double,double> Message::getNormalEstimates()
  *  \brief This function returns the Laplace estimates of the parameters
  *  \return the Laplace estimates
  */
-pair<double,double> Message::getLaplaceEstimates()
+vector<double> Message::getLaplaceEstimates()
 {
   return laplaceEstimates;
 }
@@ -85,9 +90,9 @@ double Message::encodeUsingNormalModel()
   double rangeLogSigma = log(4/(3*AOM));
   int N = data.size();
   double part1 = log(K2) + log(rangeMu * rangeLogSigma) + 0.5 * log(2 * N * N) 
-                 - log(normalEstimates.second);
+                 - log(normalEstimates[2]);
   double part2 = (N/2.0) * log(2 * PI) - N * log(AOM) + 0.5 * (N+1) + 
-                  + N * log(normalEstimates.second);
+                  + N * log(normalEstimates[2]);
   return (part1+part2)/log(2);
 }
 
@@ -103,8 +108,8 @@ double Message::encodeUsingLaplaceModel()
   double rangeLogSigma = log(4/(3*AOM));
   int N = data.size();
   double part1 = log(K2) + log(rangeMu * rangeLogSigma) + log(N)
-                 - log(laplaceEstimates.second);
-  double part2 = N * log(2/AOM) + N * log(laplaceEstimates.second) + N;
+                 - log(laplaceEstimates[2]);
+  double part2 = N * log(2/AOM) + N * log(laplaceEstimates[2]) + N;
   return (part1+part2)/log(2);
 }
 

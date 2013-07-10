@@ -113,7 +113,7 @@ void Plot::sketchStatistics(string &data_file)
 	script << "set multiplot" << endl;
   script << "plot \"results/data/" << data_file << "\" using (column(0)):4 title "
          << "'normal message length' with lines lc rgb \"red\", \\" << endl;
-  script << "\"results/data/" << data_file << "\" using (column(0)):7 title "
+  script << "\"results/data/" << data_file << "\" using (column(0)):8 title "
          << "'laplace message length' with lines lc rgb \"blue\"" << endl;
 	script.close();
 

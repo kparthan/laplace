@@ -10,10 +10,10 @@ class Message
     vector<double> data;
 
     //! Parameter estimates for the normal distribution
-    pair<double,double> normalEstimates;
+    vector<double> normalEstimates;
 
     //! Parameter estimates for the laplace distribution
-    pair<double,double> laplaceEstimates;
+    vector<double> laplaceEstimates;
 
     //! Estimates the MML parameters for the Normal distribution
     void estimateNormalParameters();
@@ -32,10 +32,10 @@ class Message
     void estimateParameters();
 
     //! Return the parameter estimates for the Normal distribution
-    pair<double,double> getNormalEstimates();
+    vector<double> getNormalEstimates();
 
     //! Return the parameter estimates for the Laplace distribution
-    pair<double,double> getLaplaceEstimates();
+    vector<double> getLaplaceEstimates();
 
     //! Computes the length of encoding (in bits) for encoding using a
     //! Normal distribution

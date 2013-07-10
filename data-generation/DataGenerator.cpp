@@ -117,42 +117,64 @@ string DataGenerator::getFileName(const char *name, int num_samples,
  *  \param file_name a reference to a string 
  *  \param num_samples an integer
  *  \param scale_index an integer 
- *  \param estimates a reference to a struct MML_Estimates
+ *  \param estimates a reference to a struct Estimates
  */
 void DataGenerator::updateResults(string &file_name, int num_samples,
-                              int scale_index, struct MML_Estimates &estimates)
+                              int scale_index, struct Estimates &estimates)
 {
   string file = "results/data/statistics_" + file_name; 
   ofstream fp(file.c_str(),ios::app);
-  fp << setw(10) << num_samples << "\t";
-  /*fp << setw(5) << setprecision(3) << parameters.mean << "\t";
+  /*fp << setw(10) << num_samples << "\t";
+  fp << setw(5) << setprecision(3) << parameters.mean << "\t";
   fp << setw(5) << setprecision(3) << parameters.scale[scale_index] << "\t";
   fp << setw(10) << parameters.distribution << "\t";*/
+
+  // print normal estimates
   fp << setw(10) << setprecision(3) << estimates.normal_mean << "\t";
-  fp << setw(10) << setprecision(3) << estimates.normal_sigma << "\t";
-  fp << fixed << setw(10) << setprecision(3) << estimates.normal_mml << "\t";
+  fp << setw(10) << setprecision(3) << estimates.normal_sigma_ml << "\t";
+  fp << setw(10) << setprecision(3) << estimates.normal_sigma_mml << "\t";
+  fp << fixed << setw(10) << setprecision(3) << estimates.normal_msglen << "\t";
+
+  // print laplace estimates
   fp << setw(10) << setprecision(3) << estimates.laplace_mean << "\t";
-  fp << setw(10) << setprecision(3) << estimates.laplace_scale << "\t";
-  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_mml << "\t";
-  if (estimates.normal_mml < estimates.laplace_mml) {
+  fp << setw(10) << setprecision(3) << estimates.laplace_scale_ml << "\t";
+  fp << setw(10) << setprecision(3) << estimates.laplace_scale_mml << "\t";
+  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_msglen << "\t";
+
+  // print winner
+  if (estimates.normal_msglen < estimates.laplace_msglen) {
     fp << setw(10) << "Normal";
-  } else if (estimates.normal_mml > estimates.laplace_mml) {
+  } else if (estimates.normal_msglen > estimates.laplace_msglen) {
     fp << setw(10) << "Laplace";
   } else {
     fp << setw(10) << "Draw";
   }
-  // error = estimate - true
-  // calculate error in estimating mean
-  // error for normal
+
+  /*  error = estimate - true */
+  // print difference in normal estimates
   double normal_mean_error = estimates.normal_mean - parameters.mean; 
-  double laplace_mean_error = estimates.laplace_mean - parameters.mean; 
+  double normal_ml_sigma_error = estimates.normal_sigma_ml - parameters.scale[scale_index];
+  double normal_mml_sigma_error = estimates.normal_sigma_mml - parameters.scale[scale_index];
   fp << setw(10) << setprecision(3) << normal_mean_error << "\t";
-  fp << fixed << setw(10) << setprecision(3) << laplace_mean_error << "\t";
-  // calculate error in estimating scale 
-  double normal_scale_error = estimates.normal_sigma - parameters.scale[scale_index]; 
-  double laplace_scale_error = estimates.laplace_scale - parameters.scale[scale_index]; 
-  fp << setw(10) << setprecision(3) << normal_scale_error << "\t";
-  fp << fixed << setw(10) << setprecision(3) << laplace_scale_error << "\t";
+  fp << setw(10) << setprecision(3) << normal_ml_sigma_error << "\t";
+  fp << fixed << setw(10) << setprecision(3) << normal_mml_sigma_error << "\t";
+
+  // print difference in laplace estimates
+  double laplace_mean_error = estimates.laplace_mean - parameters.mean; 
+  double laplace_ml_scale_error = estimates.laplace_scale_ml - parameters.scale[scale_index];
+  double laplace_mml_scale_error = estimates.laplace_scale_mml - parameters.scale[scale_index];
+  fp << setw(10) << setprecision(3) << laplace_mean_error << "\t";
+  fp << setw(10) << setprecision(3) << laplace_ml_scale_error << "\t";
+  fp << fixed << setw(10) << setprecision(3) << laplace_mml_scale_error << "\t";
+
+  // calculate the difference in msg len
+  double diff_msglen;
+  if (type == LAPLACE) {
+    diff_msglen = estimates.normal_msglen - estimates.laplace_msglen;
+  } else if (type == NORMAL) {
+    diff_msglen = estimates.laplace_msglen - estimates.normal_msglen;
+  }
+  fp << fixed << setw(10) << setprecision(3) << diff_msglen << "\t";
   fp << endl;
   fp.close();
 }
@@ -206,15 +228,15 @@ void DataGenerator::plotPredictions(string &data_file)
  *  \param list a reference to a vector<double>
  *  \param scale_index an integer 
  *  \param iteration an integer
- *  \return the distribution which wins (the best compression)
+ *  \return the normal & laplace estimates of the data 
  */
-int DataGenerator::estimateAndPlotModel(const char *name,
+Estimates DataGenerator::estimateAndPlotModel(const char *name,
                                         vector<double> &list, 
                                         int scale_index, int iteration)
 {
   x = sort(list);
   fx = computeFunctionValues(x);
-  struct MML_Estimates estimates = mmlEstimate(x);
+  struct Estimates estimates = mmlEstimate(x);
   predictions = predict(x,estimates);
 
   string file_name = getFileName(name,list.size(),scale_index);
@@ -225,9 +247,11 @@ int DataGenerator::estimateAndPlotModel(const char *name,
     updateResults(file_name,list.size(),scale_index,estimates);
   }
 
-  if (estimates.normal_mml < estimates.laplace_mml) {
+  return estimates;
+
+  if (estimates.normal_msglen < estimates.laplace_msglen) {
     return 0; // normal wins
-  } else if (estimates.normal_mml > estimates.laplace_mml) {
+  } else if (estimates.normal_msglen > estimates.laplace_msglen) {
     return 1; // laplace wins
   } else {
     return 2; // draw
@@ -267,21 +291,21 @@ void DataGenerator::plotStatistics(const char *name, int num_samples,
  *  \brief This function predicts the distribution with respect to the
  *  estimated parameters.
  *  \param x a reference to a vector<double>
- *  \param estimates a reference to a struct MML_Estimates
+ *  \param estimates a reference to a struct Estimates
  *  \return the list of estimated values
  */
 vector<vector<double>> DataGenerator::predict(vector<double> &x, 
-                                      struct MML_Estimates &estimates)
+                                      struct Estimates &estimates)
 {
   vector<vector<double>> y;
 
   // Estimate values using Normal distribution
-  NormalDataGenerator normal(estimates.normal_mean,estimates.normal_sigma);
+  NormalDataGenerator normal(estimates.normal_mean,estimates.normal_sigma_mml);
   vector<double> y0 = normal.computeFunctionValues(x);
   y.push_back(y0);
 
   // Estimate values using Laplace distribution
-  LaplaceDataGenerator laplace(estimates.laplace_mean,estimates.laplace_scale);
+  LaplaceDataGenerator laplace(estimates.laplace_mean,estimates.laplace_scale_mml);
   vector<double> y1 = laplace.computeFunctionValues(x);
   y.push_back(y1);
 
@@ -294,32 +318,34 @@ vector<vector<double>> DataGenerator::predict(vector<double> &x,
  *  \return the MML estimates of the parameters and the corresponding
  *  message length
  */
-struct MML_Estimates DataGenerator::mmlEstimate(vector<double> &x)
+struct Estimates DataGenerator::mmlEstimate(vector<double> &x)
 {
   Message message(x);
   message.estimateParameters();
-  struct MML_Estimates estimates;
+  struct Estimates estimates;
 
   // Normal estimates
   //cout << "*** NORMAL ***" << endl;
-  pair<double,double> normalEstimates = message.getNormalEstimates();
-  estimates.normal_mean = normalEstimates.first;
-  estimates.normal_sigma = normalEstimates.second;
-  estimates.normal_mml = message.encodeUsingNormalModel();
+  vector<double> normalEstimates = message.getNormalEstimates();
+  estimates.normal_mean = normalEstimates[0];
+  estimates.normal_sigma_ml = normalEstimates[1];
+  estimates.normal_sigma_mml = normalEstimates[2];
+  estimates.normal_msglen = message.encodeUsingNormalModel();
   /*cout << "\tMean: " << estimates.normal_mean << endl;
   cout << "\tSigma: " << estimates.normal_sigma << endl;
-  cout << "\tMessage length: " << estimates.normal_mml << endl;
+  cout << "\tMessage length: " << estimates.normal_msglen << endl;
   cout << endl;*/
 
   // Laplace estimates
   //cout << "*** LAPLACE ***" << endl;
-  pair<double,double> laplaceEstimates = message.getLaplaceEstimates();
-  estimates.laplace_mean = laplaceEstimates.first;
-  estimates.laplace_scale = laplaceEstimates.second;
-  estimates.laplace_mml = message.encodeUsingLaplaceModel();
+  vector<double> laplaceEstimates = message.getLaplaceEstimates();
+  estimates.laplace_mean = laplaceEstimates[0];
+  estimates.laplace_scale_ml = laplaceEstimates[1];
+  estimates.laplace_scale_mml = laplaceEstimates[2];
+  estimates.laplace_msglen = message.encodeUsingLaplaceModel();
   /*cout << "\tMean: " << estimates.laplace_mean << endl;
   cout << "\tScale: " << estimates.laplace_scale << endl;
-  cout << "\tMessage length: " << estimates.laplace_mml << endl;
+  cout << "\tMessage length: " << estimates.laplace_msglen << endl;
   cout << endl;*/
 
   return estimates;

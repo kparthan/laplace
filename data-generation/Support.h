@@ -14,14 +14,16 @@ struct Parameters
   int iterations;
 };
 
-struct MML_Estimates
+struct Estimates
 {
   double normal_mean;
-  double normal_sigma;
-  double normal_mml;
+  double normal_sigma_ml;
+  double normal_sigma_mml;
+  double normal_msglen;
   double laplace_mean;
-  double laplace_scale;
-  double laplace_mml;
+  double laplace_scale_ml;
+  double laplace_scale_mml;
+  double laplace_msglen;
 };
 
 struct Parameters parseCommandLineInput(int, char **);

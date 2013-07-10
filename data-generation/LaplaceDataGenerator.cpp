@@ -66,6 +66,7 @@ void LaplaceDataGenerator::simulate()
         double scale = parameters.scale[j];
         laplace = Laplace(mean,scale);
         list = generateRandom(parameters.samples[i]);
+        Estimates estimates = estimateAndPlotModel("laplace",list,j,n);
         int result = estimateAndPlotModel("laplace",list,j,n);
         outcomes[result]++;
       }

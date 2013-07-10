@@ -26,7 +26,7 @@ class DataGenerator
     virtual vector<double> generateRandom(int){}
 
     //! Calculate the minimum message length and plot
-    int estimateAndPlotModel(const char *, vector<double> &, int, int);
+    Estimates estimateAndPlotModel(const char *, vector<double> &, int, int);
 
     //! Plot the message lengths for all iterations
     void plotStatistics(const char *, int, int);
@@ -35,7 +35,7 @@ class DataGenerator
     virtual vector<double> computeFunctionValues(vector<double> &){}
 
     //! Predict using the estimates
-    vector<vector<double>> predict(vector<double> &, struct MML_Estimates &);
+    vector<vector<double>> predict(vector<double> &, struct Estimates &);
 
     //! Sort the elements in the list
     vector<double> sort(vector<double> &);
@@ -44,7 +44,7 @@ class DataGenerator
     void plotPredictions(string &); 
 
     //! MML estimates
-    struct MML_Estimates mmlEstimate(vector<double> &);
+    struct Estimates mmlEstimate(vector<double> &);
 
   protected:
     //! Distribution type
@@ -69,7 +69,7 @@ class DataGenerator
     string getFileName(const char *, int, int);
 
     //! Outputs the data to a file
-    void updateResults(string &, int, int, struct MML_Estimates &);
+    void updateResults(string &, int, int, struct Estimates &);
 
     //! Outputs the predictions to a file
     void writeToFile(string &, vector<double> &, vector<double> &, 
