@@ -14,9 +14,9 @@ class DataGenerator
 
     //! Types of distributions
     enum DistributionType {
-      DEFAULT,
-      NORMAL,
-      LAPLACE
+      NORMAL = 0,
+      LAPLACE = 1,
+      DEFAULT = 2
     };
 
     //! Simulate the experiment
@@ -26,10 +26,13 @@ class DataGenerator
     virtual vector<double> generateRandom(int){}
 
     //! Calculate the minimum message length and plot
-    Estimates estimateAndPlotModel(const char *, vector<double> &, int, int);
+    Estimates estimateAndPlotModel(const char *, vector<double> &, int);
 
     //! Plot the message lengths for all iterations
-    void plotStatistics(const char *, int, int);
+    void plotMessageLength(const char *, int, int);
+
+    //! Plots the errors in parameter estimates
+    void plotErrors();
 
     //! Compute the corresponding function values
     virtual vector<double> computeFunctionValues(vector<double> &){}
@@ -53,6 +56,9 @@ class DataGenerator
     //! Model parameters
     struct Parameters parameters;
 
+    //! Error statistics
+    struct Statistics statistics;
+
     //! Random samples generated
     vector<double> x,fx;
 
@@ -70,6 +76,12 @@ class DataGenerator
 
     //! Outputs the data to a file
     void updateResults(string &, int, int, struct Estimates &);
+
+    //! Updates the statistics over iterations
+    void updateStatistics(int, struct Estimates &, struct Statistics &);
+
+    //! Saves the statistics to a file
+    void saveErrorStatistics(struct Statistics &, int, int, int);
 
     //! Outputs the predictions to a file
     void writeToFile(string &, vector<double> &, vector<double> &, 

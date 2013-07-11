@@ -16,6 +16,7 @@ struct Parameters
 
 struct Estimates
 {
+  int winner;
   double normal_mean;
   double normal_sigma_ml;
   double normal_sigma_mml;
@@ -24,6 +25,24 @@ struct Estimates
   double laplace_scale_ml;
   double laplace_scale_mml;
   double laplace_msglen;
+};
+
+struct Statistics
+{
+  vector<double> normal_sigma;
+    //normal_sigma[0] avg_normal_sigma_ml;
+    //normal_sigma[1] min_normal_sigma_ml;
+    //normal_sigma[2] max_normal_sigma_ml;
+    //normal_sigma[3] avg_normal_sigma_mml;
+    //normal_sigma[4] min_normal_sigma_mml;
+    //normal_sigma[5] max_normal_sigma_mml;
+  vector<double> laplace_scale;
+    //laplace_sigma[0] avg_laplace_sigma_ml;
+    //laplace_sigma[1] min_laplace_sigma_ml;
+    //laplace_sigma[2] max_laplace_sigma_ml;
+    //laplace_sigma[3] avg_laplace_sigma_mml;
+    //laplace_sigma[4] min_laplace_sigma_mml;
+    //laplace_sigma[5] max_laplace_sigma_mml;
 };
 
 struct Parameters parseCommandLineInput(int, char **);

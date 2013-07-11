@@ -61,22 +61,25 @@ void LaplaceDataGenerator::simulate()
     for (int j=0; j<parameters.scale.size(); j++) {
       vector<double> list;  
       int outcomes[3] = {0};
+      struct Statistics statistics;
       for(int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
         laplace = Laplace(mean,scale);
         list = generateRandom(parameters.samples[i]);
-        Estimates estimates = estimateAndPlotModel("laplace",list,j,n);
-        int result = estimateAndPlotModel("laplace",list,j,n);
-        outcomes[result]++;
+        Estimates estimates = estimateAndPlotModel("laplace",list,j);
+        outcomes[estimates.winner]++;
+        updateStatistics(n,estimates,statistics);
       }
       cout << "N:L:D = " << outcomes[0] << ":";
       cout << outcomes[1] << ":" << outcomes[2] << endl;
       if (parameters.iterations > 1) {
-        plotStatistics("laplace",list.size(),j);
+        plotMessageLength("laplace",list.size(),j);
+        saveErrorStatistics(statistics,parameters.iterations,i,j);
       }
     }
   }
+  plotErrors();
 }
 
 /*!

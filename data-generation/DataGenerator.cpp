@@ -107,7 +107,7 @@ string DataGenerator::getFileName(const char *name, int num_samples,
   double mean = parameters.mean;
   file += "_mean_" + boost::lexical_cast<string>(mean);
   double scale = parameters.scale[scale_index];
-  file += "_scale_" + boost::lexical_cast<string>(scale);
+  file += "_scale_" + boost::lexical_cast<string>(scale).substr(0,3);
   //cout << file << endl;
   return file;
 }
@@ -180,6 +180,79 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
 }
 
 /*!
+ *  \brief This function updates the statistics over all iterations
+ *  \param n an integer
+ *  \param estimates a reference to a struct Estimates
+ *  \param statistics a reference to a struct Statistics
+ */
+void DataGenerator::updateStatistics(int n, struct Estimates &estimates,
+                                     struct Statistics &statistics)
+{
+  if (n == 1) {
+    statistics.normal_sigma = vector<double>(6,0);
+    statistics.laplace_scale = vector<double>(6,0);
+    for (int i=0; i<3; i++) {
+      statistics.normal_sigma[i] = estimates.normal_sigma_ml;
+      statistics.normal_sigma[i+3] = estimates.normal_sigma_mml;
+      statistics.laplace_scale[i] = estimates.laplace_scale_ml;
+      statistics.laplace_scale[i+3] = estimates.laplace_scale_mml;
+    }
+  } else {
+    double sum;
+    // update normal statistics
+    {
+      // update ML average
+      sum = (n-1) * statistics.normal_sigma[0];
+      statistics.normal_sigma[0] = (sum + estimates.normal_sigma_ml) / n;
+      // update ML min
+      if (statistics.normal_sigma[1] > estimates.normal_sigma_ml) {
+        statistics.normal_sigma[1] = estimates.normal_sigma_ml;
+      }
+      // update ML max
+      if (statistics.normal_sigma[2] < estimates.normal_sigma_ml) {
+        statistics.normal_sigma[2] = estimates.normal_sigma_ml;
+      }
+      // update MML average
+      sum = (n-1) * statistics.normal_sigma[3];
+      statistics.normal_sigma[3] = (sum + estimates.normal_sigma_mml) / n;
+      // update MML min
+      if (statistics.normal_sigma[4] > estimates.normal_sigma_mml) {
+        statistics.normal_sigma[4] = estimates.normal_sigma_mml;
+      }
+      // update MML max
+      if (statistics.normal_sigma[5] < estimates.normal_sigma_mml) {
+        statistics.normal_sigma[5] = estimates.normal_sigma_mml;
+      }
+    }
+    // update laplace statistics
+    {
+      // update ML average
+      sum = (n-1) * statistics.laplace_scale[0];
+      statistics.laplace_scale[0] = (sum + estimates.laplace_scale_ml) / n;
+      // update ML min
+      if (statistics.laplace_scale[1] > estimates.laplace_scale_ml) {
+        statistics.laplace_scale[1] = estimates.laplace_scale_ml;
+      }
+      // update ML max
+      if (statistics.laplace_scale[2] < estimates.laplace_scale_ml) {
+        statistics.laplace_scale[2] = estimates.laplace_scale_ml;
+      }
+      // update MML average
+      sum = (n-1) * statistics.laplace_scale[3];
+      statistics.laplace_scale[3] = (sum + estimates.laplace_scale_mml) / n;
+      // update MML min
+      if (statistics.laplace_scale[4] > estimates.laplace_scale_mml) {
+        statistics.laplace_scale[4] = estimates.laplace_scale_mml;
+      }
+      // update MML max
+      if (statistics.laplace_scale[5] < estimates.laplace_scale_mml) {
+        statistics.laplace_scale[5] = estimates.laplace_scale_mml;
+      }
+    }
+  }
+}
+
+/*!
  *  \brief This function outputs the predictions to a file.
  *  \param file_name a reference to a string
  *  \param x a reference to a vector<double>
@@ -205,7 +278,7 @@ void DataGenerator::writeToFile(string &file_name,
  */
 void DataGenerator::plotPredictions(string &data_file)
 {
-  string script_file("results/script.p");
+  string script_file("results/script.plot");
   Plot graph(script_file);
   pair<double,double> xrange,yrange;
 
@@ -227,12 +300,11 @@ void DataGenerator::plotPredictions(string &data_file)
  *  \param name a pointer to a char 
  *  \param list a reference to a vector<double>
  *  \param scale_index an integer 
- *  \param iteration an integer
  *  \return the normal & laplace estimates of the data 
  */
 Estimates DataGenerator::estimateAndPlotModel(const char *name,
                                         vector<double> &list, 
-                                        int scale_index, int iteration)
+                                        int scale_index)
 {
   x = sort(list);
   fx = computeFunctionValues(x);
@@ -247,15 +319,14 @@ Estimates DataGenerator::estimateAndPlotModel(const char *name,
     updateResults(file_name,list.size(),scale_index,estimates);
   }
 
-  return estimates;
-
   if (estimates.normal_msglen < estimates.laplace_msglen) {
-    return 0; // normal wins
+    estimates.winner = NORMAL; // normal wins
   } else if (estimates.normal_msglen > estimates.laplace_msglen) {
-    return 1; // laplace wins
+    estimates.winner = LAPLACE; // laplace wins
   } else {
-    return 2; // draw
+    estimates.winner = DEFAULT; // draw
   }
+  return estimates;
 }
 
 /*!
@@ -265,12 +336,12 @@ Estimates DataGenerator::estimateAndPlotModel(const char *name,
  *  \param num_samples an integer
  *  \param scale_index an integer
  */
-void DataGenerator::plotStatistics(const char *name, int num_samples,
-                                   int scale_index)
+void DataGenerator::plotMessageLength(const char *name, int num_samples,
+                                      int scale_index)
 {
   string file_name = getFileName(name,num_samples,scale_index);
   file_name = "statistics_" + file_name;
-  string script_file("results/script.p");
+  string script_file("results/script.plot");
   Plot graph(script_file);
   pair<double,double> xrange,yrange;
 
@@ -285,6 +356,70 @@ void DataGenerator::plotStatistics(const char *name, int num_samples,
   //yrange = pair<double,double>(6400,6900);
   //graph.setRange(xrange,yrange);
   graph.sketchStatistics(file_name);
+}
+
+/*!
+ *  \brief This function saves the statistics to the file
+ *  \param statistics a reference to a struct Statistics
+ *  \param iterations an integer
+ *  \param sample_index an integer
+ *  \param scale_index an integer
+ */
+void DataGenerator::saveErrorStatistics(struct Statistics &statistics,
+                                        int iterations, int sample_index,
+                                        int scale_index)
+{
+  double scale = parameters.scale[scale_index];
+  string file_name = "results/data/";
+  file_name += "errors_i_" + boost::lexical_cast<string>(iterations) + 
+               "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
+  ofstream file(file_name.c_str(),ios::app);
+  file << fixed << setw(10) << parameters.samples[sample_index];
+  for (int i=0; i<statistics.normal_sigma.size(); i++) {
+    file << fixed << setw(10) << setprecision(3) << statistics.normal_sigma[i];
+  }
+  for (int i=0; i<statistics.laplace_scale.size(); i++) {
+    file << fixed << setw(10) << setprecision(3) << statistics.laplace_scale[i];
+  }
+  file << endl;
+  file.close();
+}
+
+/*!
+ *  \brief This method plots the errors in parameter estimates.
+ */
+void DataGenerator::plotErrors()
+{
+  for (int i=0; i<parameters.scale.size(); i++) {
+    double scale = parameters.scale[i];
+    string data_file = "errors_i_" + boost::lexical_cast<string>(parameters.iterations)
+                       + "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
+    ofstream script("results/script.plot");
+    script << "set term post eps" << endl;
+    script << "set title \"Errors in Parameter Estimation\"" <<  endl;
+    script << "set xlabel \"# of samples\"" << endl;
+    script << "set ylabel \"Scale Parameter\"" << endl;
+    script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
+    script << "set multiplot" << endl;
+    script << "plot \"results/data/" << data_file << "\" using 1:2:($3):($4) title " 
+           << "'normal ML' with errorbars lc rgb \"blue\", \\" << endl;
+    script << "\"results/data/" << data_file << "\" using 1:5:($6):($7) title " 
+           << "'normal MML' with errorbars lc rgb \"green\", \\" << endl;
+    script << "\"results/data/" << data_file << "\" using 1:8:($9):($10) title " 
+           << "'laplace ML' with errorbars lc rgb \"red\", \\" << endl;
+    script << "\"results/data/" << data_file << "\" using 1:11:($12):($13) title " 
+           << "'laplace MML' with errorbars lc rgb \"black\", \\" << endl;
+    script << "\"results/data/" << data_file << "\" using 1:2 notitle " 
+           << "with lines lc rgb \"blue\", \\" << endl;
+    script << "\"results/data/" << data_file << "\" using 1:5 notitle " 
+           << "with lines lc rgb \"green\", \\" << endl;
+    script << "\"results/data/" << data_file << "\" using 1:8 notitle " 
+           << "with lines lc rgb \"red\", \\" << endl;
+    script << "\"results/data/" << data_file << "\" using 1:11 notitle " 
+           << "with lines lc rgb \"black\"" << endl;
+    script.close();
+	  system("gnuplot -persist results/script.plot");	
+  }
 }
 
 /*!

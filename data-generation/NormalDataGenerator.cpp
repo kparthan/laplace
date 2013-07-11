@@ -81,16 +81,19 @@ void NormalDataGenerator::simulate()
         double scale = parameters.scale[j];
         normal = Normal(mean,scale);
         list = generateRandom(parameters.samples[i]);
-        int result = estimateAndPlotModel("normal",list,j,n);
-        outcomes[result]++;
+        Estimates estimates = estimateAndPlotModel("laplace",list,j);
+        outcomes[estimates.winner]++;
+        updateStatistics(n,estimates,statistics);
       }
       cout << "N:L:D = " << outcomes[0] << ":";
       cout << outcomes[1] << ":" << outcomes[2] << endl;
       if (parameters.iterations > 1) {
-        plotStatistics("normal",list.size(),j);
+        plotMessageLength("normal",list.size(),j);
+        saveErrorStatistics(statistics,parameters.iterations,i,j);
       }
     }
   }
+  plotErrors();
 }
 
 /*!

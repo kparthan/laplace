@@ -100,7 +100,7 @@ void Plot::sketch(string &data_file, vector<vector<double>> &predictions)
          << "'laplace approximation' with points lc rgb \"green\"" << endl;
 	script.close();
 
-	system("gnuplot -persist results/script.p");	
+	system("gnuplot -persist results/script.plot");	
 }
 
 /*!
@@ -117,7 +117,7 @@ void Plot::sketchStatistics(string &data_file)
          << "'laplace message length' with lines lc rgb \"blue\"" << endl;
 	script.close();
 
-	system("gnuplot -persist results/script.p");	
+	system("gnuplot -persist results/script.plot");	
 }
 
 /*!
