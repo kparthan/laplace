@@ -9,6 +9,9 @@ class Message
     //! Data samples (sorted) to be encoded
     vector<double> data;
 
+    //! AOM of data
+    double AOM;
+
     //! Parameter estimates for the normal distribution
     vector<double> normalEstimates;
 
@@ -26,7 +29,7 @@ class Message
     Message() ;
 
     //! Constructor
-    Message(vector<double> &);
+    Message(vector<double> &, double);
 
     //! Estimate the parameters for the Normal & Laplace cases
     void estimateParameters();

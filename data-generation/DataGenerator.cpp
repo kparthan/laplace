@@ -58,6 +58,21 @@ void DataGenerator::quicksort(vector<double> &list, vector<int> &index,
 }
 
 /*!
+ *  \brief This function adjusts the data to AOM precision
+ *  \param data a reference to a vector<double>
+ *  \return the modified data values
+ */
+vector<double> DataGenerator::modifyDataToAOM(vector<double> &data, double aom)
+{
+  vector<double> x(data.size(),0);
+  for (int i=0; i<data.size(); i++) {
+    int val = data[i] / aom;
+    x[i] = ((double)val) * aom;
+  }
+  return x;
+}
+
+/*!
  *  This function is called from the quicksort() routine to compute the new
  *  pivot index.
  *  \param list a reference to a vector<double>
@@ -113,7 +128,7 @@ string DataGenerator::getFileName(const char *name, int num_samples,
 }
 
 /*!
- *  \brief This function outputs the data to a file.
+ *  \brief This function prints the MML estimates for all the iterations. 
  *  \param file_name a reference to a string 
  *  \param num_samples an integer
  *  \param scale_index an integer 
@@ -308,7 +323,7 @@ Estimates DataGenerator::estimateAndPlotModel(const char *name,
 {
   x = sort(list);
   fx = computeFunctionValues(x);
-  struct Estimates estimates = mmlEstimate(x);
+  struct Estimates estimates = mmlEstimate(x,parameters.aom);
   predictions = predict(x,estimates);
 
   string file_name = getFileName(name,list.size(),scale_index);
@@ -450,12 +465,13 @@ vector<vector<double>> DataGenerator::predict(vector<double> &x,
 /*!
  *  \brief This function computes the MML estimates.
  *  \param x a reference to a vector<double>
+ *  \param aom a double
  *  \return the MML estimates of the parameters and the corresponding
  *  message length
  */
-struct Estimates DataGenerator::mmlEstimate(vector<double> &x)
+struct Estimates DataGenerator::mmlEstimate(vector<double> &x, double aom)
 {
-  Message message(x);
+  Message message(x,aom);
   message.estimateParameters();
   struct Estimates estimates;
 

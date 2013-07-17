@@ -6,12 +6,15 @@
 struct Parameters
 {
   int print;
+  int generate;
   vector<int> samples;
   double mean;
   vector<double> scale;
   string distribution;
   string estimate;
   int iterations;
+  string data_file;
+  double aom;
 };
 
 struct Estimates
@@ -45,6 +48,8 @@ struct Statistics
     //laplace_sigma[5] max_laplace_sigma_mml;
 };
 
+vector<double> parseFile(string &);
+void printEstimates(struct Estimates &);
 struct Parameters parseCommandLineInput(int, char **);
 void Usage(const char *, options_description &);
 int sign(double);

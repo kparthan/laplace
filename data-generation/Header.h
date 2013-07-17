@@ -18,6 +18,8 @@
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
 
 #define DEFAULT_SAMPLES 100
 #define DEFAULT_MEAN 0.0
@@ -26,8 +28,8 @@
 #define DEFAULT_ITERATIONS 1
 #define DEFAULT_GENERATE_DISTRIBUTION "laplace"
 #define DEFAULT_ESTIMATE_DISTRIBUTION "laplace"
+#define DEFAULT_AOM 0.001
 
-#define AOM 0.001
 #define SET 1
 #define UNSET 0
 #define GAP 1

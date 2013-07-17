@@ -25,6 +25,9 @@ class DataGenerator
     //! Generate x values
     virtual vector<double> generateRandom(int){}
 
+    //! Modify data samples to required precision
+    vector<double> modifyDataToAOM(vector<double> &, double);
+
     //! Calculate the minimum message length and plot
     Estimates estimateAndPlotModel(const char *, vector<double> &, int);
 
@@ -47,7 +50,7 @@ class DataGenerator
     void plotPredictions(string &); 
 
     //! MML estimates
-    struct Estimates mmlEstimate(vector<double> &);
+    struct Estimates mmlEstimate(vector<double> &, double);
 
   protected:
     //! Distribution type

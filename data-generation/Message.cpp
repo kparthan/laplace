@@ -10,8 +10,9 @@ Message::Message()
 /*!
  *  \brief This is a constructor function used to instantiate the object
  *  \param deviations a reference to a vector<array<double,3>>
+ *  \param aom a double
  */
-Message::Message(vector<double> &data) : data(data)
+Message::Message(vector<double> &data, double aom) : data(data), AOM(aom)
 {}
 
 /*!
