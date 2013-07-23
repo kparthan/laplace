@@ -77,8 +77,10 @@ void Plot::setRange(pair<double,double> xrange, pair<double,double> yrange)
 	script.open(script_file.c_str(),ios::app);
 	script << "set xr [" << xrange.first - GAP << ":" << xrange.second + GAP 
          << "]"  << endl;
-	script << "set yr [" << yrange.first - GAP << ":" << yrange.second + GAP 
+	script << "set yr [" << yrange.first << ":" << yrange.second 
          << "]"  << endl;
+	//script << "set yr [" << yrange.first - GAP << ":" << yrange.second + GAP 
+  //       << "]"  << endl;
 	script.close();
 }
 

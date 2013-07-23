@@ -82,7 +82,7 @@ void NormalDataGenerator::simulate()
         normal = Normal(mean,scale);
         vector<double> data = generateRandom(parameters.samples[i]);
         list = modifyDataToAOM(data,parameters.aom);
-        Estimates estimates = estimateAndPlotModel("laplace",list,j);
+        Estimates estimates = estimateAndPlotModel("normal",list,j);
         outcomes[estimates.winner]++;
         updateStatistics(n,estimates,statistics);
       }

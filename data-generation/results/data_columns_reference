@@ -9,9 +9,13 @@ laplace_msglen
 winner
 estimate_normal_mean - true_mean
 estimate_normal_sigma_ml - true_sigma
+(estimate_normal_sigma_ml - true_sigma)^2
 estimate_normal_sigma_mml - true_sigma
+(estimate_normal_sigma_mml - true_sigma)^2
 estimate_laplace_mean - true_mean
 estimate_laplace_scale_ml - true_scale
+(estimate_laplace_scale_ml - true_scale)^2
 estimate_laplace_scale_mml - true_scale
+(estimate_laplace_scale_mml - true_scale)^2
 difference in message lengths: msglen(normal-laplace) -- if true distribution is laplace
                                msglen(laplace-normal) -- if true distribution is normal 

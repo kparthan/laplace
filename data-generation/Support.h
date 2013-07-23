@@ -11,7 +11,7 @@ struct Parameters
   double mean;
   vector<double> scale;
   string distribution;
-  string estimate;
+  //string estimate;
   int iterations;
   string data_file;
   double aom;

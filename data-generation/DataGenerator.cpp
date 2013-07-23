@@ -169,18 +169,26 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   // print difference in normal estimates
   double normal_mean_error = estimates.normal_mean - parameters.mean; 
   double normal_ml_sigma_error = estimates.normal_sigma_ml - parameters.scale[scale_index];
+  double normal_ml_sigma_error_sq = normal_ml_sigma_error * normal_ml_sigma_error;
   double normal_mml_sigma_error = estimates.normal_sigma_mml - parameters.scale[scale_index];
+  double normal_mml_sigma_error_sq = normal_mml_sigma_error * normal_mml_sigma_error;
   fp << setw(10) << setprecision(3) << normal_mean_error << "\t";
   fp << setw(10) << setprecision(3) << normal_ml_sigma_error << "\t";
+  fp << setw(10) << setprecision(3) << normal_ml_sigma_error_sq << "\t";
   fp << fixed << setw(10) << setprecision(3) << normal_mml_sigma_error << "\t";
+  fp << fixed << setw(10) << setprecision(3) << normal_mml_sigma_error_sq << "\t";
 
   // print difference in laplace estimates
   double laplace_mean_error = estimates.laplace_mean - parameters.mean; 
   double laplace_ml_scale_error = estimates.laplace_scale_ml - parameters.scale[scale_index];
+  double laplace_ml_scale_error_sq = laplace_ml_scale_error * laplace_ml_scale_error;
   double laplace_mml_scale_error = estimates.laplace_scale_mml - parameters.scale[scale_index];
+  double laplace_mml_scale_error_sq = laplace_mml_scale_error * laplace_mml_scale_error;
   fp << setw(10) << setprecision(3) << laplace_mean_error << "\t";
   fp << setw(10) << setprecision(3) << laplace_ml_scale_error << "\t";
+  fp << setw(10) << setprecision(3) << laplace_ml_scale_error_sq << "\t";
   fp << fixed << setw(10) << setprecision(3) << laplace_mml_scale_error << "\t";
+  fp << setw(10) << setprecision(3) << laplace_mml_scale_error_sq << "\t";
 
   // calculate the difference in msg len
   double diff_msglen;
@@ -304,8 +312,8 @@ void DataGenerator::plotPredictions(string &data_file)
   graph.label(labels);
   xrange = extremum(x);
   //yrange = extremum(predictions[0]);
-  //xrange = pair<double,double>(-10,10);
-  yrange = pair<double,double>(0,0.8);
+  xrange = pair<double,double>(-5,5);
+  yrange = pair<double,double>(0,0.7);
   graph.setRange(xrange,yrange);
   graph.sketch(data_file,predictions);
 }
@@ -328,6 +336,7 @@ Estimates DataGenerator::estimateAndPlotModel(const char *name,
 
   string file_name = getFileName(name,list.size(),scale_index);
   if (parameters.iterations == 1) {
+    printEstimates(estimates);
     writeToFile(file_name,x,fx,predictions);
     plotPredictions(file_name);
   } else {
@@ -405,35 +414,37 @@ void DataGenerator::saveErrorStatistics(struct Statistics &statistics,
  */
 void DataGenerator::plotErrors()
 {
-  for (int i=0; i<parameters.scale.size(); i++) {
-    double scale = parameters.scale[i];
-    string data_file = "errors_i_" + boost::lexical_cast<string>(parameters.iterations)
-                       + "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
-    ofstream script("results/script.plot");
-    script << "set term post eps" << endl;
-    script << "set title \"Errors in Parameter Estimation\"" <<  endl;
-    script << "set xlabel \"# of samples\"" << endl;
-    script << "set ylabel \"Scale Parameter\"" << endl;
-    script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
-    script << "set multiplot" << endl;
-    script << "plot \"results/data/" << data_file << "\" using 1:2:($3):($4) title " 
-           << "'normal ML' with errorbars lc rgb \"blue\", \\" << endl;
-    script << "\"results/data/" << data_file << "\" using 1:5:($6):($7) title " 
-           << "'normal MML' with errorbars lc rgb \"green\", \\" << endl;
-    script << "\"results/data/" << data_file << "\" using 1:8:($9):($10) title " 
-           << "'laplace ML' with errorbars lc rgb \"red\", \\" << endl;
-    script << "\"results/data/" << data_file << "\" using 1:11:($12):($13) title " 
-           << "'laplace MML' with errorbars lc rgb \"black\", \\" << endl;
-    script << "\"results/data/" << data_file << "\" using 1:2 notitle " 
-           << "with lines lc rgb \"blue\", \\" << endl;
-    script << "\"results/data/" << data_file << "\" using 1:5 notitle " 
-           << "with lines lc rgb \"green\", \\" << endl;
-    script << "\"results/data/" << data_file << "\" using 1:8 notitle " 
-           << "with lines lc rgb \"red\", \\" << endl;
-    script << "\"results/data/" << data_file << "\" using 1:11 notitle " 
-           << "with lines lc rgb \"black\"" << endl;
-    script.close();
-	  system("gnuplot -persist results/script.plot");	
+  if (parameters.samples.size() > 1) {
+    for (int i=0; i<parameters.scale.size(); i++) {
+      double scale = parameters.scale[i];
+      string data_file = "errors_i_" + boost::lexical_cast<string>(parameters.iterations)
+                         + "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
+      ofstream script("results/script.plot");
+      script << "set term post eps" << endl;
+      script << "set title \"Errors in Parameter Estimation\"" <<  endl;
+      script << "set xlabel \"# of samples\"" << endl;
+      script << "set ylabel \"Scale Parameter\"" << endl;
+      script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
+      script << "set multiplot" << endl;
+      script << "plot \"results/data/" << data_file << "\" using 1:2:($3):($4) title " 
+             << "'normal ML' with errorbars lc rgb \"blue\", \\" << endl;
+      script << "\"results/data/" << data_file << "\" using 1:5:($6):($7) title " 
+             << "'normal MML' with errorbars lc rgb \"green\", \\" << endl;
+      script << "\"results/data/" << data_file << "\" using 1:8:($9):($10) title " 
+             << "'laplace ML' with errorbars lc rgb \"red\", \\" << endl;
+      script << "\"results/data/" << data_file << "\" using 1:11:($12):($13) title " 
+             << "'laplace MML' with errorbars lc rgb \"black\", \\" << endl;
+      script << "\"results/data/" << data_file << "\" using 1:2 notitle " 
+             << "with lines lc rgb \"blue\", \\" << endl;
+      script << "\"results/data/" << data_file << "\" using 1:5 notitle " 
+             << "with lines lc rgb \"green\", \\" << endl;
+      script << "\"results/data/" << data_file << "\" using 1:8 notitle " 
+             << "with lines lc rgb \"red\", \\" << endl;
+      script << "\"results/data/" << data_file << "\" using 1:11 notitle " 
+             << "with lines lc rgb \"black\"" << endl;
+      script.close();
+      system("gnuplot -persist results/script.plot");	
+    }
   }
 }
 

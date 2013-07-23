@@ -25,8 +25,8 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
                                                         "the scale values")
        ("generate",value<string>(&parameters.distribution),
                                     "distribution used to generate the data")
-       ("estimate",value<string>(&parameters.estimate),
-                                    "distribution used to estimate the data")
+       //("estimate",value<string>(&parameters.estimate),
+       //                             "distribution used to estimate the data")
        ("iterate",value<int>(&parameters.iterations),"number of iterations")
        ("data",value<string>(&parameters.data_file),"data file")
        ("aom",value<double>(&parameters.aom),"AOM of data")
@@ -104,14 +104,14 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
            << DEFAULT_GENERATE_DISTRIBUTION << endl;
     }
 
-    if (vm.count("estimate")) {
+    /*if (vm.count("estimate")) {
       cout << "Distribution which is used to estimate the data: " 
            << parameters.estimate << endl;
     } else {
       parameters.estimate = DEFAULT_ESTIMATE_DISTRIBUTION;
       cout << "Data estimated using the default distribution: "
            << DEFAULT_ESTIMATE_DISTRIBUTION << endl;
-    }
+    }*/
 
     cout << "Samples: ";
     for (int i=0; i<parameters.samples.size(); i++) {
@@ -199,10 +199,12 @@ void fitData(struct Parameters &parameters)
  */
 void printEstimates(struct Estimates &estimates)
 {
+  cout << "\n*** NORMAL ESTIMATES ***" << endl;
   cout << "normal_mean: " << estimates.normal_mean << endl;
   cout << "normal_sigma_ml: " << estimates.normal_sigma_ml << endl;
   cout << "normal_sigma_mml: " << estimates.normal_sigma_mml << endl;
   cout << "normal_msglen: " << estimates.normal_msglen << endl;
+  cout << "\n*** LAPLACE ESTIMATES ***" << endl;
   cout << "laplace_mean: " << estimates.laplace_mean << endl;
   cout << "laplace_scale_ml: " << estimates.laplace_scale_ml << endl;
   cout << "laplace_scale_mml: " << estimates.laplace_scale_mml << endl;
