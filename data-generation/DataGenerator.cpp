@@ -376,9 +376,9 @@ void DataGenerator::plotMessageLength(const char *name, int num_samples,
   graph.label(labels);
   //xrange = extremum(x);
   //yrange = extremum(predictions[0]);
-  //xrange = pair<double,double>(1,101);
-  //yrange = pair<double,double>(6400,6900);
-  //graph.setRange(xrange,yrange);
+  xrange = pair<double,double>(1,101);
+  yrange = pair<double,double>(5900,6400);
+  graph.setRange(xrange,yrange);
   graph.sketchStatistics(file_name);
 }
 
@@ -389,13 +389,13 @@ void DataGenerator::plotMessageLength(const char *name, int num_samples,
  *  \param sample_index an integer
  *  \param scale_index an integer
  */
-void DataGenerator::saveErrorStatistics(struct Statistics &statistics,
+void DataGenerator::saveErrorStatistics(const char *name, struct Statistics &statistics,
                                         int iterations, int sample_index,
                                         int scale_index)
 {
   double scale = parameters.scale[scale_index];
   string file_name = "results/data/";
-  file_name += "errors_i_" + boost::lexical_cast<string>(iterations) + 
+  file_name += "errors_" + string(name) + "_i_" + boost::lexical_cast<string>(iterations) + 
                "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
   ofstream file(file_name.c_str(),ios::app);
   file << fixed << setw(10) << parameters.samples[sample_index];
@@ -411,38 +411,52 @@ void DataGenerator::saveErrorStatistics(struct Statistics &statistics,
 
 /*!
  *  \brief This method plots the errors in parameter estimates.
+ *  \param name a pointer to a char
  */
-void DataGenerator::plotErrors()
+void DataGenerator::plotErrors(const char *name)
 {
   if (parameters.samples.size() > 1) {
     for (int i=0; i<parameters.scale.size(); i++) {
       double scale = parameters.scale[i];
-      string data_file = "errors_i_" + boost::lexical_cast<string>(parameters.iterations)
+      string data_file = "errors_" + string(name) + "_i_" + 
+                         boost::lexical_cast<string>(parameters.iterations)
                          + "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
       ofstream script("results/script.plot");
       script << "set term post eps" << endl;
       script << "set title \"Errors in Parameter Estimation\"" <<  endl;
       script << "set xlabel \"# of samples\"" << endl;
       script << "set ylabel \"Scale Parameter\"" << endl;
-      script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
+      script << "set xr [0:" << parameters.samples[parameters.samples.size()-1]+10 << "]" << endl;
+      script << "set output \"results/plots/" << data_file << ".normal_est.eps\"" << endl;
       script << "set multiplot" << endl;
       script << "plot \"results/data/" << data_file << "\" using 1:2:($3):($4) title " 
-             << "'normal ML' with errorbars lc rgb \"blue\", \\" << endl;
+             << "'ML estimate' with errorbars lc rgb \"blue\", \\" << endl;
       script << "\"results/data/" << data_file << "\" using 1:5:($6):($7) title " 
-             << "'normal MML' with errorbars lc rgb \"green\", \\" << endl;
-      script << "\"results/data/" << data_file << "\" using 1:8:($9):($10) title " 
-             << "'laplace ML' with errorbars lc rgb \"red\", \\" << endl;
-      script << "\"results/data/" << data_file << "\" using 1:11:($12):($13) title " 
-             << "'laplace MML' with errorbars lc rgb \"black\", \\" << endl;
+             << "'MML estimate' with errorbars lc rgb \"red\", \\" << endl;
       script << "\"results/data/" << data_file << "\" using 1:2 notitle " 
              << "with lines lc rgb \"blue\", \\" << endl;
       script << "\"results/data/" << data_file << "\" using 1:5 notitle " 
-             << "with lines lc rgb \"green\", \\" << endl;
-      script << "\"results/data/" << data_file << "\" using 1:8 notitle " 
-             << "with lines lc rgb \"red\", \\" << endl;
-      script << "\"results/data/" << data_file << "\" using 1:11 notitle " 
-             << "with lines lc rgb \"black\"" << endl;
+             << "with lines lc rgb \"red\"" << endl;
       script.close();
+      system("gnuplot -persist results/script.plot");	
+
+      ofstream script2("results/script.plot");
+      script2 << "set term post eps" << endl;
+      script2 << "set title \"Errors in Parameter Estimation\"" <<  endl;
+      script2 << "set xlabel \"# of samples\"" << endl;
+      script2 << "set ylabel \"Scale Parameter\"" << endl;
+      script2 << "set xr [0:" << parameters.samples[parameters.samples.size()-1]+10 << "]" << endl;
+      script2 << "set output \"results/plots/" << data_file << ".laplace_est.eps\"" << endl;
+      script2 << "set multiplot" << endl;
+      script2 << "plot \"results/data/" << data_file << "\" using 1:8:($9):($10) title " 
+             << "'ML estimate' with errorbars lc rgb \"blue\", \\" << endl;
+      script2 << "\"results/data/" << data_file << "\" using 1:11:($12):($13) title " 
+             << "'MML estimate' with errorbars lc rgb \"red\"" << endl;
+      /*script2 << "\"results/data/" << data_file << "\" using 1:8 notitle " 
+             << "with lines lc rgb \"blue\", \\" << endl;
+      script2 << "\"results/data/" << data_file << "\" using 1:11 notitle " 
+             << "with lines lc rgb \"red\"" << endl;*/
+      script2.close();
       system("gnuplot -persist results/script.plot");	
     }
   }

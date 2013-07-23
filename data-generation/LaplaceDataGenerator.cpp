@@ -76,11 +76,11 @@ void LaplaceDataGenerator::simulate()
       cout << outcomes[1] << ":" << outcomes[2] << endl;
       if (parameters.iterations > 1) {
         plotMessageLength("laplace",list.size(),j);
-        saveErrorStatistics(statistics,parameters.iterations,i,j);
+        saveErrorStatistics("laplace",statistics,parameters.iterations,i,j);
       }
     }
   }
-  plotErrors();
+  plotErrors("laplace");
 }
 
 /*!

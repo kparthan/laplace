@@ -35,7 +35,7 @@ class DataGenerator
     void plotMessageLength(const char *, int, int);
 
     //! Plots the errors in parameter estimates
-    void plotErrors();
+    void plotErrors(const char *);
 
     //! Compute the corresponding function values
     virtual vector<double> computeFunctionValues(vector<double> &){}
@@ -84,7 +84,7 @@ class DataGenerator
     void updateStatistics(int, struct Estimates &, struct Statistics &);
 
     //! Saves the statistics to a file
-    void saveErrorStatistics(struct Statistics &, int, int, int);
+    void saveErrorStatistics(const char *, struct Statistics &, int, int, int);
 
     //! Outputs the predictions to a file
     void writeToFile(string &, vector<double> &, vector<double> &, 

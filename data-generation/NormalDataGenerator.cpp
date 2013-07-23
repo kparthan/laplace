@@ -90,11 +90,11 @@ void NormalDataGenerator::simulate()
       cout << outcomes[1] << ":" << outcomes[2] << endl;
       if (parameters.iterations > 1) {
         plotMessageLength("normal",list.size(),j);
-        saveErrorStatistics(statistics,parameters.iterations,i,j);
+        saveErrorStatistics("normal",statistics,parameters.iterations,i,j);
       }
     }
   }
-  plotErrors();
+  plotErrors("normal");
 }
 
 /*!
