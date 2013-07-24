@@ -182,12 +182,12 @@ void fitData(struct Parameters &parameters)
     DataGenerator data;
     vector<double> sorted = data.sort(x);
     vector<double> y = data.modifyDataToAOM(sorted,parameters.aom);
-    if (parameters.print == SET) {
+    /*if (parameters.print == SET) {
       for (int i=0; i<y.size(); i++) {
         cout << y[i] << " ";
       }
       cout << endl;
-    }
+    }*/
     struct Estimates estimates = data.mmlEstimate(y,parameters.aom);
     printEstimates(estimates);
   }

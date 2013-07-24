@@ -84,7 +84,7 @@ void NormalDataGenerator::simulate()
         list = modifyDataToAOM(data,parameters.aom);
         Estimates estimates = estimateAndPlotModel("normal",list,j);
         outcomes[estimates.winner]++;
-        updateStatistics(n,estimates,statistics);
+        updateStatistics(n,j,estimates,statistics);
       }
       cout << "N:L:D = " << outcomes[0] << ":";
       cout << outcomes[1] << ":" << outcomes[2] << endl;

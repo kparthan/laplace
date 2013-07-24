@@ -81,7 +81,7 @@ class DataGenerator
     void updateResults(string &, int, int, struct Estimates &);
 
     //! Updates the statistics over iterations
-    void updateStatistics(int, struct Estimates &, struct Statistics &);
+    void updateStatistics(int, int, struct Estimates &, struct Statistics &);
 
     //! Saves the statistics to a file
     void saveErrorStatistics(const char *, struct Statistics &, int, int, int);

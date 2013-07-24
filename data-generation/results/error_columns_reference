@@ -2,12 +2,16 @@ num_samples
 avg_estimate_normal_sigma_ml;
 min_estimate_normal_sigma_ml;
 max_estimate_normal_sigma_ml;
+avg_error_normal_sigma_ml;
 avg_estimate_normal_sigma_mml;
 min_estimate_normal_sigma_mml;
 max_estimate_normal_sigma_mml;
+avg_error_normal_sigma_mml;
 avg_estimate_laplace_scale_ml;
 min_estimate_laplace_scale_ml;
 max_estimate_laplace_scale_ml;
+avg_error_laplace_sigma_ml;
 avg_estimate_laplace_scale_mml;
 min_estimate_laplace_scale_mml;
 max_estimate_laplace_scale_mml;
+avg_error_laplace_sigma_mml;
