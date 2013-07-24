@@ -6,6 +6,9 @@ int main(int argc, char *argv[])
   string line;
   vector<double> numbers;
 
+  int p = atoi(argv[1]);
+  //cout << "Precision: " << p << endl;
+
   while(getline(file,line)) {
     boost::char_separator<char> sep(", ");
     boost::tokenizer<boost::char_separator<char> > tokens(line,sep);
@@ -20,8 +23,8 @@ int main(int argc, char *argv[])
 
   ofstream log_file("test/ball_bearings_log");
   for (int i=0; i<numbers.size(); i++) {
-    //log_file << fixed << setw(10) << setprecision(2) << log(numbers[i]) << endl;
-    log_file << log(numbers[i]) << endl;
+    //cout << numbers[i] << " " << log(numbers[i]) << endl;
+    log_file << fixed << setw(10) << setprecision(p) << log(numbers[i]) << endl;
   }
   log_file.close();
   file.close();
