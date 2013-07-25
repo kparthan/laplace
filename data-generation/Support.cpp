@@ -25,8 +25,6 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
                                                         "the scale values")
        ("generate",value<string>(&parameters.distribution),
                                     "distribution used to generate the data")
-       //("estimate",value<string>(&parameters.estimate),
-       //                             "distribution used to estimate the data")
        ("iterate",value<int>(&parameters.iterations),"number of iterations")
        ("data",value<string>(&parameters.data_file),"data file")
        ("aom",value<double>(&parameters.aom),"AOM of data")
@@ -177,6 +175,9 @@ void fitData(struct Parameters &parameters)
       cout << "Distribution unknown ..." << endl;
       exit(1);
     }
+    analyzeScale();
+    analyzeVarianceScale();
+    analyzeDiffMsglen();
   } else if (parameters.generate == UNSET) {  // data file provided
     vector<double> x = parseFile(parameters.data_file);
     DataGenerator data;
@@ -188,7 +189,7 @@ void fitData(struct Parameters &parameters)
       }
       cout << endl;
     }*/
-    struct Estimates estimates = data.mmlEstimate(y,parameters.aom);
+    struct Estimates estimates = data.parameterEstimation(y,parameters.aom);
     printEstimates(estimates);
   }
 }
@@ -201,8 +202,8 @@ void printEstimates(struct Estimates &estimates)
 {
   cout << "\n*** NORMAL ESTIMATES ***" << endl;
   cout << "normal_mean: " << estimates.normal_mean << endl;
-  cout << "normal_sigma_ml: " << estimates.normal_sigma_ml << endl;
-  cout << "normal_sigma_mml: " << estimates.normal_sigma_mml << endl;
+  cout << "normal_scale_ml: " << estimates.normal_scale_ml << endl;
+  cout << "normal_scale_mml: " << estimates.normal_scale_mml << endl;
   cout << "normal_msglen: " << estimates.normal_msglen << endl;
   cout << "\n*** LAPLACE ESTIMATES ***" << endl;
   cout << "laplace_mean: " << estimates.laplace_mean << endl;

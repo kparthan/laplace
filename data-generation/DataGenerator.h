@@ -41,7 +41,7 @@ class DataGenerator
     virtual vector<double> computeFunctionValues(vector<double> &){}
 
     //! Predict using the estimates
-    vector<vector<double>> predict(vector<double> &, struct Estimates &);
+    void predict(vector<double> &, struct Estimates &);
 
     //! Sort the elements in the list
     vector<double> sort(vector<double> &);
@@ -50,7 +50,7 @@ class DataGenerator
     void plotPredictions(string &); 
 
     //! MML estimates
-    struct Estimates mmlEstimate(vector<double> &, double);
+    struct Estimates parameterEstimation(vector<double> &, double);
 
   protected:
     //! Distribution type
@@ -60,13 +60,13 @@ class DataGenerator
     struct Parameters parameters;
 
     //! Error statistics
-    struct Statistics statistics;
+    //struct Statistics statistics;
 
     //! Random samples generated
     vector<double> x,fx;
 
     //! List of predictions
-    vector<vector<double>> predictions;
+    vector<vector<double>> predictions_ml,predictions_mml;
 
     //! Quciksort algorithm
     void quicksort(vector<double> &, vector<int> &, int, int);
@@ -81,15 +81,17 @@ class DataGenerator
     void updateResults(string &, int, int, struct Estimates &);
 
     //! Updates the statistics over iterations
-    void updateStatistics(int, int, struct Estimates &, struct Statistics &);
+    //void updateStatistics(int, int, struct Estimates &, struct Statistics &);
 
     //! Saves the statistics to a file
-    void saveErrorStatistics(const char *, struct Statistics &, int, int, int);
+    //void saveErrorStatistics(const char *, struct Statistics &, int, int, int);
 
     //! Outputs the predictions to a file
     void writeToFile(string &, vector<double> &, vector<double> &, 
                      vector<vector<double>> &);
 
+    //!
+    vector<double> logLikelihood(vector<vector<double>> &);
 };
 
 #endif

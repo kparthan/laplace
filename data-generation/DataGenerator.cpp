@@ -123,6 +123,7 @@ string DataGenerator::getFileName(const char *name, int num_samples,
   file += "_mean_" + boost::lexical_cast<string>(mean);
   double scale = parameters.scale[scale_index];
   file += "_scale_" + boost::lexical_cast<string>(scale).substr(0,3);
+  file += "_iter_" + boost::lexical_cast<string>(parameters.iterations);
   //cout << file << endl;
   return file;
 }
@@ -139,15 +140,11 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
 {
   string file = "results/data/statistics_" + file_name; 
   ofstream fp(file.c_str(),ios::app);
-  /*fp << setw(10) << num_samples << "\t";
-  fp << setw(5) << setprecision(3) << parameters.mean << "\t";
-  fp << setw(5) << setprecision(3) << parameters.scale[scale_index] << "\t";
-  fp << setw(10) << parameters.distribution << "\t";*/
 
   // print normal estimates
   fp << setw(10) << setprecision(3) << estimates.normal_mean << "\t";
-  fp << setw(10) << setprecision(3) << estimates.normal_sigma_ml << "\t";
-  fp << setw(10) << setprecision(3) << estimates.normal_sigma_mml << "\t";
+  fp << setw(10) << setprecision(3) << estimates.normal_scale_ml << "\t";
+  fp << setw(10) << setprecision(3) << estimates.normal_scale_mml << "\t";
   fp << fixed << setw(10) << setprecision(3) << estimates.normal_msglen << "\t";
 
   // print laplace estimates
@@ -167,10 +164,10 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
 
   /*  error = estimate - true */
   // print difference in normal estimates
-  double normal_mean_error = estimates.normal_mean - parameters.mean; 
-  double normal_ml_sigma_error = estimates.normal_sigma_ml - parameters.scale[scale_index];
+  /*double normal_mean_error = estimates.normal_mean - parameters.mean; 
+  double normal_ml_sigma_error = estimates.normal_scale_ml - parameters.scale[scale_index];
   double normal_ml_sigma_error_sq = normal_ml_sigma_error * normal_ml_sigma_error;
-  double normal_mml_sigma_error = estimates.normal_sigma_mml - parameters.scale[scale_index];
+  double normal_mml_sigma_error = estimates.normal_scale_mml - parameters.scale[scale_index];
   double normal_mml_sigma_error_sq = normal_mml_sigma_error * normal_mml_sigma_error;
   fp << setw(10) << setprecision(3) << normal_mean_error << "\t";
   fp << setw(10) << setprecision(3) << normal_ml_sigma_error << "\t";
@@ -188,10 +185,10 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   fp << setw(10) << setprecision(3) << laplace_ml_scale_error << "\t";
   fp << setw(10) << setprecision(3) << laplace_ml_scale_error_sq << "\t";
   fp << fixed << setw(10) << setprecision(3) << laplace_mml_scale_error << "\t";
-  fp << setw(10) << setprecision(3) << laplace_mml_scale_error_sq << "\t";
+  fp << setw(10) << setprecision(3) << laplace_mml_scale_error_sq << "\t";*/
 
   // calculate the difference in msg len
-  double diff_msglen;
+  /*double diff_msglen;
   if (type == LAPLACE) {
     diff_msglen = estimates.normal_msglen - estimates.laplace_msglen;
   } else if (type == NORMAL) {
@@ -199,7 +196,7 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   }
   fp << fixed << setw(10) << setprecision(3) << diff_msglen << "\t";
   fp << endl;
-  fp.close();
+  fp.close();*/
 }
 
 /*!
@@ -208,24 +205,24 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
  *  \param estimates a reference to a struct Estimates
  *  \param statistics a reference to a struct Statistics
  */
-void DataGenerator::updateStatistics(int n, int scale_index, struct Estimates &estimates,
+/*void DataGenerator::updateStatistics(int n, int scale_index, struct Estimates &estimates,
                                      struct Statistics &statistics)
 {
   double scale = parameters.scale[scale_index];
   double sum,residual,error;
   if (n == 1) {
     // normal
-    statistics.normal_sigma = vector<double>(8,0);
-    statistics.normal_sigma[0] = estimates.normal_sigma_ml;
-    statistics.normal_sigma[1] = estimates.normal_sigma_ml;
-    statistics.normal_sigma[2] = estimates.normal_sigma_ml;
-    residual = estimates.normal_sigma_ml - scale;
-    statistics.normal_sigma[3] = residual * residual;
-    statistics.normal_sigma[4] = estimates.normal_sigma_mml;
-    statistics.normal_sigma[5] = estimates.normal_sigma_mml;
-    statistics.normal_sigma[6] = estimates.normal_sigma_mml;
-    residual = estimates.normal_sigma_mml - scale;
-    statistics.normal_sigma[7] = residual * residual;
+    statistics.normal_scale = vector<double>(8,0);
+    statistics.normal_scale[0] = estimates.normal_scale_ml;
+    statistics.normal_scale[1] = estimates.normal_scale_ml;
+    statistics.normal_scale[2] = estimates.normal_scale_ml;
+    residual = estimates.normal_scale_ml - scale;
+    statistics.normal_scale[3] = residual * residual;
+    statistics.normal_scale[4] = estimates.normal_scale_mml;
+    statistics.normal_scale[5] = estimates.normal_scale_mml;
+    statistics.normal_scale[6] = estimates.normal_scale_mml;
+    residual = estimates.normal_scale_mml - scale;
+    statistics.normal_scale[7] = residual * residual;
     // laplace
     statistics.laplace_scale = vector<double>(8,0);
     statistics.laplace_scale[0] = estimates.laplace_scale_ml;
@@ -242,37 +239,37 @@ void DataGenerator::updateStatistics(int n, int scale_index, struct Estimates &e
     // update normal statistics
     {
       // update ML average
-      sum = (n-1) * statistics.normal_sigma[0];
-      statistics.normal_sigma[0] = (sum + estimates.normal_sigma_ml) / n;
+      sum = (n-1) * statistics.normal_scale[0];
+      statistics.normal_scale[0] = (sum + estimates.normal_scale_ml) / n;
       // update ML min
-      if (statistics.normal_sigma[1] > estimates.normal_sigma_ml) {
-        statistics.normal_sigma[1] = estimates.normal_sigma_ml;
+      if (statistics.normal_scale[1] > estimates.normal_scale_ml) {
+        statistics.normal_scale[1] = estimates.normal_scale_ml;
       }
       // update ML max
-      if (statistics.normal_sigma[2] < estimates.normal_sigma_ml) {
-        statistics.normal_sigma[2] = estimates.normal_sigma_ml;
+      if (statistics.normal_scale[2] < estimates.normal_scale_ml) {
+        statistics.normal_scale[2] = estimates.normal_scale_ml;
       }
       // update ML error
-      sum = (n-1) * statistics.normal_sigma[3];
-      residual = estimates.normal_sigma_ml - scale;
+      sum = (n-1) * statistics.normal_scale[3];
+      residual = estimates.normal_scale_ml - scale;
       error = residual * residual;
-      statistics.normal_sigma[3] = (sum+error)/n;
+      statistics.normal_scale[3] = (sum+error)/n;
       // update MML average
-      sum = (n-1) * statistics.normal_sigma[4];
-      statistics.normal_sigma[4] = (sum + estimates.normal_sigma_mml) / n;
+      sum = (n-1) * statistics.normal_scale[4];
+      statistics.normal_scale[4] = (sum + estimates.normal_scale_mml) / n;
       // update MML min
-      if (statistics.normal_sigma[5] > estimates.normal_sigma_mml) {
-        statistics.normal_sigma[5] = estimates.normal_sigma_mml;
+      if (statistics.normal_scale[5] > estimates.normal_scale_mml) {
+        statistics.normal_scale[5] = estimates.normal_scale_mml;
       }
       // update MML max
-      if (statistics.normal_sigma[6] < estimates.normal_sigma_mml) {
-        statistics.normal_sigma[6] = estimates.normal_sigma_mml;
+      if (statistics.normal_scale[6] < estimates.normal_scale_mml) {
+        statistics.normal_scale[6] = estimates.normal_scale_mml;
       }
       // update MML error
-      sum = (n-1) * statistics.normal_sigma[7];
-      residual = estimates.normal_sigma_mml - scale;
+      sum = (n-1) * statistics.normal_scale[7];
+      residual = estimates.normal_scale_mml - scale;
       error = residual * residual;
-      statistics.normal_sigma[7] = (sum+error)/n;
+      statistics.normal_scale[7] = (sum+error)/n;
     }
     // update laplace statistics
     {
@@ -310,7 +307,7 @@ void DataGenerator::updateStatistics(int n, int scale_index, struct Estimates &e
       statistics.laplace_scale[7] = (sum+error)/n;
     }
   }
-}
+}*/
 
 /*!
  *  \brief This function outputs the predictions to a file.
@@ -352,7 +349,7 @@ void DataGenerator::plotPredictions(string &data_file)
   xrange = pair<double,double>(-5,5);
   yrange = pair<double,double>(0,0.7);
   graph.setRange(xrange,yrange);
-  graph.sketch(data_file,predictions);
+  graph.sketch(data_file,predictions_mml);
 }
 
 /*!
@@ -368,25 +365,29 @@ Estimates DataGenerator::estimateAndPlotModel(const char *name,
 {
   x = sort(list);
   fx = computeFunctionValues(x);
-  struct Estimates estimates = mmlEstimate(x,parameters.aom);
-  predictions = predict(x,estimates);
+  struct Estimates estimates = parameterEstimation(x,parameters.aom);
+  predict(x,estimates);
+
+  vector<double> likelihood = logLikelihood(predictions_ml);
+  estimates.normal_likelihood = likelihood[0];
+  estimates.laplace_likelihood = likelihood[1];
+  if (estimates.normal_likelihood > estimates.laplace_likelihood) {
+    estimates.winner_ml = NORMAL;
+  } else {
+    estimates.winner_ml = LAPLACE;
+  }
 
   string file_name = getFileName(name,list.size(),scale_index);
   if (parameters.iterations == 1) {
     printEstimates(estimates);
-    writeToFile(file_name,x,fx,predictions);
+    writeToFile(file_name,x,fx,predictions_mml);
     plotPredictions(file_name);
   } else {
     updateResults(file_name,list.size(),scale_index,estimates);
   }
 
-  if (estimates.normal_msglen < estimates.laplace_msglen) {
-    estimates.winner = NORMAL; // normal wins
-  } else if (estimates.normal_msglen > estimates.laplace_msglen) {
-    estimates.winner = LAPLACE; // laplace wins
-  } else {
-    estimates.winner = DEFAULT; // draw
-  }
+  predictions_ml[0].clear();predictions_ml[1].clear();predictions_ml.clear();
+  predictions_mml[0].clear();predictions_mml[1].clear();predictions_mml.clear();
   return estimates;
 }
 
@@ -426,7 +427,7 @@ void DataGenerator::plotMessageLength(const char *name, int num_samples,
  *  \param sample_index an integer
  *  \param scale_index an integer
  */
-void DataGenerator::saveErrorStatistics(const char *name, struct Statistics &statistics,
+/*void DataGenerator::saveErrorStatistics(const char *name, struct Statistics &statistics,
                                         int iterations, int sample_index,
                                         int scale_index)
 {
@@ -437,8 +438,8 @@ void DataGenerator::saveErrorStatistics(const char *name, struct Statistics &sta
                "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
   ofstream file(file_name.c_str(),ios::app);
   file << fixed << setw(10) << num_samples; 
-  for (int i=0; i<statistics.normal_sigma.size(); i++) {
-    file << fixed << setw(10) << setprecision(5) << statistics.normal_sigma[i];
+  for (int i=0; i<statistics.normal_scale.size(); i++) {
+    file << fixed << setw(10) << setprecision(5) << statistics.normal_scale[i];
   }
   for (int i=0; i<statistics.laplace_scale.size(); i++) {
     file << fixed << setw(10) << setprecision(5) << statistics.laplace_scale[i];
@@ -450,13 +451,13 @@ void DataGenerator::saveErrorStatistics(const char *name, struct Statistics &sta
   file << fixed << setw(10) << setprecision(5) << expectation;
   file << endl;
   file.close();
-}
+}*/
 
 /*!
  *  \brief This method plots the errors in parameter estimates.
  *  \param name a pointer to a char
  */
-void DataGenerator::plotErrors(const char *name)
+/*void DataGenerator::plotErrors(const char *name)
 {
   if (parameters.samples.size() > 1) {
     for (int i=0; i<parameters.scale.size(); i++) {
@@ -505,7 +506,7 @@ void DataGenerator::plotErrors(const char *name)
       system("gnuplot -persist results/script.plot");	
     }
   }
-}
+}*/
 
 /*!
  *  \brief This function predicts the distribution with respect to the
@@ -514,22 +515,30 @@ void DataGenerator::plotErrors(const char *name)
  *  \param estimates a reference to a struct Estimates
  *  \return the list of estimated values
  */
-vector<vector<double>> DataGenerator::predict(vector<double> &x, 
+void DataGenerator::predict(vector<double> &x, 
                                       struct Estimates &estimates)
 {
-  vector<vector<double>> y;
+  vector<double> y;
 
   // Estimate values using Normal distribution
-  NormalDataGenerator normal(estimates.normal_mean,estimates.normal_sigma_mml);
-  vector<double> y0 = normal.computeFunctionValues(x);
-  y.push_back(y0);
+  // ML
+  NormalDataGenerator normal_ml(estimates.normal_mean,estimates.normal_scale_ml);
+  y = normal_ml.computeFunctionValues(x);
+  predictions_ml.push_back(y);
+  // MML
+  NormalDataGenerator normal_mml(estimates.normal_mean,estimates.normal_scale_mml);
+  y = normal_mml.computeFunctionValues(x);
+  predictions_mml.push_back(y);
 
   // Estimate values using Laplace distribution
-  LaplaceDataGenerator laplace(estimates.laplace_mean,estimates.laplace_scale_mml);
-  vector<double> y1 = laplace.computeFunctionValues(x);
-  y.push_back(y1);
-
-  return y;
+  // ML
+  LaplaceDataGenerator laplace_ml(estimates.laplace_mean,estimates.laplace_scale_ml);
+  y = laplace_ml.computeFunctionValues(x);
+  predictions_ml.push_back(y);
+  // MML
+  LaplaceDataGenerator laplace_mml(estimates.laplace_mean,estimates.laplace_scale_mml);
+  y = laplace_mml.computeFunctionValues(x);
+  predictions_mml.push_back(y);
 }
 
 /*!
@@ -539,7 +548,7 @@ vector<vector<double>> DataGenerator::predict(vector<double> &x,
  *  \return the MML estimates of the parameters and the corresponding
  *  message length
  */
-struct Estimates DataGenerator::mmlEstimate(vector<double> &x, double aom)
+struct Estimates DataGenerator::parameterEstimation(vector<double> &x, double aom)
 {
   Message message(x,aom);
   message.estimateParameters();
@@ -549,13 +558,9 @@ struct Estimates DataGenerator::mmlEstimate(vector<double> &x, double aom)
   //cout << "*** NORMAL ***" << endl;
   vector<double> normalEstimates = message.getNormalEstimates();
   estimates.normal_mean = normalEstimates[0];
-  estimates.normal_sigma_ml = normalEstimates[1];
-  estimates.normal_sigma_mml = normalEstimates[2];
+  estimates.normal_scale_ml = normalEstimates[1];
+  estimates.normal_scale_mml = normalEstimates[2];
   estimates.normal_msglen = message.encodeUsingNormalModel();
-  /*cout << "\tMean: " << estimates.normal_mean << endl;
-  cout << "\tSigma: " << estimates.normal_sigma << endl;
-  cout << "\tMessage length: " << estimates.normal_msglen << endl;
-  cout << endl;*/
 
   // Laplace estimates
   //cout << "*** LAPLACE ***" << endl;
@@ -564,11 +569,30 @@ struct Estimates DataGenerator::mmlEstimate(vector<double> &x, double aom)
   estimates.laplace_scale_ml = laplaceEstimates[1];
   estimates.laplace_scale_mml = laplaceEstimates[2];
   estimates.laplace_msglen = message.encodeUsingLaplaceModel();
-  /*cout << "\tMean: " << estimates.laplace_mean << endl;
-  cout << "\tScale: " << estimates.laplace_scale << endl;
-  cout << "\tMessage length: " << estimates.laplace_msglen << endl;
-  cout << endl;*/
+
+  if (estimates.normal_msglen < estimates.laplace_msglen) {
+    estimates.winner_mml = NORMAL; // normal wins
+  } else if (estimates.normal_msglen > estimates.laplace_msglen) {
+    estimates.winner_mml = LAPLACE; // laplace wins
+  } else {
+    estimates.winner_mml = DEFAULT; // draw
+  }
 
   return estimates;
+}
+
+/*!
+ *
+ */
+vector<double> DataGenerator::logLikelihood(vector<vector<double>> &y)
+{
+  vector<double> likelihood(2,0);
+  for (int i=0; i<y.size(); i++) {
+    for (int j=0; j<y[i].size(); j++) {
+      double value = y[i][j];
+      likelihood[i] += log(value);
+    }
+  }
+  return likelihood;
 }
 

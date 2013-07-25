@@ -11,7 +11,6 @@ struct Parameters
   double mean;
   vector<double> scale;
   string distribution;
-  //string estimate;
   int iterations;
   string data_file;
   double aom;
@@ -19,26 +18,31 @@ struct Parameters
 
 struct Estimates
 {
-  int winner;
+  int winner_ml;
+  int winner_mml;
+  // Normal estimates
   double normal_mean;
-  double normal_sigma_ml;
-  double normal_sigma_mml;
+  double normal_scale_ml;
+  double normal_scale_mml;
+  double normal_likelihood;
   double normal_msglen;
+  // Laplace estimates
   double laplace_mean;
   double laplace_scale_ml;
   double laplace_scale_mml;
+  double laplace_likelihood;
   double laplace_msglen;
 };
 
-struct Statistics
+/*struct Statistics
 {
-  vector<double> normal_sigma;
-    //normal_sigma[0] avg_normal_sigma_ml;
-    //normal_sigma[1] min_normal_sigma_ml;
-    //normal_sigma[2] max_normal_sigma_ml;
-    //normal_sigma[3] avg_normal_sigma_mml;
-    //normal_sigma[4] min_normal_sigma_mml;
-    //normal_sigma[5] max_normal_sigma_mml;
+  vector<double> normal_scale;
+    //normal_scale[0] avg_normal_scale_ml;
+    //normal_scale[1] min_normal_scale_ml;
+    //normal_scale[2] max_normal_scale_ml;
+    //normal_scale[3] avg_normal_scale_mml;
+    //normal_scale[4] min_normal_scale_mml;
+    //normal_scale[5] max_normal_scale_mml;
   vector<double> laplace_scale;
     //laplace_sigma[0] avg_laplace_sigma_ml;
     //laplace_sigma[1] min_laplace_sigma_ml;
@@ -46,7 +50,7 @@ struct Statistics
     //laplace_sigma[3] avg_laplace_sigma_mml;
     //laplace_sigma[4] min_laplace_sigma_mml;
     //laplace_sigma[5] max_laplace_sigma_mml;
-};
+};*/
 
 vector<double> parseFile(string &);
 void printEstimates(struct Estimates &);

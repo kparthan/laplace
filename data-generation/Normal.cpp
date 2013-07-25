@@ -55,7 +55,7 @@ const double Normal::standardDeviation(void)
 double Normal::value(double x)
 {
 	double expNumerator = (-1) * (x-mu) * (x-mu);
-	double expDenominator = 2 * sigma * sigma;
+	double expDenominator = (double)2 * sigma * sigma;
 	return (exp (expNumerator/expDenominator)) / ((sqrt(2*PI)) * sigma);
 }
 

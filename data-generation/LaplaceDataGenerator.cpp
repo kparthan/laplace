@@ -60,7 +60,8 @@ void LaplaceDataGenerator::simulate()
   for (int i=0; i<parameters.samples.size(); i++) {
     for (int j=0; j<parameters.scale.size(); j++) {
       vector<double> list;  
-      int outcomes[3] = {0};
+      int mml_outcomes[3] = {0};
+      int ml_outcomes[3] = {0};
       struct Statistics statistics;
       for(int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
@@ -68,19 +69,22 @@ void LaplaceDataGenerator::simulate()
         laplace = Laplace(mean,scale);
         vector<double> data = generateRandom(parameters.samples[i]);
         list = modifyDataToAOM(data,parameters.aom);
-        Estimates estimates = estimateAndPlotModel("laplace",list,j);
-        outcomes[estimates.winner]++;
-        updateStatistics(n,j,estimates,statistics);
+        struct Estimates estimates = estimateAndPlotModel("laplace",list,j);
+        mml_outcomes[estimates.winner_mml]++;
+        ml_outcomes[estimates.winner_ml]++;
+        //updateStatistics(n,j,estimates,statistics);
       }
-      cout << "N:L:D = " << outcomes[0] << ":";
-      cout << outcomes[1] << ":" << outcomes[2] << endl;
-      if (parameters.iterations > 1) {
+      cout << "N:L:D  [ML] = " << ml_outcomes[0] << ":";
+      cout << ml_outcomes[1] << ":" << ml_outcomes[2] << " -- ";
+      cout << " [MML] = " << mml_outcomes[0] << ":";
+      cout << mml_outcomes[1] << ":" << mml_outcomes[2] << endl;
+      /*if (parameters.iterations > 1) {
         plotMessageLength("laplace",list.size(),j);
         saveErrorStatistics("laplace",statistics,parameters.iterations,i,j);
-      }
+      }*/
     }
   }
-  plotErrors("laplace");
+  //plotErrors("laplace");
 }
 
 /*!
