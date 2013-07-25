@@ -145,15 +145,24 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   fp << setw(10) << setprecision(3) << estimates.normal_mean << "\t";
   fp << setw(10) << setprecision(3) << estimates.normal_scale_ml << "\t";
   fp << setw(10) << setprecision(3) << estimates.normal_scale_mml << "\t";
+  fp << fixed << setw(10) << setprecision(3) << estimates.normal_likelihood << "\t";
   fp << fixed << setw(10) << setprecision(3) << estimates.normal_msglen << "\t";
 
   // print laplace estimates
   fp << setw(10) << setprecision(3) << estimates.laplace_mean << "\t";
   fp << setw(10) << setprecision(3) << estimates.laplace_scale_ml << "\t";
   fp << setw(10) << setprecision(3) << estimates.laplace_scale_mml << "\t";
+  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_likelihood << "\t";
   fp << fixed << setw(10) << setprecision(3) << estimates.laplace_msglen << "\t";
 
-  // print winner
+  // print ML winner
+  if (estimates.normal_likelihood > estimates.laplace_likelihood) {
+    fp << setw(10) << "Normal ";
+  } else if (estimates.normal_msglen > estimates.laplace_msglen) {
+    fp << setw(10) << "Laplace ";
+  }
+
+  // print MML winner
   if (estimates.normal_msglen < estimates.laplace_msglen) {
     fp << setw(10) << "Normal";
   } else if (estimates.normal_msglen > estimates.laplace_msglen) {
@@ -162,6 +171,7 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
     fp << setw(10) << "Draw";
   }
 
+  cout << endl;
   /*  error = estimate - true */
   // print difference in normal estimates
   /*double normal_mean_error = estimates.normal_mean - parameters.mean; 

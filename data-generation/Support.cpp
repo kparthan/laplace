@@ -175,9 +175,9 @@ void fitData(struct Parameters &parameters)
       cout << "Distribution unknown ..." << endl;
       exit(1);
     }
-    analyzeScale();
-    analyzeVarianceScale();
-    analyzeDiffMsglen();
+    analyzeScale(parameters);
+    analyzeVarianceScale(parameters);
+    analyzeDiffMsglen(parameters);
   } else if (parameters.generate == UNSET) {  // data file provided
     vector<double> x = parseFile(parameters.data_file);
     DataGenerator data;
@@ -338,5 +338,68 @@ string convertToString(double number)
   ostringstream convert ;
   convert << number ;
   return convert.str() ;
+}
+
+void analyzeScale(struct Parameters &parameters)
+{
+  int col1,col2;
+  if (boost::iequals(parameters.distribution,"laplace")) {
+    col1 = 7; col2 = 8;
+  } else if (boost::iequals(parameters.distribution,"normal")) {
+    col1 = 2; col2 = 3;
+  }
+  for (int i=0; i<parameters.scale.size(); i++) {
+    b = parameters.scale[i];
+    vector<vector<double>> bml,bmml;
+    for (int j=0; j<parameters.samples.size(); j++) {
+      n = parameters.samples[j];
+      string file_name = fileName(parameters.distribution,parameters.mean,
+                                  n,b,parameters.iterations);
+      vector<double> bmln,bmmln;
+      bmln = getColumn(file_name,col1);
+      bml.push_back(bmln);
+      bmmln = getColumn(file_name,col2);
+      bmml.push_back(bmmln);
+    }
+    string file_ml = parameters.distribution + "_ml_scale_" + 
+                     boost::lexical_cast<string>(b).substr(0,3) + "_iter_" +
+                     boost::lexical_cast<string>(parameters.iterations);
+    ofstream file();
+  }
+}
+
+vector<double> getColumn(string file_name, int index)
+{
+  string line;
+  vector<double> numbers;
+  ifstream file(file_name.c_str());
+  while(getline(file,line)) {
+    boost::char_separator<char> sep(", ");
+    boost::tokenizer<boost::char_separator<char> > tokens(line,sep);
+    int count = 1;
+    BOOST_FOREACH (const string& t, tokens) {
+      istringstream iss(t);
+      if (count == index) {
+        double x;
+        iss >> x;
+        numbers.push_back(x);
+      }
+      count++;
+    }
+  }
+  file.close();
+  return numbers;
+}
+
+string fileName(string distribution, double mean, int n, double b, 
+                int iterations)
+{
+  string file = distribution;
+  file += "_n_" + boost::lexical_cast<string>(n);
+  file += "_mean_" + boost::lexical_cast<string>(mean);
+  file += "_scale_" + boost::lexical_cast<string>(b).substr(0,3);
+  file += "_iter_" + boost::lexical_cast<string>(iterations);
+  //cout << file << endl;
+  return file;
 }
 

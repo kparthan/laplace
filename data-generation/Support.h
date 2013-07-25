@@ -66,5 +66,10 @@ double computeMean(vector<double> &);
 double computeMedian(vector<double> &);
 template<class T> string convertToString(T);
 
+string fileName(string, double, int, double, int);
+void analyzeScale(struct Parameters &);
+void analyzeVarianceScale(struct Parameters &);
+void analyzeDiffMsglen(struct Parameters &);
+
 #endif
 
