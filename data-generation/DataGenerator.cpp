@@ -23,7 +23,7 @@ DataGenerator::DataGenerator(struct Parameters &parameters):
  *  \param list a reference to a vector<double>
  *  \return the sorted list
  */
-vector<double> DataGenerator::sort(vector<double> &list)
+/*vector<double> DataGenerator::sort(vector<double> &list)
 {
   int num_samples = list.size();
 	vector<double> sortedList(list);
@@ -33,7 +33,7 @@ vector<double> DataGenerator::sort(vector<double> &list)
   }
 	quicksort(sortedList,index,0,num_samples-1);
   return sortedList;
-}
+}*/
 
 /*!
  *  This is an implementation of the classic quicksort() algorithm to sort a
@@ -46,7 +46,7 @@ vector<double> DataGenerator::sort(vector<double> &list)
  *  \param left an integer
  *  \param right an integer
  */
-void DataGenerator::quicksort(vector<double> &list, vector<int> &index, 
+/*void DataGenerator::quicksort(vector<double> &list, vector<int> &index, 
                               int left, int right)
 {
 	if(left < right)
@@ -55,7 +55,7 @@ void DataGenerator::quicksort(vector<double> &list, vector<int> &index,
 		quicksort(list,index,left,pivotNewIndex-1);
 		quicksort(list,index,pivotNewIndex+1,right);
 	}
-}
+}*/
 
 /*!
  *  \brief This function adjusts the data to AOM precision
@@ -81,7 +81,7 @@ vector<double> DataGenerator::modifyDataToAOM(vector<double> &data, double aom)
  *  \param right an integer
  *  \return the new pivot index
  */
-int DataGenerator::partition(vector<double> &list, vector<int> &index,
+/*int DataGenerator::partition(vector<double> &list, vector<int> &index,
                              int left, int right)
 {
 	double temp,pivotPoint = list[right];
@@ -104,7 +104,7 @@ int DataGenerator::partition(vector<double> &list, vector<int> &index,
 	index[storeIndex] = index[right];
 	index[right] = temp_i;
 	return storeIndex;
-}
+}*/
 
 /*!
  *  \brief This function generates the relevant file name to which the data 
@@ -171,10 +171,9 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
     fp << setw(10) << "Draw";
   }
 
-  cout << endl;
   /*  error = estimate - true */
   // print difference in normal estimates
-  /*double normal_mean_error = estimates.normal_mean - parameters.mean; 
+  double normal_mean_error = estimates.normal_mean - parameters.mean; 
   double normal_ml_sigma_error = estimates.normal_scale_ml - parameters.scale[scale_index];
   double normal_ml_sigma_error_sq = normal_ml_sigma_error * normal_ml_sigma_error;
   double normal_mml_sigma_error = estimates.normal_scale_mml - parameters.scale[scale_index];
@@ -195,10 +194,10 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   fp << setw(10) << setprecision(3) << laplace_ml_scale_error << "\t";
   fp << setw(10) << setprecision(3) << laplace_ml_scale_error_sq << "\t";
   fp << fixed << setw(10) << setprecision(3) << laplace_mml_scale_error << "\t";
-  fp << setw(10) << setprecision(3) << laplace_mml_scale_error_sq << "\t";*/
+  fp << setw(10) << setprecision(3) << laplace_mml_scale_error_sq << "\t";
 
   // calculate the difference in msg len
-  /*double diff_msglen;
+  double diff_msglen;
   if (type == LAPLACE) {
     diff_msglen = estimates.normal_msglen - estimates.laplace_msglen;
   } else if (type == NORMAL) {
@@ -206,7 +205,7 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   }
   fp << fixed << setw(10) << setprecision(3) << diff_msglen << "\t";
   fp << endl;
-  fp.close();*/
+  fp.close();
 }
 
 /*!

@@ -175,13 +175,15 @@ void fitData(struct Parameters &parameters)
       cout << "Distribution unknown ..." << endl;
       exit(1);
     }
-    analyzeScale(parameters);
-    analyzeVarianceScale(parameters);
-    analyzeDiffMsglen(parameters);
+    if (parameters.iterations > 1) {
+      analyzeScale(parameters);
+      analyzeScaleVariance(parameters);
+      analyzeDiffMsglen(parameters);
+    }
   } else if (parameters.generate == UNSET) {  // data file provided
     vector<double> x = parseFile(parameters.data_file);
     DataGenerator data;
-    vector<double> sorted = data.sort(x);
+    vector<double> sorted = sort(x);
     vector<double> y = data.modifyDataToAOM(sorted,parameters.aom);
     /*if (parameters.print == SET) {
       for (int i=0; i<y.size(); i++) {
@@ -348,24 +350,118 @@ void analyzeScale(struct Parameters &parameters)
   } else if (boost::iequals(parameters.distribution,"normal")) {
     col1 = 2; col2 = 3;
   }
+  double b;
+  int n;
   for (int i=0; i<parameters.scale.size(); i++) {
     b = parameters.scale[i];
-    vector<vector<double>> bml,bmml;
+
+    // read the estimated scale values into a matrix
+    vector<vector<double>> bml,bmml; // N X num_iterations
+    vector<vector<double>> bml_range,bmml_range;
     for (int j=0; j<parameters.samples.size(); j++) {
       n = parameters.samples[j];
       string file_name = fileName(parameters.distribution,parameters.mean,
                                   n,b,parameters.iterations);
       vector<double> bmln,bmmln;
+      vector<double> bmln_range,bmmln_range;
       bmln = getColumn(file_name,col1);
+      bmln_range = getRange(bmln);
       bml.push_back(bmln);
       bmmln = getColumn(file_name,col2);
+      bmmln_range = getRange(bmmln);
       bmml.push_back(bmmln);
     }
-    string file_ml = parameters.distribution + "_ml_scale_" + 
+
+    // print the matrix values to a file
+    string file_ml = "results/data/" + parameters.distribution + "_ml_scale_" + 
                      boost::lexical_cast<string>(b).substr(0,3) + "_iter_" +
                      boost::lexical_cast<string>(parameters.iterations);
-    ofstream file();
+    string file_mml = "results/data/" + parameters.distribution + "_mml_scale_" + 
+                     boost::lexical_cast<string>(b).substr(0,3) + "_iter_" +
+                     boost::lexical_cast<string>(parameters.iterations);
+    ofstream file1(file_ml.c_str());
+    ofstream file2(file_mml.c_str());
+    for (int j=0; j<parameters.iterations; j++) {
+      for (int k=0; k<parameters.samples.size(); k++) {
+        file1 << fixed << setw(10) << setprecision(4) << bml[k][j];
+        file2 << fixed << setw(10) << setprecision(4) << bmml[k][j];
+      }
+      file1 << endl;
+      file2 << endl;
+    }
+
+    // for each scale parameter
+    plotScaleBoxplots(n,b,file_ml,file_mml,parameters);
   }
+}
+
+void plotScaleBoxplots(int n, double b, string file_ml, string file_mml, 
+                       struct Parameters &parameters)
+{
+  string eps_file_ml =  "results/plots/boxplot_" + parameters.distribution + "_ml_scale_" + 
+                     boost::lexical_cast<string>(b).substr(0,3) + "_iter_" +
+                     boost::lexical_cast<string>(parameters.iterations) + ".eps";
+  string eps_file_mml =  "results/plots/boxplot_" + parameters.distribution + "_mml_scale_" + 
+                     boost::lexical_cast<string>(b).substr(0,3) + "_iter_" +
+                     boost::lexical_cast<string>(parameters.iterations) + ".eps";
+
+  ofstream script("results/script.plot");
+  script << "set terminal postscript eps enhanced" << endl;
+  script << "#set linetype 1 lc rgb \"blue\"" << endl;
+  script << "#set style fill solid 0.25 border lt 1" << endl;
+  script << "set style boxplot outliers pointtype 7" << endl;
+  script << "set style data boxplot" << endl;
+  script << "set boxwidth  0.05" << endl;
+  script << "set pointsize 0.5" << endl;
+  script << "unset key" << endl;
+  script << "set border 2" << endl;
+  script << "set xtics nomirror" << endl;
+  script << "set ytics nomirror" << endl;
+  script << "set xlabel \"Number of samples\"" << endl;
+  script << "set ylabel \"Scale parameter\"" << endl;
+  script << "#set grid ytics" << endl;
+  script << "set xrange [0:*]" << endl;
+  script << "set xtics (";
+  for (int i=0; i<parameters.samples.size(); i++) {
+    if (i != parameters.samples.size() - 1) {
+      script << "\"" << parameters.samples[i] << "\" " << i+1 << ", ";
+    } else {
+      script << "\"" << parameters.samples[i] << "\" " << i+1 << ") scale 0.0" << endl;
+    }
+  }
+  script << "set output \"" << eps_file_ml << "\"" << endl;
+  script << "plot ";
+  for (int i=0; i<parameters.samples.size(); i++) {
+    if (i != parameters.samples.size() - 1) {
+      script << "\"" << file_ml << "\" using (" << i+1 << "):" << i+1 
+             << "lt 1 lc rgb \"red\" pointtype 7" << ", "; 
+    } else {
+      script << "\"" << file_ml << "\" using (" << i+1 << "):" << i+1 
+             << "lt 1 lc rgb \"red\" pointtype 7" << ", " << b 
+             << "with lines lt 4" << endl; 
+    }
+  }  
+  script << "set output \"" << eps_file_mml << "\"" << endl;
+  script << "plot ";
+  for (int i=0; i<parameters.samples.size(); i++) {
+    if (i != parameters.samples.size() - 1) {
+      script << "\"" << file_mml << "\" using (" << i+1 << "):" << i+1 
+             << "lt 1 lc rgb \"blue\" pointtype 7" << ", "; 
+    } else {
+      script << "\"" << file_mml << "\" using (" << i+1 << "):" << i+1 
+             << "lt 1 lc rgb \"blue\" pointtype 7" << ", " << b 
+             << "with lines lt 4" << endl; 
+    }
+  }  
+  script.close();
+  system("gnuplot -persist results/script.plot");
+}
+
+void analyzeScaleVariance(struct Parameters &parameters)
+{
+}
+
+void analyzeDiffMsglen(struct Parameters &parameters) {
 }
 
 vector<double> getColumn(string file_name, int index)
@@ -391,15 +487,95 @@ vector<double> getColumn(string file_name, int index)
   return numbers;
 }
 
+vector<double> getRange(vector<double> &list)
+{
+  vector<double> range(3,0);
+  //for (int i)
+  return range;
+}
+
 string fileName(string distribution, double mean, int n, double b, 
                 int iterations)
 {
-  string file = distribution;
+  string file = "results/data/statistics_" + distribution;
   file += "_n_" + boost::lexical_cast<string>(n);
   file += "_mean_" + boost::lexical_cast<string>(mean);
   file += "_scale_" + boost::lexical_cast<string>(b).substr(0,3);
   file += "_iter_" + boost::lexical_cast<string>(iterations);
   //cout << file << endl;
   return file;
+}
+
+/*!
+ *  \brief This function sorts the elements in the list
+ *  \param list a reference to a vector<double>
+ *  \return the sorted list
+ */
+vector<double> sort(vector<double> &list)
+{
+  int num_samples = list.size();
+	vector<double> sortedList(list);
+  vector<int> index(num_samples,0);
+	for(int i=0; i<num_samples; i++) {
+			index[i] = i;
+  }
+	quicksort(sortedList,index,0,num_samples-1);
+  return sortedList;
+}
+
+/*!
+ *  This is an implementation of the classic quicksort() algorithm to sort a
+ *  list of data values. The module uses the overloading operator(<) to 
+ *  compare two Point<T> objects. 
+ *  Pivot is chosen as the right most element in the list(default)
+ *  This function is called recursively.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ */
+void quicksort(vector<double> &list, vector<int> &index, 
+                              int left, int right)
+{
+	if(left < right)
+	{
+		int pivotNewIndex = partition(list,index,left,right);
+		quicksort(list,index,left,pivotNewIndex-1);
+		quicksort(list,index,pivotNewIndex+1,right);
+	}
+}
+
+/*!
+ *  This function is called from the quicksort() routine to compute the new
+ *  pivot index.
+ *  \param list a reference to a vector<double>
+ *	\param index a reference to a vector<int>
+ *  \param left an integer
+ *  \param right an integer
+ *  \return the new pivot index
+ */
+int partition(vector<double> &list, vector<int> &index,
+                             int left, int right)
+{
+	double temp,pivotPoint = list[right];
+	int storeIndex = left,temp_i;
+	for(int i=left; i<right; i++) {
+		if(list[i] < pivotPoint) {
+			temp = list[i];
+			list[i] = list[storeIndex];
+			list[storeIndex] = temp;
+			temp_i = index[i];
+			index[i] = index[storeIndex];
+			index[storeIndex] = temp_i;
+			storeIndex += 1;	
+		}
+	}
+	temp = list[storeIndex];
+	list[storeIndex] = list[right];
+	list[right] = temp;
+	temp_i = index[storeIndex];
+	index[storeIndex] = index[right];
+	index[right] = temp_i;
+	return storeIndex;
 }
 

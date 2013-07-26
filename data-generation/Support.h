@@ -67,9 +67,16 @@ double computeMedian(vector<double> &);
 template<class T> string convertToString(T);
 
 string fileName(string, double, int, double, int);
+vector<double> getColumn(string, int);
+vector<double> getRange(vector<double> &);
 void analyzeScale(struct Parameters &);
-void analyzeVarianceScale(struct Parameters &);
+void analyzeScaleVariance(struct Parameters &);
 void analyzeDiffMsglen(struct Parameters &);
+void plotScaleBoxplots(int, double, string, string, struct Parameters &);
+
+vector<double> sort(vector<double> &);
+void quicksort(vector<double> &, vector<int> &, int, int);
+int partition(vector<double> &, vector<int> &, int, int);
 
 #endif
 

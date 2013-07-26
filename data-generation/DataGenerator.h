@@ -44,7 +44,7 @@ class DataGenerator
     void predict(vector<double> &, struct Estimates &);
 
     //! Sort the elements in the list
-    vector<double> sort(vector<double> &);
+    //vector<double> sort(vector<double> &);
 
     //! Plot the data
     void plotPredictions(string &); 
@@ -69,10 +69,10 @@ class DataGenerator
     vector<vector<double>> predictions_ml,predictions_mml;
 
     //! Quciksort algorithm
-    void quicksort(vector<double> &, vector<int> &, int, int);
+    //void quicksort(vector<double> &, vector<int> &, int, int);
 
     //! Partition function used in quicksort()
-    int partition(vector<double> &, vector<int> &, int, int);
+    //int partition(vector<double> &, vector<int> &, int, int);
 
     //! Generates the file name to append data to
     string getFileName(const char *, int, int);

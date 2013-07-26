@@ -62,7 +62,7 @@ void LaplaceDataGenerator::simulate()
       vector<double> list;  
       int mml_outcomes[3] = {0};
       int ml_outcomes[3] = {0};
-      struct Statistics statistics;
+      //struct Statistics statistics;
       for(int n=1; n<=parameters.iterations; n++) {
         double mean = parameters.mean;
         double scale = parameters.scale[j];
