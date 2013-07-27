@@ -34,24 +34,6 @@ struct Estimates
   double laplace_msglen;
 };
 
-/*struct Statistics
-{
-  vector<double> normal_scale;
-    //normal_scale[0] avg_normal_scale_ml;
-    //normal_scale[1] min_normal_scale_ml;
-    //normal_scale[2] max_normal_scale_ml;
-    //normal_scale[3] avg_normal_scale_mml;
-    //normal_scale[4] min_normal_scale_mml;
-    //normal_scale[5] max_normal_scale_mml;
-  vector<double> laplace_scale;
-    //laplace_sigma[0] avg_laplace_sigma_ml;
-    //laplace_sigma[1] min_laplace_sigma_ml;
-    //laplace_sigma[2] max_laplace_sigma_ml;
-    //laplace_sigma[3] avg_laplace_sigma_mml;
-    //laplace_sigma[4] min_laplace_sigma_mml;
-    //laplace_sigma[5] max_laplace_sigma_mml;
-};*/
-
 vector<double> parseFile(string &);
 void printEstimates(struct Estimates &);
 struct Parameters parseCommandLineInput(int, char **);
@@ -63,6 +45,8 @@ double minimum(vector<double> &);
 double maximum(vector<double> &);
 void printError(const char *);
 double computeMean(vector<double> &);
+double computeVariance(vector<double> &);
+double computeVariance(vector<double> &, double);
 double computeMedian(vector<double> &);
 template<class T> string convertToString(T);
 
@@ -72,7 +56,8 @@ vector<double> getRange(vector<double> &);
 void analyzeScale(struct Parameters &);
 void analyzeScaleVariance(struct Parameters &);
 void analyzeDiffMsglen(struct Parameters &);
-void plotScaleBoxplots(int, double, string, string, struct Parameters &);
+void plotScaleBoxplots(int, double, double, string, string, string, string,
+                       struct Parameters &);
 
 vector<double> sort(vector<double> &);
 void quicksort(vector<double> &, vector<int> &, int, int);

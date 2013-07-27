@@ -86,19 +86,13 @@ void NormalDataGenerator::simulate()
         struct Estimates estimates = estimateAndPlotModel("normal",list,j);
         mml_outcomes[estimates.winner_mml]++;
         ml_outcomes[estimates.winner_ml]++;
-        //updateStatistics(n,j,estimates,statistics);
       }
       cout << "N:L:D  [ML] = " << ml_outcomes[0] << ":";
       cout << ml_outcomes[1] << ":" << ml_outcomes[2] << " -- ";
       cout << " [MML] = " << mml_outcomes[0] << ":";
       cout << mml_outcomes[1] << ":" << mml_outcomes[2] << endl;
-      /*if (parameters.iterations > 1) {
-        plotMessageLength("normal",list.size(),j);
-        saveErrorStatistics("normal",statistics,parameters.iterations,i,j);
-      }*/
     }
   }
-  //plotErrors("normal");
 }
 
 /*!

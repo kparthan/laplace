@@ -90,7 +90,7 @@ double Message::encodeUsingNormalModel()
   double rangeMu = 5.0;
   double rangeLogSigma = log(4/(3*AOM));
   int N = data.size();
-  double part1 = log(K2) + log(rangeMu * rangeLogSigma) + 0.5 * log(2 * N * N) 
+  double part1 = log(K2) + log(rangeMu * rangeLogSigma) + 0.5 * log(2) + 2 * log(N) 
                  - log(normalEstimates[2]);
   double part2 = (N/2.0) * log(2 * PI) - N * log(AOM) + 0.5 * (N+1) + 
                   + N * log(normalEstimates[2]);

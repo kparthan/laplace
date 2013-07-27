@@ -19,45 +19,6 @@ DataGenerator::DataGenerator(struct Parameters &parameters):
 {}
 
 /*!
- *  \brief This function sorts the elements in the list
- *  \param list a reference to a vector<double>
- *  \return the sorted list
- */
-/*vector<double> DataGenerator::sort(vector<double> &list)
-{
-  int num_samples = list.size();
-	vector<double> sortedList(list);
-  vector<int> index(num_samples,0);
-	for(int i=0; i<num_samples; i++) {
-			index[i] = i;
-  }
-	quicksort(sortedList,index,0,num_samples-1);
-  return sortedList;
-}*/
-
-/*!
- *  This is an implementation of the classic quicksort() algorithm to sort a
- *  list of data values. The module uses the overloading operator(<) to 
- *  compare two Point<T> objects. 
- *  Pivot is chosen as the right most element in the list(default)
- *  This function is called recursively.
- *  \param list a reference to a vector<double>
- *	\param index a reference to a vector<int>
- *  \param left an integer
- *  \param right an integer
- */
-/*void DataGenerator::quicksort(vector<double> &list, vector<int> &index, 
-                              int left, int right)
-{
-	if(left < right)
-	{
-		int pivotNewIndex = partition(list,index,left,right);
-		quicksort(list,index,left,pivotNewIndex-1);
-		quicksort(list,index,pivotNewIndex+1,right);
-	}
-}*/
-
-/*!
  *  \brief This function adjusts the data to AOM precision
  *  \param data a reference to a vector<double>
  *  \return the modified data values
@@ -71,40 +32,6 @@ vector<double> DataGenerator::modifyDataToAOM(vector<double> &data, double aom)
   }
   return x;
 }
-
-/*!
- *  This function is called from the quicksort() routine to compute the new
- *  pivot index.
- *  \param list a reference to a vector<double>
- *	\param index a reference to a vector<int>
- *  \param left an integer
- *  \param right an integer
- *  \return the new pivot index
- */
-/*int DataGenerator::partition(vector<double> &list, vector<int> &index,
-                             int left, int right)
-{
-	double temp,pivotPoint = list[right];
-	int storeIndex = left,temp_i;
-	for(int i=left; i<right; i++) {
-		if(list[i] < pivotPoint) {
-			temp = list[i];
-			list[i] = list[storeIndex];
-			list[storeIndex] = temp;
-			temp_i = index[i];
-			index[i] = index[storeIndex];
-			index[storeIndex] = temp_i;
-			storeIndex += 1;	
-		}
-	}
-	temp = list[storeIndex];
-	list[storeIndex] = list[right];
-	list[right] = temp;
-	temp_i = index[storeIndex];
-	index[storeIndex] = index[right];
-	index[right] = temp_i;
-	return storeIndex;
-}*/
 
 /*!
  *  \brief This function generates the relevant file name to which the data 
@@ -142,47 +69,47 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   ofstream fp(file.c_str(),ios::app);
 
   // print normal estimates
-  fp << setw(10) << setprecision(3) << estimates.normal_mean << "\t";
-  fp << setw(10) << setprecision(3) << estimates.normal_scale_ml << "\t";
-  fp << setw(10) << setprecision(3) << estimates.normal_scale_mml << "\t";
-  fp << fixed << setw(10) << setprecision(3) << estimates.normal_likelihood << "\t";
-  fp << fixed << setw(10) << setprecision(3) << estimates.normal_msglen << "\t";
+  fp << setw(15) << setprecision(3) << estimates.normal_mean << "\t";
+  fp << setw(15) << setprecision(3) << estimates.normal_scale_ml << "\t";
+  fp << setw(15) << setprecision(3) << estimates.normal_scale_mml << "\t";
+  fp << fixed << setw(15) << setprecision(3) << estimates.normal_likelihood << "\t";
+  fp << fixed << setw(15) << setprecision(3) << estimates.normal_msglen << "\t";
 
   // print laplace estimates
-  fp << setw(10) << setprecision(3) << estimates.laplace_mean << "\t";
-  fp << setw(10) << setprecision(3) << estimates.laplace_scale_ml << "\t";
-  fp << setw(10) << setprecision(3) << estimates.laplace_scale_mml << "\t";
-  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_likelihood << "\t";
-  fp << fixed << setw(10) << setprecision(3) << estimates.laplace_msglen << "\t";
+  fp << setw(15) << setprecision(3) << estimates.laplace_mean << "\t";
+  fp << setw(15) << setprecision(3) << estimates.laplace_scale_ml << "\t";
+  fp << setw(15) << setprecision(3) << estimates.laplace_scale_mml << "\t";
+  fp << fixed << setw(15) << setprecision(3) << estimates.laplace_likelihood << "\t";
+  fp << fixed << setw(15) << setprecision(3) << estimates.laplace_msglen << "\t";
 
   // print ML winner
   if (estimates.normal_likelihood > estimates.laplace_likelihood) {
-    fp << setw(10) << "Normal ";
+    fp << setw(15) << "Normal ";
   } else if (estimates.normal_msglen > estimates.laplace_msglen) {
-    fp << setw(10) << "Laplace ";
+    fp << setw(15) << "Laplace ";
   }
 
   // print MML winner
   if (estimates.normal_msglen < estimates.laplace_msglen) {
-    fp << setw(10) << "Normal";
+    fp << setw(15) << "Normal";
   } else if (estimates.normal_msglen > estimates.laplace_msglen) {
-    fp << setw(10) << "Laplace";
+    fp << setw(15) << "Laplace";
   } else {
-    fp << setw(10) << "Draw";
+    fp << setw(15) << "Draw";
   }
 
   /*  error = estimate - true */
   // print difference in normal estimates
   double normal_mean_error = estimates.normal_mean - parameters.mean; 
-  double normal_ml_sigma_error = estimates.normal_scale_ml - parameters.scale[scale_index];
-  double normal_ml_sigma_error_sq = normal_ml_sigma_error * normal_ml_sigma_error;
-  double normal_mml_sigma_error = estimates.normal_scale_mml - parameters.scale[scale_index];
-  double normal_mml_sigma_error_sq = normal_mml_sigma_error * normal_mml_sigma_error;
+  double normal_ml_scale_error = estimates.normal_scale_ml - parameters.scale[scale_index];
+  double normal_ml_scale_error_sq = normal_ml_scale_error * normal_ml_scale_error;
+  double normal_mml_scale_error = estimates.normal_scale_mml - parameters.scale[scale_index];
+  double normal_mml_scale_error_sq = normal_mml_scale_error * normal_mml_scale_error;
   fp << setw(10) << setprecision(3) << normal_mean_error << "\t";
-  fp << setw(10) << setprecision(3) << normal_ml_sigma_error << "\t";
-  fp << setw(10) << setprecision(3) << normal_ml_sigma_error_sq << "\t";
-  fp << fixed << setw(10) << setprecision(3) << normal_mml_sigma_error << "\t";
-  fp << fixed << setw(10) << setprecision(3) << normal_mml_sigma_error_sq << "\t";
+  fp << setw(10) << setprecision(3) << normal_ml_scale_error << "\t";
+  fp << setw(10) << setprecision(3) << normal_ml_scale_error_sq << "\t";
+  fp << fixed << setw(10) << setprecision(3) << normal_mml_scale_error << "\t";
+  fp << fixed << setw(10) << setprecision(3) << normal_mml_scale_error_sq << "\t";
 
   // print difference in laplace estimates
   double laplace_mean_error = estimates.laplace_mean - parameters.mean; 
@@ -198,125 +125,15 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
 
   // calculate the difference in msg len
   double diff_msglen;
-  if (type == LAPLACE) {
-    diff_msglen = estimates.normal_msglen - estimates.laplace_msglen;
-  } else if (type == NORMAL) {
+  //if (type == LAPLACE) {
+  //  diff_msglen = estimates.normal_msglen - estimates.laplace_msglen;
+  //} else if (type == NORMAL) {
     diff_msglen = estimates.laplace_msglen - estimates.normal_msglen;
-  }
+  //}
   fp << fixed << setw(10) << setprecision(3) << diff_msglen << "\t";
   fp << endl;
   fp.close();
 }
-
-/*!
- *  \brief This function updates the statistics over all iterations
- *  \param n an integer
- *  \param estimates a reference to a struct Estimates
- *  \param statistics a reference to a struct Statistics
- */
-/*void DataGenerator::updateStatistics(int n, int scale_index, struct Estimates &estimates,
-                                     struct Statistics &statistics)
-{
-  double scale = parameters.scale[scale_index];
-  double sum,residual,error;
-  if (n == 1) {
-    // normal
-    statistics.normal_scale = vector<double>(8,0);
-    statistics.normal_scale[0] = estimates.normal_scale_ml;
-    statistics.normal_scale[1] = estimates.normal_scale_ml;
-    statistics.normal_scale[2] = estimates.normal_scale_ml;
-    residual = estimates.normal_scale_ml - scale;
-    statistics.normal_scale[3] = residual * residual;
-    statistics.normal_scale[4] = estimates.normal_scale_mml;
-    statistics.normal_scale[5] = estimates.normal_scale_mml;
-    statistics.normal_scale[6] = estimates.normal_scale_mml;
-    residual = estimates.normal_scale_mml - scale;
-    statistics.normal_scale[7] = residual * residual;
-    // laplace
-    statistics.laplace_scale = vector<double>(8,0);
-    statistics.laplace_scale[0] = estimates.laplace_scale_ml;
-    statistics.laplace_scale[1] = estimates.laplace_scale_ml;
-    statistics.laplace_scale[2] = estimates.laplace_scale_ml;
-    residual = estimates.laplace_scale_ml - scale;
-    statistics.laplace_scale[3] = residual * residual;
-    statistics.laplace_scale[4] = estimates.laplace_scale_mml;
-    statistics.laplace_scale[5] = estimates.laplace_scale_mml;
-    statistics.laplace_scale[6] = estimates.laplace_scale_mml;
-    residual = estimates.laplace_scale_mml - scale;
-    statistics.laplace_scale[7] = residual * residual;
-  } else {
-    // update normal statistics
-    {
-      // update ML average
-      sum = (n-1) * statistics.normal_scale[0];
-      statistics.normal_scale[0] = (sum + estimates.normal_scale_ml) / n;
-      // update ML min
-      if (statistics.normal_scale[1] > estimates.normal_scale_ml) {
-        statistics.normal_scale[1] = estimates.normal_scale_ml;
-      }
-      // update ML max
-      if (statistics.normal_scale[2] < estimates.normal_scale_ml) {
-        statistics.normal_scale[2] = estimates.normal_scale_ml;
-      }
-      // update ML error
-      sum = (n-1) * statistics.normal_scale[3];
-      residual = estimates.normal_scale_ml - scale;
-      error = residual * residual;
-      statistics.normal_scale[3] = (sum+error)/n;
-      // update MML average
-      sum = (n-1) * statistics.normal_scale[4];
-      statistics.normal_scale[4] = (sum + estimates.normal_scale_mml) / n;
-      // update MML min
-      if (statistics.normal_scale[5] > estimates.normal_scale_mml) {
-        statistics.normal_scale[5] = estimates.normal_scale_mml;
-      }
-      // update MML max
-      if (statistics.normal_scale[6] < estimates.normal_scale_mml) {
-        statistics.normal_scale[6] = estimates.normal_scale_mml;
-      }
-      // update MML error
-      sum = (n-1) * statistics.normal_scale[7];
-      residual = estimates.normal_scale_mml - scale;
-      error = residual * residual;
-      statistics.normal_scale[7] = (sum+error)/n;
-    }
-    // update laplace statistics
-    {
-      // update ML average
-      sum = (n-1) * statistics.laplace_scale[0];
-      statistics.laplace_scale[0] = (sum + estimates.laplace_scale_ml) / n;
-      // update ML min
-      if (statistics.laplace_scale[1] > estimates.laplace_scale_ml) {
-        statistics.laplace_scale[1] = estimates.laplace_scale_ml;
-      }
-      // update ML max
-      if (statistics.laplace_scale[2] < estimates.laplace_scale_ml) {
-        statistics.laplace_scale[2] = estimates.laplace_scale_ml;
-      }
-      // update ML error
-      sum = (n-1) * statistics.laplace_scale[3];
-      residual = estimates.laplace_scale_ml - scale;
-      error = residual * residual;
-      statistics.laplace_scale[3] = (sum+error)/n;
-      // update MML average
-      sum = (n-1) * statistics.laplace_scale[4];
-      statistics.laplace_scale[4] = (sum + estimates.laplace_scale_mml) / n;
-      // update MML min
-      if (statistics.laplace_scale[5] > estimates.laplace_scale_mml) {
-        statistics.laplace_scale[5] = estimates.laplace_scale_mml;
-      }
-      // update MML max
-      if (statistics.laplace_scale[6] < estimates.laplace_scale_mml) {
-        statistics.laplace_scale[6] = estimates.laplace_scale_mml;
-      }
-      // update MML error
-      sum = (n-1) * statistics.laplace_scale[7];
-      residual = estimates.laplace_scale_mml - scale;
-      error = residual * residual;
-      statistics.laplace_scale[7] = (sum+error)/n;
-    }
-  }
-}*/
 
 /*!
  *  \brief This function outputs the predictions to a file.
@@ -428,94 +245,6 @@ void DataGenerator::plotMessageLength(const char *name, int num_samples,
   graph.setRange(xrange,yrange);
   graph.sketchStatistics(file_name);
 }
-
-/*!
- *  \brief This function saves the statistics to the file
- *  \param statistics a reference to a struct Statistics
- *  \param iterations an integer
- *  \param sample_index an integer
- *  \param scale_index an integer
- */
-/*void DataGenerator::saveErrorStatistics(const char *name, struct Statistics &statistics,
-                                        int iterations, int sample_index,
-                                        int scale_index)
-{
-  double scale = parameters.scale[scale_index];
-  int num_samples = parameters.samples[sample_index];
-  string file_name = "results/data/";
-  file_name += "errors_" + string(name) + "_i_" + boost::lexical_cast<string>(iterations) + 
-               "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
-  ofstream file(file_name.c_str(),ios::app);
-  file << fixed << setw(10) << num_samples; 
-  for (int i=0; i<statistics.normal_scale.size(); i++) {
-    file << fixed << setw(10) << setprecision(5) << statistics.normal_scale[i];
-  }
-  for (int i=0; i<statistics.laplace_scale.size(); i++) {
-    file << fixed << setw(10) << setprecision(5) << statistics.laplace_scale[i];
-  }
-  // print expectation values
-  double expectation = scale * scale / (double) num_samples; 
-  file << fixed << setw(10) << setprecision(5) << expectation;
-  expectation = scale * scale * (num_samples+1) / (double) ((num_samples-1)*(num_samples-1));
-  file << fixed << setw(10) << setprecision(5) << expectation;
-  file << endl;
-  file.close();
-}*/
-
-/*!
- *  \brief This method plots the errors in parameter estimates.
- *  \param name a pointer to a char
- */
-/*void DataGenerator::plotErrors(const char *name)
-{
-  if (parameters.samples.size() > 1) {
-    for (int i=0; i<parameters.scale.size(); i++) {
-      double scale = parameters.scale[i];
-      string data_file = "errors_" + string(name) + "_i_" + 
-                         boost::lexical_cast<string>(parameters.iterations)
-                         + "_s_" + boost::lexical_cast<string>(scale).substr(0,3);
-      ofstream script("results/script.plot");
-      script << "set term post eps" << endl;
-      script << "set title \"Errors in Parameter Estimation\"" <<  endl;
-      script << "set xlabel \"# of samples\"" << endl;
-      script << "set ylabel \"Scale Parameter\"" << endl;
-      script << "set xr [0:" << parameters.samples[parameters.samples.size()-1]+10 << "]" << endl;
-      script << "set yr [0:3]" << endl;
-      script << "set output \"results/plots/" << data_file << ".normal_est.eps\"" << endl;
-      script << "set multiplot" << endl;
-      script << "plot \"results/data/" << data_file << "\" using 1:2:3:4 title " 
-             << "'ML estimate' with errorbars lc rgb \"blue\", \\" << endl;
-      script << "\"results/data/" << data_file << "\" using 1:6:7:8 title " 
-             << "'MML estimate' with errorbars lc rgb \"red\", \\" << endl;
-      script << "\"results/data/" << data_file << "\" using 1:2 notitle " 
-             << "with lines lc rgb \"blue\", \\" << endl;
-      script << "\"results/data/" << data_file << "\" using 1:6 notitle " 
-             << "with lines lc rgb \"red\"" << endl;
-      script.close();
-      system("gnuplot -persist results/script.plot");	
-
-      ofstream script2("results/script.plot");
-      script2 << "set term post eps" << endl;
-      script2 << "set title \"Errors in Parameter Estimation\"" <<  endl;
-      script2 << "set xlabel \"# of samples\"" << endl;
-      script2 << "set ylabel \"Scale Parameter\"" << endl;
-      script2 << "set xr [0:" << parameters.samples[parameters.samples.size()-1]+10 << "]" << endl;
-      script2 << "set yr [0:3]" << endl;
-      script2 << "set output \"results/plots/" << data_file << ".laplace_est.eps\"" << endl;
-      script2 << "set multiplot" << endl;
-      script2 << "plot \"results/data/" << data_file << "\" using 1:10:11:12 title " 
-             << "'ML estimate' with errorbars lc rgb \"blue\", \\" << endl;
-      script2 << "\"results/data/" << data_file << "\" using 1:14:15:16 title " 
-             << "'MML estimate' with errorbars lc rgb \"red\", \\" << endl;
-      script2 << "\"results/data/" << data_file << "\" using 1:10 notitle " 
-             << "with lines lc rgb \"blue\", \\" << endl;
-      script2 << "\"results/data/" << data_file << "\" using 1:14 notitle " 
-             << "with lines lc rgb \"red\"" << endl;
-      script2.close();
-      system("gnuplot -persist results/script.plot");	
-    }
-  }
-}*/
 
 /*!
  *  \brief This function predicts the distribution with respect to the

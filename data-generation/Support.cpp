@@ -315,6 +315,25 @@ double computeMean(vector<double> &list)
   return sum / (double)list.size();
 }
 
+double computeVariance(vector<double> &list)
+{
+  double mean = computeMean(list);
+  double sum = 0;
+  for (int i=0; i<list.size(); i++) {
+    sum += (list[i]-mean) * (list[i]-mean);
+  }
+  return sum / (double) list.size();
+}
+
+double computeVariance(vector<double> &list, double mean)
+{
+  double sum = 0;
+  for (int i=0; i<list.size(); i++) {
+    sum += (list[i]-mean) * (list[i]-mean);
+  }
+  return sum / (double) list.size();
+}
+
 /*!
  *  \brief This module computes the median of a sorted set of samples
  *  \param list a reference to a vector<double>
@@ -322,6 +341,7 @@ double computeMean(vector<double> &list)
  */
 double computeMedian(vector<double> &list)
 {
+  //vector<double> sorted_list = sort(list);
   int n = list.size();
   if (n % 2 == 1) {
     return list[n/2];
@@ -358,18 +378,28 @@ void analyzeScale(struct Parameters &parameters)
     // read the estimated scale values into a matrix
     vector<vector<double>> bml,bmml; // N X num_iterations
     vector<vector<double>> bml_range,bmml_range;
+    double bmax;
     for (int j=0; j<parameters.samples.size(); j++) {
       n = parameters.samples[j];
       string file_name = fileName(parameters.distribution,parameters.mean,
                                   n,b,parameters.iterations);
       vector<double> bmln,bmmln;
       vector<double> bmln_range,bmmln_range;
+
       bmln = getColumn(file_name,col1);
       bmln_range = getRange(bmln);
       bml.push_back(bmln);
+      bml_range.push_back(bmln_range);
       bmmln = getColumn(file_name,col2);
       bmmln_range = getRange(bmmln);
       bmml.push_back(bmmln);
+      bmml_range.push_back(bmmln_range);
+      double temp_max = (bmln_range[2] > bmmln_range[2]) ? bmln_range[2] : bmmln_range[2];
+      if (j == 0) {
+        bmax = temp_max; 
+      } else {
+        bmax = (bmax > temp_max) ? bmax : temp_max;
+      }
     }
 
     // print the matrix values to a file
@@ -389,14 +419,35 @@ void analyzeScale(struct Parameters &parameters)
       file1 << endl;
       file2 << endl;
     }
+    file1.close();
+    file2.close();
+
+    // print the range of scales to a file
+    string file_ml_range = file_ml + "_range";
+    string file_mml_range = file_mml + "_range";
+    ofstream file3(file_ml_range.c_str());
+    ofstream file4(file_mml_range.c_str());
+    for (int j=0; j<parameters.samples.size(); j++) {
+      file3 << j+1 << " ";
+      file4 << j+1 << " ";
+      for (int k=0; k<3; k++) {
+        file3 << fixed << setw(10) << setprecision(4) << bml_range[j][k];
+        file4 << fixed << setw(10) << setprecision(4) << bmml_range[j][k];
+      }
+      file3 << endl;
+      file4 << endl;
+    }
+    file3.close();
+    file4.close();
 
     // for each scale parameter
-    plotScaleBoxplots(n,b,file_ml,file_mml,parameters);
+    plotScaleBoxplots(n,b,bmax,file_ml_range,file_mml_range,file_ml,file_mml,parameters);
   }
 }
 
-void plotScaleBoxplots(int n, double b, string file_ml, string file_mml, 
-                       struct Parameters &parameters)
+void plotScaleBoxplots(int n, double b, double bmax, string file_ml_range, 
+                       string file_mml_range, string file_ml, 
+                       string file_mml, struct Parameters &parameters)
 {
   string eps_file_ml =  "results/plots/boxplot_" + parameters.distribution + "_ml_scale_" + 
                      boost::lexical_cast<string>(b).substr(0,3) + "_iter_" +
@@ -421,6 +472,7 @@ void plotScaleBoxplots(int n, double b, string file_ml, string file_mml,
   script << "set ylabel \"Scale parameter\"" << endl;
   script << "#set grid ytics" << endl;
   script << "set xrange [0:*]" << endl;
+  script << "set yrange [*:" << bmax << "]" << endl;
   script << "set xtics (";
   for (int i=0; i<parameters.samples.size(); i++) {
     if (i != parameters.samples.size() - 1) {
@@ -434,11 +486,12 @@ void plotScaleBoxplots(int n, double b, string file_ml, string file_mml,
   for (int i=0; i<parameters.samples.size(); i++) {
     if (i != parameters.samples.size() - 1) {
       script << "\"" << file_ml << "\" using (" << i+1 << "):" << i+1 
-             << "lt 1 lc rgb \"red\" pointtype 7" << ", "; 
+             << " lt 1 lc rgb \"blue\" pointtype 7" << ", "; 
     } else {
       script << "\"" << file_ml << "\" using (" << i+1 << "):" << i+1 
-             << "lt 1 lc rgb \"red\" pointtype 7" << ", " << b 
-             << "with lines lt 4" << endl; 
+             << " lt 1 lc rgb \"blue\" pointtype 7" << ", " << b
+             << " with lines lt 4, " << "\"" << file_ml_range << "\" "
+             << "using 1:3 with lines lt 4 lc rgb \"red\"" << endl;
     }
   }  
   script << "set output \"" << eps_file_mml << "\"" << endl;
@@ -446,11 +499,12 @@ void plotScaleBoxplots(int n, double b, string file_ml, string file_mml,
   for (int i=0; i<parameters.samples.size(); i++) {
     if (i != parameters.samples.size() - 1) {
       script << "\"" << file_mml << "\" using (" << i+1 << "):" << i+1 
-             << "lt 1 lc rgb \"blue\" pointtype 7" << ", "; 
+             << " lt 1 lc rgb \"blue\" pointtype 7" << ", "; 
     } else {
       script << "\"" << file_mml << "\" using (" << i+1 << "):" << i+1 
-             << "lt 1 lc rgb \"blue\" pointtype 7" << ", " << b 
-             << "with lines lt 4" << endl; 
+             << " lt 1 lc rgb \"blue\" pointtype 7" << ", " << b 
+             << " with lines lt 4, " << "\"" << file_mml_range << "\" "
+             << "using 1:3 with lines lt 4 lc rgb \"red\"" << endl;
     }
   }  
   script.close();
@@ -459,9 +513,99 @@ void plotScaleBoxplots(int n, double b, string file_ml, string file_mml,
 
 void analyzeScaleVariance(struct Parameters &parameters)
 {
+  int col1,col2;
+  if (boost::iequals(parameters.distribution,"laplace")) {
+    col1 = 20; col2 = 22;
+  } else if (boost::iequals(parameters.distribution,"normal")) {
+    col1 = 15; col2 = 17;
+  }
+  for (int i=0; i<parameters.scale.size(); i++) {
+    double b = parameters.scale[i];
+    string file_scale_variance = "results/data/variance_mean_";
+    file_scale_variance += boost::lexical_cast<string>(parameters.mean).substr(0,3);
+    file_scale_variance += "_scale_";
+    file_scale_variance += boost::lexical_cast<string>(b).substr(0,3);
+    file_scale_variance += "_iter_";
+    file_scale_variance += boost::lexical_cast<string>(parameters.iterations);
+    ofstream file(file_scale_variance.c_str());
+    for (int j=0; j<parameters.samples.size(); j++) {
+      int n = parameters.samples[j];
+      string results = fileName(parameters.distribution,parameters.mean,
+                                n,b,parameters.iterations);
+      file << setw(5) << n << " ";
+      vector<double> bml = getColumn(results,col1);
+      double mean = computeMean(bml);
+      file << fixed << setw(10) << setprecision(4) << mean;
+      vector<double> bmml = getColumn(results,col2);
+      mean = computeMean(bmml);
+      file << fixed << setw(10) << setprecision(4) << mean;
+      double variance_ml = b * b / (double)n;
+      file << fixed << setw(10) << setprecision(4) << variance_ml;
+      double variance_mml = (b * b * (n+1)) / (double)((n-1)*(n-1));
+      file << fixed << setw(10) << setprecision(4) << variance_mml << endl;
+    }
+    file.close();
+  }
 }
 
 void analyzeDiffMsglen(struct Parameters &parameters) {
+  for (int i=0; i<parameters.scale.size(); i++) {
+    double b = parameters.scale[i];
+    string file_msglen = "results/data/";
+    file_msglen += parameters.distribution + "_msglen_mean_";
+    file_msglen += boost::lexical_cast<string>(parameters.mean).substr(0,3);
+    file_msglen += "_scale_";
+    file_msglen += boost::lexical_cast<string>(b).substr(0,3);
+    file_msglen += "_iter_";
+    file_msglen += boost::lexical_cast<string>(parameters.iterations);
+    ofstream file(file_msglen.c_str());
+    for (int j=0; j<parameters.samples.size(); j++) {
+      int n = parameters.samples[j];
+      string results = fileName(parameters.distribution,parameters.mean,
+                                n,b,parameters.iterations);
+      vector<double> diff_msglen = getColumn(results,23);
+      double mean = computeMean(diff_msglen);
+      double variance = computeVariance(diff_msglen,mean);
+      file << setw(5) << n << " ";
+      file << fixed << setw(10) << setprecision(4) << mean / (double) n;
+      file << fixed << setw(10) << setprecision(4) << variance / (double) n; 
+      if (boost::iequals(parameters.distribution,"normal")) {
+        double x1 = 1 - (1 / (double) (2 * n));
+        x1 *= log(2/PI);
+        double expectation = x1 + 0.5;
+        expectation -= 1 / (double)n;
+        double x2 = (n-1)/(double)n;
+        x1 = x2 * log(x2);
+        expectation += x1;
+        file << fixed << setw(10) << setprecision(4) << expectation;
+
+        expectation = 0.5 + (x2 * x2 * ((PI/2) - 1)) - x2;
+        file << fixed << setw(10) << setprecision(4) << expectation;
+
+        // limiting case
+        expectation = log(2/PI) + 0.5;
+        file << fixed << setw(10) << setprecision(4) << expectation;
+        expectation = (PI/2.0) - 1.5;
+        file << fixed << setw(10) << setprecision(4) << expectation << endl;
+      } else if (boost::iequals(parameters.distribution,"laplace")) {
+        double expectation = 0.5 * log(2/PI);
+        double x2 = (n-1)/(double)(2*n);
+        expectation += (x2 * log(x2));
+        expectation += (n+1)/(double)(2*n);
+        file << fixed << setw(10) << setprecision(4) << expectation;
+
+        x2 = (n-1)/(double)n;
+        expectation = 1.25 * x2 * x2 + 1 - 2.5 * x2;
+        file << fixed << setw(10) << setprecision(4) << expectation;
+
+        // limiting case
+        expectation = -0.5 * log(PI) + 0.5;
+        file << fixed << setw(10) << setprecision(4) << expectation;
+        expectation = -0.25;
+        file << fixed << setw(10) << setprecision(4) << expectation << endl;
+      }
+    }
+  }
 }
 
 vector<double> getColumn(string file_name, int index)
@@ -489,8 +633,14 @@ vector<double> getColumn(string file_name, int index)
 
 vector<double> getRange(vector<double> &list)
 {
+  vector<double> sorted_list = sort(list);
+  double median = computeMedian(sorted_list);
+  double min = sorted_list[0];
+  double max = sorted_list[sorted_list.size()-1];
   vector<double> range(3,0);
-  //for (int i)
+  range[0] = min;
+  range[1] = median;
+  range[2] = max;
   return range;
 }
 

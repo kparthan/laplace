@@ -43,9 +43,6 @@ class DataGenerator
     //! Predict using the estimates
     void predict(vector<double> &, struct Estimates &);
 
-    //! Sort the elements in the list
-    //vector<double> sort(vector<double> &);
-
     //! Plot the data
     void plotPredictions(string &); 
 
@@ -59,32 +56,17 @@ class DataGenerator
     //! Model parameters
     struct Parameters parameters;
 
-    //! Error statistics
-    //struct Statistics statistics;
-
     //! Random samples generated
     vector<double> x,fx;
 
     //! List of predictions
     vector<vector<double>> predictions_ml,predictions_mml;
 
-    //! Quciksort algorithm
-    //void quicksort(vector<double> &, vector<int> &, int, int);
-
-    //! Partition function used in quicksort()
-    //int partition(vector<double> &, vector<int> &, int, int);
-
     //! Generates the file name to append data to
     string getFileName(const char *, int, int);
 
     //! Outputs the data to a file
     void updateResults(string &, int, int, struct Estimates &);
-
-    //! Updates the statistics over iterations
-    //void updateStatistics(int, int, struct Estimates &, struct Statistics &);
-
-    //! Saves the statistics to a file
-    //void saveErrorStatistics(const char *, struct Statistics &, int, int, int);
 
     //! Outputs the predictions to a file
     void writeToFile(string &, vector<double> &, vector<double> &, 
