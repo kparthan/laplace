@@ -28,6 +28,7 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
        ("iterate",value<int>(&parameters.iterations),"number of iterations")
        ("data",value<string>(&parameters.data_file),"data file")
        ("aom",value<double>(&parameters.aom),"AOM of data")
+       ("randomize","random trials")
   ;
   variables_map vm;
   store(parse_command_line(argc,argv,desc),vm);
@@ -37,10 +38,12 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     Usage(argv[0],desc);
   }
 
-  if (vm.count("data")) {
-    parameters.generate = UNSET;
-  } else {
-    parameters.generate = SET;
+  if (!vm.count("randomize")) {
+    if (vm.count("data")) {
+      parameters.generate = UNSET;
+    } else {
+      parameters.generate = SET;
+    }
   }
 
   if (!vm.count("aom")) {
@@ -50,6 +53,10 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
     cout << "Using AOM: " << parameters.aom << endl;
   }
    
+  if (vm.count("randomize")) {
+    randomize(parameters);
+  }
+
   if (vm.count("verbose")) {
     parameters.print = SET;
   } else {
@@ -727,5 +734,66 @@ int partition(vector<double> &list, vector<int> &index,
 	index[storeIndex] = index[right];
 	index[right] = temp_i;
 	return storeIndex;
+}
+
+void randomize(struct Parameters &parameters)
+{
+  double m = parameters.mean;
+  vector<double> probabilities;
+  double b = generateScale();
+  for (int j=0; j<parameters.samples.size(); j++) {
+    int n = parameters.samples[j];
+    vector<double> outcomes(2,0);
+    for (int k=0; k<parameters.iterations; k++) {
+      struct Estimates estimates;
+      // choose one of the distributions
+      struct timespec now;
+      clock_gettime(CLOCK_MONOTONIC, &now);
+      srand(now.tv_nsec);
+      double random = rand() / (double)RAND_MAX;
+      if (random < 0.5) { // choose Laplace
+        LaplaceDataGenerator laplace_data_generator(parameters);
+        DataGenerator *data_generator = &laplace_data_generator;
+        estimates = data_generator->simulate2(n,m,b);
+        probabilities = computeProbabilities(estimates);
+        outcomes[0] -= log2(probabilities[0]);
+        outcomes[1] -= log2(probabilities[2]);
+      } else if (random >= 0.5) { //choose Normal
+        NormalDataGenerator normal_data_generator(parameters);
+        DataGenerator *data_generator = &normal_data_generator;
+        estimates = data_generator->simulate2(n,m,b);
+        probabilities = computeProbabilities(estimates);
+        outcomes[0] -= log2(probabilities[1]);
+        outcomes[1] -= log2(probabilities[3]);
+      }
+    }
+  }
+  cout << "ml: " << outcomes[0] << endl;
+  cout << "mml: " << outcomes[1] << endl;
+}
+
+vector<double> computeProbabilities(struct Estimates &estimates)
+{
+  vector<double> probabilities(4,0);
+  // likelihood
+  double diff_likelihood = estimates.normal_likelihood - estimates.laplace_likelihood;
+  double ratio = exp(diff_likelihood);
+  double pl = 1 / (double)(1+ratio);
+  double pn = ratio * pl;
+  probabilities[0] = pl;
+  probabilities[1] = pn;
+  // msglen
+  double diff_msglen = (estimates.laplace_msglen - estimates.normal_msglen) * log(2);
+  ratio = exp(diff_msglen);
+  pl = 1 / (double)(1+ratio);
+  pn = ratio * pl;
+  probabilities[2] = pl;
+  probabilities[3] = pn;
+
+  return probabilities;
+}
+
+double generateScale()
+{
 }
 

@@ -111,3 +111,25 @@ vector<double> NormalDataGenerator::computeFunctionValues(vector<double> &x)
   return fx;
 }
 
+struct Estimates NormalDataGenerator::simulate2(int n, double m, double b)
+{
+  normal = Normal(m,b);
+  vector<double> data = generateRandom(n);
+  list = modifyDataToAOM(data,parameters.aom);
+  vector<double> x = sort(list);
+  struct Estimates estimates = parameterEstimation(x,parameters.aom);
+  predict(x,estimates);
+
+  vector<double> likelihood = logLikelihood(predictions_ml);
+  estimates.normal_likelihood = likelihood[0];
+  estimates.laplace_likelihood = likelihood[1];
+  if (estimates.normal_likelihood > estimates.laplace_likelihood) {
+    estimates.winner_ml = NORMAL;
+  } else {
+    estimates.winner_ml = LAPLACE;
+  }
+  predictions_ml[0].clear();predictions_ml[1].clear();predictions_ml.clear();
+  predictions_mml[0].clear();predictions_mml[1].clear();predictions_mml.clear();
+  return estimates;
+}
+

@@ -63,5 +63,10 @@ vector<double> sort(vector<double> &);
 void quicksort(vector<double> &, vector<int> &, int, int);
 int partition(vector<double> &, vector<int> &, int, int);
 
+void randomize(struct Parameters &);
+double generateScale();
+vector<double> computeProbabilities(struct Estimates &);
+
+
 #endif
 

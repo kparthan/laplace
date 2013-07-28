@@ -49,6 +49,8 @@ class DataGenerator
     //! MML estimates
     struct Estimates parameterEstimation(vector<double> &, double);
 
+    virtual struct Estimates simulate2(int, double, double){}
+
   protected:
     //! Distribution type
     DistributionType type;
