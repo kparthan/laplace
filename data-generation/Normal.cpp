@@ -56,6 +56,7 @@ double Normal::value(double x)
 {
 	double expNumerator = (-1) * (x-mu) * (x-mu);
 	double expDenominator = (double)2 * sigma * sigma;
-	return (exp (expNumerator/expDenominator)) / ((sqrt(2*PI)) * sigma);
+	double val = (exp (expNumerator/expDenominator)) / ((sqrt(2*PI)) * sigma);
+  return val;
 }
 

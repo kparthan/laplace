@@ -85,8 +85,10 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   // print ML winner
   if (estimates.normal_likelihood > estimates.laplace_likelihood) {
     fp << setw(15) << "Normal ";
-  } else if (estimates.normal_msglen > estimates.laplace_msglen) {
+  } else if (estimates.normal_likelihood < estimates.laplace_likelihood) {
     fp << setw(15) << "Laplace ";
+  } else {
+    fp << setw(15) << "Draw";
   }
 
   // print MML winner
@@ -310,11 +312,11 @@ struct Estimates DataGenerator::parameterEstimation(vector<double> &x, double ao
 
   if (estimates.normal_msglen < estimates.laplace_msglen) {
     estimates.winner_mml = NORMAL; // normal wins
-  } else if (estimates.normal_msglen > estimates.laplace_msglen) {
+  } else {//(estimates.normal_msglen > estimates.laplace_msglen) {
     estimates.winner_mml = LAPLACE; // laplace wins
-  } else {
+  } /*else {
     estimates.winner_mml = DEFAULT; // draw
-  }
+  }*/
 
   return estimates;
 }
@@ -328,6 +330,7 @@ vector<double> DataGenerator::logLikelihood(vector<vector<double>> &y)
   for (int i=0; i<y.size(); i++) {
     for (int j=0; j<y[i].size(); j++) {
       double value = y[i][j];
+      if (!(value > 0)) {cout << "val: " << value << endl; exit(1);}
       likelihood[i] += log(value);
     }
   }

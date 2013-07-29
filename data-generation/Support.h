@@ -7,6 +7,7 @@ struct Parameters
 {
   int print;
   int generate;
+  int random_trials;
   vector<int> samples;
   double mean;
   vector<double> scale;
@@ -64,9 +65,12 @@ void quicksort(vector<double> &, vector<int> &, int, int);
 int partition(vector<double> &, vector<int> &, int, int);
 
 void randomize(struct Parameters &);
+double generateMean();
 double generateScale();
 vector<double> computeProbabilities(struct Estimates &);
-
+double computeCodeLength(double);
+int convertNumberAOM(double, double);
+void computeMetric(vector<vector<double>> &);
 
 #endif
 

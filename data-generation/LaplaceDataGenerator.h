@@ -24,6 +24,8 @@ class LaplaceDataGenerator : public DataGenerator
     //! Simulate the experiment
     void simulate();
 
+    struct Estimates simulate2(int, double, double);
+
     //! Generate random x values from a Normal distribution
     vector<double> generateRandom(int);
 

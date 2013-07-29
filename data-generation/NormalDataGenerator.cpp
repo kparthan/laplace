@@ -51,16 +51,35 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
   struct timespec now;
   clock_gettime(CLOCK_MONOTONIC, &now);
   srand(now.tv_nsec);
-  for (int i=0; i<samples; i=i+2) {
-    double u = ((double) rand()) / RAND_MAX;
-    double v = ((double) rand()) / RAND_MAX;
+  double r1,r2;
+  unsigned t = now.tv_nsec;
+  int y = 100;
+  for (int i=0; i<samples; i++) {
+    srand(t);
+    t += 100;
+    double u = rand() / (double)RAND_MAX;
+    //cout << "u: " << u << endl;
+
+    srand(t);
+    t += 100;
+    double v = rand() / (double)RAND_MAX;
+    //cout << "v: " << v << endl;
+
     double sqroot = sqrt(-2 * log(u));
     double arg = 2 * PI * v;
-    double r1 = sqroot * cos (arg);
-    double r2 = sqroot * sin (arg);
+    r1 = sqroot * cos (arg);
+    //r2 = sqroot * sin (arg);
 	  x[i] = mu + sigma * r1;
-    if (i != samples-1) {
+    //cout << "x: " << x[i] << endl;
+    /*if (i != samples-1) {
 	    x[i+1] = mu + sigma * r2;
+    }*/
+    int xtemp = convertNumberAOM(parameters.aom,x[i]);
+    if (y == xtemp) {
+      i--;
+      continue;
+    } else {
+      y = xtemp;
     }
   }
 	return x;
@@ -114,8 +133,9 @@ vector<double> NormalDataGenerator::computeFunctionValues(vector<double> &x)
 struct Estimates NormalDataGenerator::simulate2(int n, double m, double b)
 {
   normal = Normal(m,b);
+  //cout << "Normal Gen\n";
   vector<double> data = generateRandom(n);
-  list = modifyDataToAOM(data,parameters.aom);
+  vector<double> list = modifyDataToAOM(data,parameters.aom);
   vector<double> x = sort(list);
   struct Estimates estimates = parameterEstimation(x,parameters.aom);
   predict(x,estimates);

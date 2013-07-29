@@ -43,10 +43,20 @@ vector<double> LaplaceDataGenerator::generateRandom(int samples)
   struct timespec now;
   clock_gettime(CLOCK_MONOTONIC, &now);
   srand(now.tv_nsec);
+  int y = 100;
   for (int i=0; i<samples; i++) {
-    double random = (double)rand() / RAND_MAX;
+    double random = rand() / (double)RAND_MAX;
+    //cout << "random: " << random << endl;
     random -= 0.5;
     x[i] = mu - b * sign(random) * log(1-2*fabs(random));
+    //cout << "x: " << x[i] << endl;
+    int xtemp = convertNumberAOM(parameters.aom,x[i]);
+    if (y == xtemp) {
+      i--;
+      continue;
+    } else {
+      y = xtemp;
+    }
   }
   return x;
 }
@@ -83,8 +93,9 @@ void LaplaceDataGenerator::simulate()
 struct Estimates LaplaceDataGenerator::simulate2(int n, double m, double b)
 {
   laplace = Laplace(m,b);
+  //cout << "Laplace Gen\n";
   vector<double> data = generateRandom(n);
-  list = modifyDataToAOM(data,parameters.aom);
+  vector<double> list = modifyDataToAOM(data,parameters.aom);
   vector<double> x = sort(list);
   struct Estimates estimates = parameterEstimation(x,parameters.aom);
   predict(x,estimates);

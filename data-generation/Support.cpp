@@ -54,7 +54,9 @@ struct Parameters parseCommandLineInput(int argc, char **argv)
   }
    
   if (vm.count("randomize")) {
-    randomize(parameters);
+    parameters.random_trials = SET;
+  } else {
+    parameters.random_trials = UNSET;
   }
 
   if (vm.count("verbose")) {
@@ -738,38 +740,116 @@ int partition(vector<double> &list, vector<int> &index,
 
 void randomize(struct Parameters &parameters)
 {
-  double m = parameters.mean;
+  int NORMAL = 0, LAPLACE = 1;
   vector<double> probabilities;
-  double b = generateScale();
   for (int j=0; j<parameters.samples.size(); j++) {
     int n = parameters.samples[j];
     vector<double> outcomes(2,0);
+    vector<vector<double>> results_ml,results_mml;
+    for (int i=0; i<2; i++) {
+      vector<double> tmp(2,0);
+      results_ml.push_back(tmp);
+      results_mml.push_back(tmp);
+    }
+    ofstream file("results/data/simulate");
+    int normal = 0, laplace = 0;
+
     for (int k=0; k<parameters.iterations; k++) {
+      //cout << "Iteration: " << k+1 << endl;
       struct Estimates estimates;
+      double m = generateMean();
+      file << fixed << setw(10) << setprecision(4) << m;
+      double b = generateScale();
+      file << fixed << setw(10) << setprecision(4) << b;
       // choose one of the distributions
       struct timespec now;
       clock_gettime(CLOCK_MONOTONIC, &now);
       srand(now.tv_nsec);
       double random = rand() / (double)RAND_MAX;
       if (random < 0.5) { // choose Laplace
+        laplace++;
+        file << fixed << setw(10) << "Laplace";
         LaplaceDataGenerator laplace_data_generator(parameters);
         DataGenerator *data_generator = &laplace_data_generator;
         estimates = data_generator->simulate2(n,m,b);
         probabilities = computeProbabilities(estimates);
-        outcomes[0] -= log2(probabilities[0]);
-        outcomes[1] -= log2(probabilities[2]);
+        outcomes[0] += computeCodeLength(probabilities[0]);
+        outcomes[1] += computeCodeLength(probabilities[2]);
+        if (estimates.normal_likelihood > estimates.laplace_likelihood) {
+          results_ml[LAPLACE][NORMAL]++;
+        } else {
+          results_ml[LAPLACE][LAPLACE]++;
+        }
+        if (estimates.normal_msglen < estimates.laplace_msglen) {
+          results_mml[LAPLACE][NORMAL]++;
+        } else {
+          results_mml[LAPLACE][LAPLACE]++;
+        }
       } else if (random >= 0.5) { //choose Normal
+        normal++;
+        file << fixed << setw(10) << "Normal";
         NormalDataGenerator normal_data_generator(parameters);
         DataGenerator *data_generator = &normal_data_generator;
         estimates = data_generator->simulate2(n,m,b);
         probabilities = computeProbabilities(estimates);
-        outcomes[0] -= log2(probabilities[1]);
-        outcomes[1] -= log2(probabilities[3]);
+        outcomes[0] += computeCodeLength(probabilities[1]);
+        outcomes[1] += computeCodeLength(probabilities[3]);
+        if (estimates.normal_likelihood > estimates.laplace_likelihood) {
+          results_ml[NORMAL][NORMAL]++;
+        } else {
+          results_ml[NORMAL][LAPLACE]++;
+        }
+        if (estimates.normal_msglen < estimates.laplace_msglen) {
+          results_mml[NORMAL][NORMAL]++;
+        } else {
+          results_mml[NORMAL][LAPLACE]++;
+        }
       }
+
+      file << fixed << setw(15) << setprecision(3) << estimates.normal_likelihood;
+      file << fixed << setw(15) << setprecision(3) << estimates.laplace_likelihood;
+      // print ML winner
+      if (estimates.normal_likelihood > estimates.laplace_likelihood) {
+        file << setw(15) << "Normal ";
+      } else if (estimates.normal_likelihood < estimates.laplace_likelihood) {
+        file << setw(15) << "Laplace ";
+      }
+      file << fixed << setw(15) << setprecision(3) << estimates.normal_msglen;
+      file << fixed << setw(15) << setprecision(3) << estimates.laplace_msglen;
+      // print MML winner
+      if (estimates.normal_msglen < estimates.laplace_msglen) {
+        file << setw(15) << "Normal";
+      } else {//if (estimates.normal_msglen > estimates.laplace_msglen) {
+        file << setw(15) << "Laplace";
+      }
+      file << fixed << setw(10) << setprecision(4) << probabilities[1];
+      file << fixed << setw(10) << setprecision(4) << probabilities[0];
+      file << fixed << setw(10) << setprecision(4) << probabilities[3];
+      file << fixed << setw(10) << setprecision(4) << probabilities[2];
+      file << endl;
     }
+    file.close();
+    cout << "normal: " << normal++ << endl;
+    cout << "laplace: " << laplace++ << endl;
+    cout << "ml: " << outcomes[0] << endl;
+    cout << "mml: " << outcomes[1] << endl;
+    cout << "-- ML -- [" << results_ml[0][0] + results_ml[1][1] << "]" << endl;
+    for (int i=0; i<2; i++) {
+      for (int k=0; k<2; k++) {
+        cout << results_ml[i][k] << " ";
+      }
+      cout << endl;
+    }
+    computeMetric(results_ml);
+    cout << "-- MML -- [" << results_mml[0][0] + results_mml[1][1] << "]" << endl;
+    for (int i=0; i<2; i++) {
+      for (int k=0; k<2; k++) {
+        cout << results_mml[i][k] << " ";
+      }
+      cout << endl;
+    }
+    computeMetric(results_mml);
   }
-  cout << "ml: " << outcomes[0] << endl;
-  cout << "mml: " << outcomes[1] << endl;
 }
 
 vector<double> computeProbabilities(struct Estimates &estimates)
@@ -778,6 +858,14 @@ vector<double> computeProbabilities(struct Estimates &estimates)
   // likelihood
   double diff_likelihood = estimates.normal_likelihood - estimates.laplace_likelihood;
   double ratio = exp(diff_likelihood);
+  if (!(ratio > 0)) 
+  {
+    cout << estimates.normal_likelihood << " " << estimates.laplace_likelihood << endl;
+    cout << "diff_likelihood: " << diff_likelihood << endl;
+    cout << "ratio1: " << ratio << endl; 
+    exit(1);
+  }
+  //assert(ratio > 0);
   double pl = 1 / (double)(1+ratio);
   double pn = ratio * pl;
   probabilities[0] = pl;
@@ -785,6 +873,7 @@ vector<double> computeProbabilities(struct Estimates &estimates)
   // msglen
   double diff_msglen = (estimates.laplace_msglen - estimates.normal_msglen) * log(2);
   ratio = exp(diff_msglen);
+  if (ratio <= 0) {cout << "ratio2: " << ratio << endl; exit(1);}
   pl = 1 / (double)(1+ratio);
   pn = ratio * pl;
   probabilities[2] = pl;
@@ -793,7 +882,65 @@ vector<double> computeProbabilities(struct Estimates &estimates)
   return probabilities;
 }
 
+double computeCodeLength(double p)
+{
+  double INFINITE = 100000;
+  if (fabs(p) <= ZERO) {
+    return INFINITE;
+  } else if (fabs(p - 1) <= ZERO) {
+    return ZERO;
+  } else {
+    return -log2(p);
+  }
+}
+
+double generateMean()
+{
+  double mu_min = -5;
+  double mu_max = 5;
+  struct timespec now;
+  clock_gettime(CLOCK_MONOTONIC, &now);
+  srand(now.tv_nsec);
+  double random = rand() / (double)RAND_MAX;
+  double range_mu = mu_max - mu_min;
+  double mean = random * range_mu + mu_min;
+  return mean;
+}
+
 double generateScale()
 {
+  double min_scale = 0.1;
+  double max_scale = 10;
+  double range_log_scale = log(max_scale) - log(min_scale);
+  struct timespec now;
+  clock_gettime(CLOCK_MONOTONIC, &now);
+  srand(now.tv_nsec);
+  double random = rand() / (double)RAND_MAX;
+  double log_scale = random * range_log_scale + log(min_scale);
+  double scale = exp(log_scale);
+  return scale;
+}
+
+int convertNumberAOM(double aom, double x)
+{
+  double inv_aom = 1 / (double) aom;
+  int inv = (int)inv_aom;
+  int y = inv * x;
+  //cout << "AOMconvert: " << y << endl;
+  return y;
+}
+
+void computeMetric(vector<vector<double>> &matrix)
+{
+  int tp = matrix[0][0];
+  int fp = matrix[1][0];
+  int tn = matrix[0][1];
+  int fn = matrix[1][1];
+  double precision = tp / (double)(tp+fp);
+  double recall = tp / (double)(tp+fn);
+  double f = 2 * precision * recall / (double) (precision + recall);
+  cout << "Precision: " << precision << endl;
+  cout << "Recall: " << recall << endl;
+  cout << "F-measure: " << f << endl;
 }
 
