@@ -574,10 +574,12 @@ void analyzeDiffMsglen(struct Parameters &parameters) {
                                 n,b,parameters.iterations);
       vector<double> diff_msglen = getColumn(results,23);
       double mean = computeMean(diff_msglen);
+      cout << "mean: " << mean << endl;
       double variance = computeVariance(diff_msglen,mean);
+      cout << "variance: " << variance << endl;
       file << setw(5) << n << " ";
-      file << fixed << setw(10) << setprecision(4) << mean / (double) n;
-      file << fixed << setw(10) << setprecision(4) << variance / (double) n; 
+      file << fixed << setw(10) << setprecision(4) << (mean * log(2)) / (double) n;
+      file << fixed << setw(10) << setprecision(4) << (variance * log(2) * log(2)) / (double) n; 
       if (boost::iequals(parameters.distribution,"normal")) {
         double x1 = 1 - (1 / (double) (2 * n));
         x1 *= log(2/PI);
@@ -585,7 +587,7 @@ void analyzeDiffMsglen(struct Parameters &parameters) {
         expectation -= 1 / (double)n;
         double x2 = (n-1)/(double)n;
         x1 = x2 * log(x2);
-        expectation += x1;
+        expectation -= x1;
         file << fixed << setw(10) << setprecision(4) << expectation;
 
         expectation = 0.5 + (x2 * x2 * ((PI/2) - 1)) - x2;
