@@ -132,7 +132,7 @@ void DataGenerator::updateResults(string &file_name, int num_samples,
   //} else if (type == NORMAL) {
     diff_msglen = estimates.laplace_msglen - estimates.normal_msglen;
   //}
-  fp << fixed << setw(10) << setprecision(3) << diff_msglen << "\t";
+  fp << fixed << setw(10) << setprecision(3) << diff_msglen;
   fp << endl;
   fp.close();
 }

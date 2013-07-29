@@ -557,7 +557,8 @@ void analyzeScaleVariance(struct Parameters &parameters)
   }
 }
 
-void analyzeDiffMsglen(struct Parameters &parameters) {
+void analyzeDiffMsglen(struct Parameters &parameters) 
+{
   for (int i=0; i<parameters.scale.size(); i++) {
     double b = parameters.scale[i];
     string file_msglen = "results/data/";
@@ -574,9 +575,9 @@ void analyzeDiffMsglen(struct Parameters &parameters) {
                                 n,b,parameters.iterations);
       vector<double> diff_msglen = getColumn(results,23);
       double mean = computeMean(diff_msglen);
-      cout << "mean: " << mean << endl;
+      //cout << "mean: " << mean << endl;
       double variance = computeVariance(diff_msglen,mean);
-      cout << "variance: " << variance << endl;
+      //cout << "variance: " << variance << endl;
       file << setw(5) << n << " ";
       file << fixed << setw(10) << setprecision(4) << (mean * log(2)) / (double) n;
       file << fixed << setw(10) << setprecision(4) << (variance * log(2) * log(2)) / (double) n; 
