@@ -843,7 +843,7 @@ void randomize(struct Parameters &parameters)
       }
       cout << endl;
     }
-    computeMetric(results_ml);
+    //computeMetric(results_ml);
     cout << "-- MML -- [" << results_mml[0][0] + results_mml[1][1] << "]" << endl;
     for (int i=0; i<2; i++) {
       for (int k=0; k<2; k++) {
@@ -851,7 +851,7 @@ void randomize(struct Parameters &parameters)
       }
       cout << endl;
     }
-    computeMetric(results_mml);
+    //computeMetric(results_mml);
   }
 }
 
