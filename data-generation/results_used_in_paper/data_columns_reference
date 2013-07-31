@@ -1,0 +1,23 @@
+estimate_normal_mean
+estimate_normal_scale_ml
+estimate_normal_scale_mml
+normal_likelihood
+normal_msglen
+estimate_laplace_mean
+estimate_laplace_scale_ml
+estimate_laplace_scale_mml
+laplace_likelihood
+laplace_msglen
+ml_winner
+mml_winner
+estimate_normal_mean - true_mean
+estimate_normal_scale_ml - true_scale
+(estimate_normal_scale_ml - true_scale)^2
+estimate_normal_scale_mml - true_scale
+(estimate_normal_scale_mml - true_scale)^2
+estimate_laplace_mean - true_mean
+estimate_laplace_scale_ml - true_scale
+(estimate_laplace_scale_ml - true_scale)^2
+estimate_laplace_scale_mml - true_scale
+(estimate_laplace_scale_mml - true_scale)^2
+difference in message lengths: msglen(laplace-normal) 

@@ -54,13 +54,13 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
   double r1,r2;
   unsigned t = now.tv_nsec;
   int y = 100;
-  for (int i=0; i<samples; i++) {
-    srand(t);
+  for (int i=0; i<samples; i+=2) {
+    //srand(t);
     t += 100;
     double u = rand() / (double)RAND_MAX;
     //cout << "u: " << u << endl;
 
-    srand(t);
+    //srand(t);
     t += 100;
     double v = rand() / (double)RAND_MAX;
     //cout << "v: " << v << endl;
@@ -68,19 +68,19 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
     double sqroot = sqrt(-2 * log(u));
     double arg = 2 * PI * v;
     r1 = sqroot * cos (arg);
-    //r2 = sqroot * sin (arg);
+    r2 = sqroot * sin (arg);
 	  x[i] = mu + sigma * r1;
     //cout << "x: " << x[i] << endl;
-    /*if (i != samples-1) {
+    if (i != samples-1) {
 	    x[i+1] = mu + sigma * r2;
-    }*/
-    int xtemp = convertNumberAOM(parameters.aom,x[i]);
+    }
+    /*int xtemp = convertNumberAOM(parameters.aom,x[i]);
     if (y == xtemp) {
       i--;
       continue;
     } else {
       y = xtemp;
-    }
+    }*/
   }
 	return x;
 }
@@ -106,6 +106,9 @@ void NormalDataGenerator::simulate()
         mml_outcomes[estimates.winner_mml]++;
         ml_outcomes[estimates.winner_ml]++;
       }
+      //if (parameters.iterations == 1) {
+        plotMessageLength("normal",parameters.samples[i],j);
+      //}
       cout << "N:L:D  [ML] = " << ml_outcomes[0] << ":";
       cout << ml_outcomes[1] << ":" << ml_outcomes[2] << " -- ";
       cout << " [MML] = " << mml_outcomes[0] << ":";

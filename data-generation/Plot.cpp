@@ -44,8 +44,8 @@ void Plot::label(vector<string> &labels)
 {
 	script.open(script_file.c_str(),ios::app);
 	script << "set title \"" << labels[0] << "\"" << endl;
-	script << "set xlabel \"" << labels[1] << "\"" << endl;
-	script << "set ylabel \"" << labels[2] << "\"" << endl;
+	script << "set xlabel \"" << labels[1] << "\" font \",20\"" << endl;
+	script << "set ylabel \"" << labels[2] << "\" font \",20\"" << endl;
 	script.close();
 }
 
@@ -113,9 +113,9 @@ void Plot::sketchStatistics(string &data_file)
   script.open(script_file.c_str(),ios::app);
   script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
 	script << "set multiplot" << endl;
-  script << "plot \"results/data/" << data_file << "\" using (column(0)):4 title "
+  script << "plot \"results/data/" << data_file << "\" using (column(0)):5 title "
          << "'normal message length' with lines lc rgb \"red\", \\" << endl;
-  script << "\"results/data/" << data_file << "\" using (column(0)):8 title "
+  script << "\"results/data/" << data_file << "\" using (column(0)):10 title "
          << "'laplace message length' with lines lc rgb \"blue\"" << endl;
 	script.close();
 
