@@ -149,8 +149,46 @@ Vector computeMedians(std::vector<Vector> &table)
   return medians;
 }
 
+double computeMean(Vector &list)
+{
+  double sum = 0;
+  for (int i=0; i<list.size(); i++) {
+    sum += list[i];
+  }
+  return sum / (double)list.size();
+}
+
+double computeBiasSquared(Vector &values, double true_value)
+{
+  double avg_est = computeMean(values);
+  double bias = avg_est - true_value;
+  return bias * bias;
+}
+
+double computeMeanAbsoluteError(Vector &values, double true_value)
+{
+  Vector relative_errors(values.size(),0);
+  for (int i=0; i<values.size(); i++) {
+    relative_errors[i] = fabs(values[i] - true_value);
+  }
+  double avg_error = computeMean(relative_errors);
+  return avg_error / true_value;
+}
+
+double computeMeanSquaredError(Vector &values, double true_value)
+{
+  Vector squared_errors(values.size(),0);
+  for (int i=0; i<squared_errors.size(); i++) {
+    double error = values[i] - true_value;
+    squared_errors[i] = error * error;
+  }
+  double mse = computeMean(squared_errors);
+  return mse;
+}
+
 int main(int argc, char **argv)
 {
+  // medians
   string file_name = "data/laplace_ml_scale_1_iter_100";
   std::vector<Vector> values = load_table(file_name,10);
   Vector medians_ml = computeMedians(values);
@@ -170,5 +208,37 @@ int main(int argc, char **argv)
     out2 << medians_mml[i] << endl;
   }
   out2.close();
+
+  // errors in estimation 
+  double true_value = 1;
+  file_name = "data/laplace_ml_scale_1_iter_100";
+  values = load_table(file_name,10);
+  std::vector<Vector> inverted_table = flip(values);
+  output_file = "errors_ml";
+  ofstream out3(output_file.c_str());
+  for (int i=0; i<inverted_table.size(); i++) {
+    double biassq = computeBiasSquared(inverted_table[i],true_value);
+    out3 << biassq << "\t\t";
+    double avg_rel_error = computeMeanAbsoluteError(inverted_table[i],true_value);
+    out3 << avg_rel_error << "\t\t";
+    double mse = computeMeanSquaredError(inverted_table[i],true_value);
+    out3 << mse << endl;
+  }
+  out3.close();
+  
+  file_name = "data/laplace_mml_scale_1_iter_100";
+  values = load_table(file_name,10);
+  inverted_table = flip(values);
+  output_file = "errors_mml";
+  ofstream out4(output_file.c_str());
+  for (int i=0; i<inverted_table.size(); i++) {
+    double biassq = computeBiasSquared(inverted_table[i],true_value);
+    out4 << biassq << "\t\t";
+    double avg_rel_error = computeMeanAbsoluteError(inverted_table[i],true_value);
+    out4 << avg_rel_error << "\t\t";
+    double mse = computeMeanSquaredError(inverted_table[i],true_value);
+    out4 << mse << endl;
+  }
+  out4.close();
 }
 
