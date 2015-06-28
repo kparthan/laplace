@@ -218,11 +218,11 @@ int main(int argc, char **argv)
   ofstream out3(output_file.c_str());
   for (int i=0; i<inverted_table.size(); i++) {
     double biassq = computeBiasSquared(inverted_table[i],true_value);
-    out3 << biassq << "\t\t";
+    out3 << fixed << scientific << setprecision(3) << biassq << "\t\t";
     double avg_rel_error = computeMeanAbsoluteError(inverted_table[i],true_value);
-    out3 << avg_rel_error << "\t\t";
+    out3 << fixed << scientific << setprecision(3) << avg_rel_error << "\t\t";
     double mse = computeMeanSquaredError(inverted_table[i],true_value);
-    out3 << mse << endl;
+    out3 << fixed << scientific << setprecision(3) << mse << endl;
   }
   out3.close();
   
@@ -233,11 +233,11 @@ int main(int argc, char **argv)
   ofstream out4(output_file.c_str());
   for (int i=0; i<inverted_table.size(); i++) {
     double biassq = computeBiasSquared(inverted_table[i],true_value);
-    out4 << biassq << "\t\t";
+    out4 << fixed << scientific << setprecision(3) << biassq << "\t\t";
     double avg_rel_error = computeMeanAbsoluteError(inverted_table[i],true_value);
-    out4 << avg_rel_error << "\t\t";
+    out4 << fixed << scientific << setprecision(3) << avg_rel_error << "\t\t";
     double mse = computeMeanSquaredError(inverted_table[i],true_value);
-    out4 << mse << endl;
+    out4 << fixed << scientific << setprecision(3) << mse << endl;
   }
   out4.close();
 }
