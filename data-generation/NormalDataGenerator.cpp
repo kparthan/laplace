@@ -107,7 +107,7 @@ void NormalDataGenerator::simulate()
         ml_outcomes[estimates.winner_ml]++;
       }
       //if (parameters.iterations == 1) {
-        plotMessageLength("normal",parameters.samples[i],j);
+        //plotMessageLength("normal",parameters.samples[i],j);
       //}
       cout << "N:L:D  [ML] = " << ml_outcomes[0] << ":";
       cout << ml_outcomes[1] << ":" << ml_outcomes[2] << " -- ";

@@ -83,7 +83,7 @@ void LaplaceDataGenerator::simulate()
         ml_outcomes[estimates.winner_ml]++;
       }
       //if (parameters.iterations == 1) {
-        plotMessageLength("laplace",parameters.samples[i],j);
+        //plotMessageLength("laplace",parameters.samples[i],j);
       //}
       cout << "N:L:D  [ML] = " << ml_outcomes[0] << ":";
       cout << ml_outcomes[1] << ":" << ml_outcomes[2] << " -- ";

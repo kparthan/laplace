@@ -44,8 +44,8 @@ void Plot::label(vector<string> &labels)
 {
 	script.open(script_file.c_str(),ios::app);
 	script << "set title \"" << labels[0] << "\"" << endl;
-	script << "set xlabel \"" << labels[1] << "\" font \",20\"" << endl;
-	script << "set ylabel \"" << labels[2] << "\" font \",20\"" << endl;
+	script << "set xlabel \"" << labels[1] << "\\n\"" << endl;
+	script << "set ylabel \"" << labels[2] << "\\n\"" << endl;
 	script.close();
 }
 
@@ -59,8 +59,8 @@ void Plot::label(string s, vector<string> &labels)
 {
 	script.open(script_file.c_str(),ios::app);
 	script << "set title \"" << labels[0] << "\"" << endl;
-  	script << "set label \"" << s << "\" at graph 0.005, graph 0.95 "
-  	"font \",10\"" << endl;
+  script << "set label \"" << s << "\" at graph 0.005, graph 0.95 "
+  "font \",10\"" << endl;
 	script << "set xlabel \"" << labels[1] << "\"" << endl;
 	script << "set ylabel \"" << labels[2] << "\"" << endl;
 	script.close();
@@ -94,12 +94,18 @@ void Plot::sketch(string &data_file, vector<vector<double>> &predictions)
   script.open(script_file.c_str(),ios::app);
   script << "set output \"results/plots/" << data_file << ".eps\"" << endl;
 	script << "set multiplot" << endl;
+  script << "set xtics font \"Times-Roman, 25\"\n";
+  script << "set ytics font \"Times-Roman, 25\"\n";
+  script << "set xlabel font \"Times-Roman, 35\"\n";
+  script << "set ylabel font \"Times-Roman, 35\"\n";
+  script << "set key font \",25\"\n";
+  script << "set key spacing 1.5\n";
   script << "plot \"results/data/" << data_file << "\" using 1:2 title "
-         << "'original distribution' with points lc rgb \"red\", \\" << endl;
+         << "'original' with points lc rgb \"red\", \\" << endl;
   script << "\"results/data/" << data_file << "\" using 1:3 title "
-         << "'normal approximation' with points lc rgb \"blue\", \\" << endl;
+         << "'Gaussian' with points lc rgb \"blue\", \\" << endl;
   script << "\"results/data/" << data_file << "\" using 1:4 title "
-         << "'laplace approximation' with points lc rgb \"green\"" << endl;
+         << "'Laplace' with points lc rgb \"dark-green\"" << endl;
 	script.close();
 
 	system("gnuplot -persist results/script.plot");	
