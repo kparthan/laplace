@@ -45,7 +45,8 @@ vector<double> LaplaceDataGenerator::generateRandom(int samples)
   srand(now.tv_nsec);
   int y = 100;
   for (int i=0; i<samples; i++) {
-    double random = rand() / (double)RAND_MAX;
+    double random = uniform_random(); 
+    //double random = rand() / (double)RAND_MAX;
     //cout << "random: " << random << endl;
     random -= 0.5;
     x[i] = mu - b * sign(random) * log(1-2*fabs(random));

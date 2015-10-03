@@ -1,5 +1,6 @@
 CFLAGS=-std=c++0x -g 
-LDFLAGS=-lboost_program_options
+#LDFLAGS=-lboost_program_options
+LDFLAGS=-lboost_program_options -lboost_system -lboost_filesystem -fopenmp -lnlopt -lgsl -lgslcblas -lm 
 
 OBJECTS = laplace-fit.o \
   Support.o \
@@ -16,7 +17,7 @@ all: laplace-fit
 laplace-fit: $(OBJECTS)
 	g++ $(OBJECTS) -o $@ $(LDFLAGS) 
 
-laplace-fit.o: laplace-fit.cpp Support.h 
+laplace-fit.o: laplace-fit.cpp Support.h UniformRandomNumberGenerator.h
 	g++ -c $(CFLAGS) $< -o $@
 
 Support.o: Support.cpp Support.h 

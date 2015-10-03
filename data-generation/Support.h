@@ -64,6 +64,7 @@ vector<double> sort(vector<double> &);
 void quicksort(vector<double> &, vector<int> &, int, int);
 int partition(vector<double> &, vector<int> &, int, int);
 
+double uniform_random();
 void randomize(struct Parameters &);
 double generateMean();
 double generateScale();

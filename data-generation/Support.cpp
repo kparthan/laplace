@@ -1,6 +1,9 @@
 #include "Support.h"
 #include "NormalDataGenerator.h"
 #include "LaplaceDataGenerator.h"
+#include "UniformRandomNumberGenerator.h"
+
+UniformRandomNumberGenerator *uniform_generator;
 
 /*!
  *  \brief This function checks to see if valid arguments are given to the 
@@ -739,6 +742,12 @@ int partition(vector<double> &list, vector<int> &index,
 	index[storeIndex] = index[right];
 	index[right] = temp_i;
 	return storeIndex;
+}
+
+double uniform_random()
+{
+  return (*uniform_generator)();
+  //return rand()/(double)RAND_MAX;
 }
 
 void randomize(struct Parameters &parameters)

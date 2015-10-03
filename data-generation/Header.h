@@ -14,12 +14,14 @@
 #include <ctime>
 #include <thread>
 #include <chrono>
+
 #include <boost/math/constants/constants.hpp>
 #include <boost/program_options.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
+#include <boost/random.hpp>
 
 #define DEFAULT_SAMPLES 100
 #define DEFAULT_MEAN 0.0

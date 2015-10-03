@@ -57,12 +57,14 @@ vector<double> NormalDataGenerator::generateRandom(int samples)
   for (int i=0; i<samples; i+=2) {
     //srand(t);
     t += 100;
-    double u = rand() / (double)RAND_MAX;
+    double u = uniform_random(); 
+    //double u = rand() / (double)RAND_MAX;
     //cout << "u: " << u << endl;
 
     //srand(t);
     t += 100;
-    double v = rand() / (double)RAND_MAX;
+    double v = uniform_random();
+    //double v = rand() / (double)RAND_MAX;
     //cout << "v: " << v << endl;
 
     double sqroot = sqrt(-2 * log(u));
